@@ -13,7 +13,7 @@ import lombok.Setter;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-public class Sku {
+public class SKU {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
