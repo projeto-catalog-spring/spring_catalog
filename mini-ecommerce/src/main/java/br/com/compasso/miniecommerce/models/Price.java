@@ -2,6 +2,7 @@ package br.com.compasso.miniecommerce.models;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 import lombok.AllArgsConstructor;
@@ -13,7 +14,7 @@ import lombok.Setter;
 @NoArgsConstructor @AllArgsConstructor
 public class Price {
  
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Getter private Long id; 
     @Getter @Setter private double price;
     @Getter @Setter private double salePrice;
