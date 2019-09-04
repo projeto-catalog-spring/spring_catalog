@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/sku")
 public class SKUController {
 
-	@GetMapping
+	@GetMapping("/")
 	public String helloSKU() {
 		return "Olá SKU";
 	}
