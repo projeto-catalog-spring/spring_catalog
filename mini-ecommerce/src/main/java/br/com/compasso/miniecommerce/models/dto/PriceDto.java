@@ -1,7 +1,11 @@
-package br.com.compasso.miniecommerce.controllers.dto;
+package br.com.compasso.miniecommerce.models.dto;
 
 import br.com.compasso.miniecommerce.models.Price;
 import br.com.compasso.miniecommerce.repository.PriceRepository;
+
+import javax.persistence.OneToOne;
+
+import br.com.compasso.miniecommerce.models.Product;
 import lombok.Getter;
 import lombok.Setter;
 
