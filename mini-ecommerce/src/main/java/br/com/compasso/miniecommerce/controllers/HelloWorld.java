@@ -16,8 +16,8 @@ public class HelloWorld {
 	@GetMapping("/")
 	public String helloWorld()
 	{
-		Customer c = new Customer("Rafael", "Romeu");
-		customer.save(c);
+		//Customer c = new Customer("Rafael", "Romeu");
+		//customer.save(c);
 		
 		Iterable<Customer> c1 = customer.findAll();
 		
