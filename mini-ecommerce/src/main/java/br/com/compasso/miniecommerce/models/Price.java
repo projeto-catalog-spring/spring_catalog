@@ -18,5 +18,5 @@ public class Price {
     @Getter private Long id; 
     @Getter @Setter private double price;
     @Getter @Setter private double salePrice;
-    //@Getter @Setter private Product product;
+    @Getter @Setter private Product product;
  }
