@@ -84,15 +84,12 @@
 			<artifactId>spring-boot-devtools</artifactId>
 			<scope>runtime</scope>
 		</dependency>
-<<<<<<< HEAD
 		<dependency>
 		  <groupId>org.modelmapper</groupId>
 		  <artifactId>modelmapper</artifactId>
 		  <version>2.3.0</version>
 		</dependency>
-=======
-		
->>>>>>> f9d780dc4bba4152caa92b4815c67e6b46599ce5
+
 	</dependencies>
 
 	<build>

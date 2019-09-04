@@ -26,7 +26,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import br.com.compasso.miniecommerce.controllers.dto.PriceDto;
+import br.com.compasso.miniecommerce.models.dto.PriceDto;
 import br.com.compasso.miniecommerce.models.Price;
 import br.com.compasso.miniecommerce.repository.PriceRepository;
 
