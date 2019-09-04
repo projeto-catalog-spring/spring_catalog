@@ -1,4 +1,4 @@
-package br.com.compasso.miniecommerce.controllers.dto;
+package br.com.compasso.miniecommerce.models.dto;
 
 import lombok.Getter;
 import lombok.Setter;
