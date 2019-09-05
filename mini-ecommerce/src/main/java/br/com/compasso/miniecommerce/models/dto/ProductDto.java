@@ -10,5 +10,7 @@ public class ProductDto {
 	@Getter @Setter private String description;
 	@Getter @Setter private boolean enable;
 	@Getter @Setter private Long idCategory;
-	@Getter @Setter private Long idBrand;	
+	@Getter @Setter private Long idBrand;
+	
+	
 }

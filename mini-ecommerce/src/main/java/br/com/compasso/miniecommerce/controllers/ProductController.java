@@ -1,13 +1,14 @@
 package br.com.compasso.miniecommerce.controllers;
 
 import java.util.List;
+import java.util.Optional;
 
 import javax.validation.Valid;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -26,33 +27,37 @@ public class ProductController {
 	private ProductRepository productrep;
 	
 	@GetMapping 
-	public List <Product> getAllProducts(){
+	public Iterable<Product> getAllProducts(){
 		return productrep.findAll();
 	}
+
 	
 	@PostMapping
-	public Product set(@Validated ProductDto products) {
+	public Product set(@Validated Product products) {
 		return productrep.save(products);
-	}
+	} 
 	
+	/*
 	@PutMapping("/{id}")
 	public Product insert(@RequestBody ProductDto id) {
 		return productrep.save(id);
 	}
+	*/
 	
 	@DeleteMapping("/{id}")
-	public void delete(@RequestBody ProductDto id) {
-		/* RN07 - Um produto nunca será excluido, apenas desativado */
+	public String delete(@PathVariable long id) {
 		
-		productrep.findById(id);
-		try {
+		/* RN07 - Um produto nunca será excluido, apenas desativado */
+		Optional<Product> optional = productrep.findById(id);
+		
+		if(optional.isPresent()) {
+			Product product = optional.get();
+			product.setEnable(false);
 			
-		} catch (Exception e ){
-			
+			return "Disabled";
+		} else { 
+			return "Product not find";
 		}
-		/*if(productrep.getOne(id)!=null) {
-			id.isEnable();
-		} */
 	}
 	
 }
