@@ -9,8 +9,5 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
 	Product save(ProductDto products);
 
-	Product findOne(ProductDto id);
-
-
 
 }

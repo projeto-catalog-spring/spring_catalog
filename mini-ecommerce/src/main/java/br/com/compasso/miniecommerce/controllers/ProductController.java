@@ -31,20 +31,28 @@ public class ProductController {
 	}
 	
 	@PostMapping
-	public Product set(@Validated @RequestBody ProductDto products) {
+	public Product set(@Validated ProductDto products) {
 		return productrep.save(products);
 	}
 	
 	@PutMapping("/{id}")
 	public Product insert(@RequestBody ProductDto id) {
-		return productrep.findOne(id);
+		return productrep.save(id);
 	}
 	
 	@DeleteMapping("/{id}")
 	public void delete(@RequestBody ProductDto id) {
-		if(productrep.findOne(id)!=null) {
+		/* RN07 - Um produto nunca será excluido, apenas desativado */
+		
+		productrep.findById(id);
+		try {
+			
+		} catch (Exception e ){
+			
+		}
+		/*if(productrep.getOne(id)!=null) {
 			id.isEnable();
-		} 
+		} */
 	}
 	
 }
