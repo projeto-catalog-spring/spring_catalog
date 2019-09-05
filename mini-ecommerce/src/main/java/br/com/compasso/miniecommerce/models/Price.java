@@ -25,7 +25,4 @@ public class Price {
 	@Getter
 	@Setter
 	private double salePrice;
-	@Getter
-	@Setter
-	private double priceeteste;
 }

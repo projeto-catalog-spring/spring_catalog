@@ -16,13 +16,10 @@ public class PriceDtoReq {
     private double price;
     @Getter @Setter @NotNull @PositiveOrZero
     private double salePrice;
-    @Getter @Setter @NotNull @PositiveOrZero
-    private double priceeteste;
     
     public PriceDtoReq(Price price2) { 
     	  this.price = price2.getPrice();
     	  this.salePrice = price2.getSalePrice();
-    	  this.priceeteste = price2.getPriceeteste();
     }
     
     public Price update(Long id, PriceRepository priceRepository) {
