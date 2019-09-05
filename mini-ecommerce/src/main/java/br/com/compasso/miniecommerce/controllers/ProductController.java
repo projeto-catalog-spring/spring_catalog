@@ -36,12 +36,12 @@ public class ProductController {
 	}
 	
 	@PutMapping("/{id}")
-	public Product insert(ProductDto id) {
+	public Product insert(@RequestBody ProductDto id) {
 		return productrep.findOne(id);
 	}
 	
-	@DeleteMapping
-	public void delete(ProductDto id) {
+	@DeleteMapping("/{id}")
+	public void delete(@RequestBody ProductDto id) {
 		if(productrep.findOne(id)!=null) {
 			id.isEnable();
 		} 
