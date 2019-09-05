@@ -28,6 +28,5 @@ public class Price {
 	private double salePrice;
 	@Getter
 	@Setter
-	@OneToOne
-	private Product product;
+	private double priceeteste;
 }

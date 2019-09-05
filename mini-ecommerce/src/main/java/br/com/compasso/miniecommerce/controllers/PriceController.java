@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import javax.transaction.Transactional;
 import javax.validation.Valid;
+import javax.validation.constraints.PositiveOrZero;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,11 +23,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import br.com.compasso.miniecommerce.models.dto.PriceDto;
+import br.com.compasso.miniecommerce.models.dto.PriceDtoRes;
+import br.com.compasso.miniecommerce.models.dto.PriceDtoReq;
 import br.com.compasso.miniecommerce.models.Price;
 import br.com.compasso.miniecommerce.repository.PriceRepository;
 
@@ -42,37 +43,28 @@ public class PriceController {
 	@SuppressWarnings("unchecked")
 	@GetMapping
 	@Cacheable(value = "listPrices")
-	public Page<PriceDto> list(@RequestParam(required = false) Long id, 
-			@PageableDefault(sort = "id", direction = Direction.DESC, page = 0, size = 10) Pageable paginacao) {
-		
-		if (id == null) {
-			ModelMapper modelMapper = new ModelMapper();
-			PriceDto pricesDto = modelMapper.map(priceRepository.findAll(paginacao), PriceDto.class);
-			return (Page<PriceDto>) pricesDto;
-		} else {
-			ModelMapper modelMapper = new ModelMapper();
-			PriceDto pricesDto = modelMapper.map(priceRepository.findById(id, paginacao), PriceDto.class);
-			return (Page<PriceDto>) pricesDto;
-		}
+	public Page<PriceDtoRes> list(@PageableDefault (sort = "id", direction = Direction.DESC, page = 0, size = 10) Pageable paginacao) {
+			Page<Price> prices = priceRepository.findAll(paginacao);
+			return PriceDtoRes.toConvert(prices);
 	}
 	
 	@PostMapping
 	@Transactional
 	@CacheEvict(value = "listPrices", allEntries = true)
-	public ResponseEntity<PriceDto> add(@RequestBody @Valid PriceDto priceDto, UriComponentsBuilder uriBuilder) {
+	public ResponseEntity<PriceDtoRes> add(@RequestBody @Valid PriceDtoReq priceDtoReq, UriComponentsBuilder uriBuilder) {
 		ModelMapper mapper = new ModelMapper();
-		Price price =  mapper.map(priceDto, Price.class);
+		Price price =  mapper.map(priceDtoReq, Price.class);
 		priceRepository.save(price);
 		
-		URI uri = uriBuilder.path("/prices/{price}").buildAndExpand(price).toUri();
-		return ResponseEntity.created(uri).body(new PriceDto(price));
+		URI uri = uriBuilder.path("/prices/{id}").buildAndExpand(price.getId()).toUri();
+		return ResponseEntity.created(uri).body(new PriceDtoRes(price));
 	}
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<PriceDto> findById(@PathVariable Long id) {
+	public ResponseEntity<PriceDtoRes> findById(@PathVariable Long id) {
 		Optional<Price> price = priceRepository.findById(id);
 		if(price.isPresent()) {
-			return ResponseEntity.ok(new PriceDto(price.get()));
+			return ResponseEntity.ok(new PriceDtoRes(price.get()));
 		}
 		return ResponseEntity.notFound().build();
 	}
@@ -80,11 +72,11 @@ public class PriceController {
 	@PutMapping("/{id}")
 	@Transactional
 	@CacheEvict(value = "listPrices", allEntries = true)
-	public ResponseEntity<PriceDto> update(@PathVariable Long id, @RequestBody @Valid PriceDto priceDto) {
+	public ResponseEntity<PriceDtoRes> update(@PathVariable Long id, @RequestBody @Valid PriceDtoReq priceDtoReq) {
 		Optional<Price> optional = priceRepository.findById(id);
 		if (optional.isPresent()) {
-			Price price = priceDto.update(id, priceRepository);
-			return ResponseEntity.ok(new PriceDto(price));
+			Price price = priceDtoReq.update(id, priceRepository);
+			return ResponseEntity.ok(new PriceDtoRes(price));
 		}
 		
 		return ResponseEntity.notFound().build();
