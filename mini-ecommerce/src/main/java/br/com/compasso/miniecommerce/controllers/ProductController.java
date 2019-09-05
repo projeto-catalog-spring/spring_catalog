@@ -37,12 +37,12 @@ public class ProductController {
 		return productrep.save(products);
 	} 
 	
-	/*
-	@PutMapping("/{id}")
-	public Product insert(@RequestBody ProductDto id) {
-		return productrep.save(id);
+	
+	@PutMapping
+	public Product insert(@RequestBody Product products) {
+		return productrep.save(products);
 	}
-	*/
+	
 	
 	@DeleteMapping("/{id}")
 	public String delete(@PathVariable long id) {
