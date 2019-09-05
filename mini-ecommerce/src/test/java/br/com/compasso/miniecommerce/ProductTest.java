@@ -2,6 +2,7 @@ package br.com.compasso.miniecommerce;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -31,12 +32,12 @@ public class ProductTest {
     	
     	mockedProduct = new Product(new Long(4), "Camiseta", "Camisa branca bem bonita", false, mockedCategory, mockedBrand);
 
-//    	mockedProduct = mock(Product.class);
-//    	when(mockedProduct.getId()).thenReturn(new Long(4));
-//    	when(mockedProduct.getName()).thenReturn("Camiseta");
-//      when(mockedProduct.getDescription()).thenReturn("Camisa branca bem bonita");
-//      when(mockedProduct.getCategory()).thenReturn(mockedCategory);
-//      when(mockedProduct.getBrand()).thenReturn(mockedBrand);
+    	mockedProduct = mock(Product.class);
+    	when(mockedProduct.getId()).thenReturn(new Long(4));
+    	when(mockedProduct.getName()).thenReturn("Camiseta");
+      when(mockedProduct.getDescription()).thenReturn("Camisa branca bem bonita");
+      when(mockedProduct.getCategory()).thenReturn(mockedCategory);
+      when(mockedProduct.getBrand()).thenReturn(mockedBrand);
     	
     }
 	
