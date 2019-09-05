@@ -82,17 +82,19 @@ public class PriceController {
 		return ResponseEntity.notFound().build();
 	}
 	
-	@DeleteMapping("/{id}")
-	@Transactional
-	@CacheEvict(value = "listPrices", allEntries = true)
-	public ResponseEntity<?> remove(@PathVariable Long id) {
-		Optional<Price> optional = priceRepository.findById(id);
-		if (optional.isPresent()) {
-			priceRepository.deleteById(id);
-			return ResponseEntity.ok().build();
-		}
-		
-		return ResponseEntity.notFound().build();
-	}
+	
+	/*
+	 * @DeleteMapping("/{id}")
+	 * 
+	 * @Transactional
+	 * 
+	 * @CacheEvict(value = "listPrices", allEntries = true) public ResponseEntity<?>
+	 * remove(@PathVariable Long id) { Price price = priceRepository.getOne(id); if
+	 * (price != null) { price.update(id, priceRepository); return
+	 * ResponseEntity.ok().build(); }
+	 * 
+	 * return ResponseEntity.notFound().build(); }
+	 */
+	 
 
 }
