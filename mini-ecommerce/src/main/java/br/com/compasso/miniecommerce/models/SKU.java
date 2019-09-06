@@ -37,7 +37,7 @@ public class SKU {
 
 	@Getter
 	@Setter
-	private boolean enable;
+	private boolean enabled;
 
 	@Getter
 	@Setter
