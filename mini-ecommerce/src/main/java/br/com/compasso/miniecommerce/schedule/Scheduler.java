@@ -1,31 +1,51 @@
 package br.com.compasso.miniecommerce.schedule;
 
-import org.json.simple.JSONObject;
-import org.modelmapper.ModelMapper;
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
-import com.google.gson.Gson;
-
+import br.com.compasso.miniecommerce.models.Brand;
+import br.com.compasso.miniecommerce.models.Category;
+import br.com.compasso.miniecommerce.models.Price;
+import br.com.compasso.miniecommerce.models.Product;
+import br.com.compasso.miniecommerce.models.SKU;
 import br.com.compasso.miniecommerce.models.dto.ERPDto;
+import br.com.compasso.miniecommerce.repository.BrandRepository;
+import br.com.compasso.miniecommerce.repository.CategoryRepository;
+import br.com.compasso.miniecommerce.repository.PriceRepository;
+import br.com.compasso.miniecommerce.repository.ProductRepository;
+import br.com.compasso.miniecommerce.repository.SKURepository;
 
 @Component
 public class Scheduler {
 
-	@Scheduled(cron = "0/5 * * * * *")
+	@Autowired
+	private ProductRepository productRepo;
+
+	@Autowired
+	private PriceRepository priceRepo;
+
+	@Autowired
+	private CategoryRepository categoryRepo;
+
+	@Autowired
+	private BrandRepository brandRepo;
+	
+	@Autowired
+	private SKURepository SKURepo;
+
+	@Scheduled(cron = "0 0 0/1 * * *")
 	public void jobSchedule() {
-		
+
 		RestTemplate restTemplate = new RestTemplate();
-		ResponseEntity<String> response = restTemplate.getForEntity("http://localhost:8080/ERP", String.class);
-		
-//		JSONObject jsonObj = new Gson().fromJson(response.getBody(), JSONObject.class);
-//		
-//		ModelMapper model = new ModelMapper();
-//		ERPDto erp = model.map(jsonObj, ERPDto.class);
-		
-		System.out.println("funcionou..." + response.getBody());
+		ResponseEntity<ERPDto> response = restTemplate.getForEntity("http://localhost:8080/ERP", ERPDto.class);
+
+		//persistir dados
+
 	}
 
 }
