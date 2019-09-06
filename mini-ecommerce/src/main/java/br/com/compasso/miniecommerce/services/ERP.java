@@ -21,22 +21,25 @@ public class ERP {
 	public ResponseEntity<ERPDtoSend> getData() {
 
 		ERPDtoSend tbe = new ERPDtoSend();
-		Product product = new Product((long)1,"asdas","asdasd",true,new Category(), new Brand());
-		Price price = new Price((long)1, 15.0, 10.0);
+		Price price1 = new Price((long)1, 15.90, 12.90);
+		Price price2 = new Price((long)1, 25.90, 18.90);
+		Price price3 = new Price((long)1, 115.90, 99.90);
 		
-		tbe.setProducts(Arrays.asList(product, product, product));
-		tbe.setPrices(Arrays.asList(price, price));
+		Category c1 = new Category((long)0, "Escritorio");
+		Category c2 = new Category((long)1, "Cama mesa e banho");
+		
+		Brand b1 = new Brand((long)0, "FaberCastell");
+		Brand b2 = new Brand((long)1, "Santista");
+		
+		
+		Product product1 = new Product((long)1,"Cadeira","Ergonômica",true,c1, b1, price3);
+		Product product2 = new Product((long)1,"Lápis","Lápis Fodão",true,c1, b1, price2);
+		Product product3 = new Product((long)1,"Toalha","Toalha de rosto",true,c2, b2, price1);
+		
+		tbe.setProducts(Arrays.asList(product1, product2, product3));
+		tbe.setPrices(Arrays.asList(price1, price2, price3));
 		
 		return ResponseEntity.ok().body(tbe);
-
-//		return ResponseEntity.ok()
-//			      .body("{"
-//			    		+ " \"product\":{"
-//				      		+ "\"id\":\"0\","
-//				      		+ "\"name\":\"SeiLá\","
-//				      		+ "\"description\":\"SeiLá\""
-//			      		+ "}"
-//			    		+"}");
 	}
 
 }

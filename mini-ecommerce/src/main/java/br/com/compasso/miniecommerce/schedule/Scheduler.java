@@ -20,12 +20,12 @@ public class Scheduler {
 		RestTemplate restTemplate = new RestTemplate();
 		ResponseEntity<String> response = restTemplate.getForEntity("http://localhost:8080/ERP", String.class);
 		
-		JSONObject jsonObj = new Gson().fromJson(response.getBody(), JSONObject.class);
+//		JSONObject jsonObj = new Gson().fromJson(response.getBody(), JSONObject.class);
+//		
+//		ModelMapper model = new ModelMapper();
+//		ERPDto erp = model.map(jsonObj, ERPDto.class);
 		
-		ModelMapper model = new ModelMapper();
-		ERPDto erp = model.map(jsonObj, ERPDto.class);
-		
-		System.out.println("funcionou..." + erp.getPrices().get(0).getSalePrice());
+		System.out.println("funcionou..." + response.getBody());
 	}
 
 }
