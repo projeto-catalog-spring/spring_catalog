@@ -13,7 +13,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@NoArgsConstructor @AllArgsConstructor
+@NoArgsConstructor 
+@AllArgsConstructor
 @Table(name="product")
 public class Product {
 		@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
