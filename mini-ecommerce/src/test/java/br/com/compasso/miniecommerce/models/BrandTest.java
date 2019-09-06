@@ -19,17 +19,24 @@ public class BrandTest {
 	
 	@Before
 	public void setup() {
-		when(mockedBrand.getId()).thenReturn(new Long(4));
-		when(mockedBrand.getName()).thenReturn("Nike");
+	}
+	
+	@Test
+	public void brandConstructorTest() {
+		mockedBrand = new Brand(new Long(4), "Nike");
+		assertEquals(new Long(4), mockedBrand.getId());
+		assertEquals("Nike", mockedBrand.getName());
 	}
 	
 	@Test
 	public void brandGetIdTest() {
+		when(mockedBrand.getId()).thenReturn(new Long(4));
 		assertEquals(new Long(4), mockedBrand.getId());		
 	}
 	
 	@Test
     public void brandGetNameTest() {
+		when(mockedBrand.getName()).thenReturn("Nike");
 		assertEquals("Nike", mockedBrand.getName());
     }
 	

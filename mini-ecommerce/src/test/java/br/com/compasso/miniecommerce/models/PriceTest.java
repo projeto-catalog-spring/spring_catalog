@@ -19,11 +19,17 @@ public class PriceTest {
 	
 	@Before
 	public void setup() {
-		when(mockedPrice.getId()).thenReturn(new Long(4));
+	}
+	
+	@Test
+	public void priceConstructorTest() {
+		mockedPrice = new Price(new Long(4), 3.2, 3.8);
+		assertEquals(new Long(4), mockedPrice.getId());
 	}
 	
 	@Test
     public void priceGetIdTest() {
+		when(mockedPrice.getId()).thenReturn(new Long(4));
         assertEquals(new Long(4), mockedPrice.getId());
     }
 	

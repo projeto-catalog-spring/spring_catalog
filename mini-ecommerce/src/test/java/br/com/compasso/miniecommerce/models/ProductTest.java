@@ -23,39 +23,58 @@ public class ProductTest {
 	@InjectMocks
 	private Category mockedCategory;
     private Brand mockedBrand;
+    private Price mockedPrice;
     
     @Before
     public void setup() {
-    	when(mockedProduct.getId()).thenReturn(new Long(4));
-    	when(mockedProduct.getName()).thenReturn("Camiseta");
-    	when(mockedProduct.getDescription()).thenReturn("Camisa branca bem bonita");
-    	when(mockedProduct.getCategory()).thenReturn(mockedCategory);
-    	when(mockedProduct.getBrand()).thenReturn(mockedBrand);
+    	
+    }
+    
+    @Test
+    public void productConstructorTest() {
+    	mockedProduct = new Product(new Long(4), "Camiseta", "Camisa branca bem bonita", false, mockedCategory, mockedBrand, mockedPrice);
+    	assertEquals(new Long(4), mockedProduct.getId());
+    	assertEquals("Camiseta", mockedProduct.getName());
+    	assertEquals("Camisa branca bem bonita", mockedProduct.getDescription());
+    	assertEquals(mockedCategory, mockedProduct.getCategory());
+		assertEquals(mockedBrand, mockedProduct.getBrand());
+		assertEquals(mockedPrice, mockedProduct.getPrice());
     }
 	
 	@Test
 	public void productGetIdTest() {
-		assertEquals(new Long(4), mockedProduct.getId());
+		when(mockedProduct.getId()).thenReturn(new Long(4));
+    	assertEquals(new Long(4), mockedProduct.getId());
 	}
 	
 	@Test
 	public void productGetNameTest() {
-		assertEquals("Camiseta", mockedProduct.getName());
+		when(mockedProduct.getName()).thenReturn("Camiseta");
+    	assertEquals("Camiseta", mockedProduct.getName());
 	}
 	
 	@Test
 	public void productGetDescriptionTest() {
-		assertEquals("Camisa branca bem bonita", mockedProduct.getDescription());
+		when(mockedProduct.getDescription()).thenReturn("Camisa branca bem bonita");
+    	assertEquals("Camisa branca bem bonita", mockedProduct.getDescription());
 	}
 	
 	@Test
 	public void productGetCategoryTest() {
-		assertEquals(mockedCategory, mockedProduct.getCategory());
+		when(mockedProduct.getCategory()).thenReturn(mockedCategory);
+    	assertEquals(mockedCategory, mockedProduct.getCategory());
 	}
 	
 	@Test
 	public void productGetBrandTest() {
+		when(mockedProduct.getBrand()).thenReturn(mockedBrand);
 		assertEquals(mockedBrand, mockedProduct.getBrand());
+	}
+	
+	@Test
+	public void productGetPriceTest() {
+		when(mockedProduct.getPrice()).thenReturn(mockedPrice);
+		assertEquals(mockedPrice, mockedProduct.getPrice());
 	}
 	
 }

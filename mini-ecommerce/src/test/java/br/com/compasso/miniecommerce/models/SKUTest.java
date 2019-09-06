@@ -23,42 +23,54 @@ public class SKUTest {
 	private Product mockedProduct;
 	
 	@Before
-	public void setup() {	
-		when(mockedSKU.getId()).thenReturn(new Long(4));
-		when(mockedSKU.getName()).thenReturn("camisapretap");
-		when(mockedSKU.getDescription()).thenReturn("camisa preta de tamanho p que cabe muito bem em voce");
-		when(mockedSKU.getStock()).thenReturn(3);
-		when(mockedSKU.isEnable()).thenReturn(true);
-		when(mockedSKU.getProduct()).thenReturn(mockedProduct);
+	public void setup() {
+		
+	}
+	
+	@Test
+	public void skuConstructorTest() {
+		mockedSKU = new SKU(new Long(4), "camisapretap", "camisa preta de tamanho p que cabe muito bem em voce", 3, true, mockedProduct);
+		assertEquals(new Long(4), mockedSKU.getId());
+		assertEquals("camisapretap", mockedSKU.getName());
+        assertEquals("camisa preta de tamanho p que cabe muito bem em voce", mockedSKU.getDescription());
+        assertEquals(3, mockedSKU.getStock());
+        assertEquals(true, mockedSKU.isEnable());
+        assertEquals(mockedProduct, mockedSKU.getProduct());
 	}
 	
 	@Test
     public void skuGetIdTest() {
+		when(mockedSKU.getId()).thenReturn(new Long(4));
         assertEquals(new Long(4), mockedSKU.getId());
     }
 	
 	@Test
 	public void skuGetNameTest() {
+		when(mockedSKU.getName()).thenReturn("camisapretap");
 		assertEquals("camisapretap", mockedSKU.getName());
 	}
 	
 	@Test
     public void skuGetDescriptionTest() {
+		when(mockedSKU.getDescription()).thenReturn("camisa preta de tamanho p que cabe muito bem em voce");
         assertEquals("camisa preta de tamanho p que cabe muito bem em voce", mockedSKU.getDescription());
     }
 	
 	@Test
     public void skuGetStockTest() {
+		when(mockedSKU.getStock()).thenReturn(3);
         assertEquals(3, mockedSKU.getStock());
     }
 	
 	@Test
     public void skuGetEnableTest() {
+		when(mockedSKU.isEnable()).thenReturn(true);
         assertEquals(true, mockedSKU.isEnable());
     }
 	
 	@Test
     public void skuGetProductTest() {
+		when(mockedSKU.getProduct()).thenReturn(mockedProduct);
         assertEquals(mockedProduct, mockedSKU.getProduct());
     }
 	

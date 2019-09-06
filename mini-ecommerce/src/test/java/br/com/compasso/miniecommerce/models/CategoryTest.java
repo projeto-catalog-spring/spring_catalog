@@ -19,17 +19,24 @@ public class CategoryTest {
 	
 	@Before
 	public void setup() {
-		when(mockedBrand.getId()).thenReturn(new Long(4));
-		when(mockedBrand.getName()).thenReturn("Masculino");
+	}
+	
+	@Test
+	public void brandConstructorTest() {
+		mockedBrand = new Brand(new Long(4), "Masculino");
+		assertEquals(new Long(4), mockedBrand.getId());
+		assertEquals("Masculino", mockedBrand.getName());
 	}
 	
 	@Test
     public void brandGetIdTest() {
+		when(mockedBrand.getId()).thenReturn(new Long(4));
 		assertEquals(new Long(4), mockedBrand.getId());	
 	}
 	
 	@Test
 	public void brandGetNameTest() {
+		when(mockedBrand.getName()).thenReturn("Masculino");
 		assertEquals("Masculino", mockedBrand.getName());		
 	}
 	
