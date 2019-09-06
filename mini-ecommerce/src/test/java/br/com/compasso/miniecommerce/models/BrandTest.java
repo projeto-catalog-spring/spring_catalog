@@ -1,6 +1,7 @@
-package br.com.compasso.miniecommerce;
+package br.com.compasso.miniecommerce.models;
 
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.when;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -18,7 +19,8 @@ public class BrandTest {
 	
 	@Before
 	public void setup() {
-		mockedBrand = new Brand(new Long(4), "Nike");
+		when(mockedBrand.getId()).thenReturn(new Long(4));
+		when(mockedBrand.getName()).thenReturn("Nike");
 	}
 	
 	@Test

@@ -28,7 +28,6 @@ public class SkuDtoReqAdd {
 
 	@Getter
 	@Setter
-
 	@PositiveOrZero
 	private int stock;
 

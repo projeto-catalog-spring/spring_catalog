@@ -1,7 +1,6 @@
-package br.com.compasso.miniecommerce;
+package br.com.compasso.miniecommerce.models;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import org.junit.Before;
@@ -27,18 +26,11 @@ public class ProductTest {
     
     @Before
     public void setup() {
-    	mockedCategory = mock(Category.class);
-    	mockedBrand = mock(Brand.class);
-    	
-    	mockedProduct = new Product(new Long(4), "Camiseta", "Camisa branca bem bonita", false, mockedCategory, mockedBrand);
-
-//    	mockedProduct = mock(Product.class);
-//    	when(mockedProduct.getId()).thenReturn(new Long(4));
-//    	when(mockedProduct.getName()).thenReturn("Camiseta");
-//      when(mockedProduct.getDescription()).thenReturn("Camisa branca bem bonita");
-//      when(mockedProduct.getCategory()).thenReturn(mockedCategory);
-//      when(mockedProduct.getBrand()).thenReturn(mockedBrand);
-    	
+    	when(mockedProduct.getId()).thenReturn(new Long(4));
+    	when(mockedProduct.getName()).thenReturn("Camiseta");
+    	when(mockedProduct.getDescription()).thenReturn("Camisa branca bem bonita");
+    	when(mockedProduct.getCategory()).thenReturn(mockedCategory);
+    	when(mockedProduct.getBrand()).thenReturn(mockedBrand);
     }
 	
 	@Test
