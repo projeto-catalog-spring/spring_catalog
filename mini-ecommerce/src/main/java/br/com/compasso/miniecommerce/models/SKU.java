@@ -22,18 +22,23 @@ public class SKU {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Getter
 	private Long id;
+
 	@Getter
 	@Setter
 	private String name;
+
 	@Getter
 	@Setter
 	private String description;
+
 	@Getter
 	@Setter
 	private int stock;
+
 	@Getter
 	@Setter
-	private boolean enable;
+	private boolean enabled;
+
 	@Getter
 	@Setter
 	@ManyToOne
