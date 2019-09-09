@@ -40,6 +40,11 @@ public class ProductService {
 	public boolean validatePrice(@NotEmpty @Validated Product product){
 		return false;}
 	
+	public void activeProduct (Product product) {
+		if(validateSKU(product) && validatePrice(product)) {
+			product.setEnable(true);
+		} 
+	}
 	
 	
 
