@@ -4,7 +4,6 @@ import java.util.Optional;
 
 import javax.validation.Valid;
 
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.data.web.SpringDataWebProperties.Pageable;
 import org.springframework.data.domain.Page;
@@ -67,7 +66,7 @@ public class ProductController {
 		
 		if(!optional.isPresent()) {
 			Product product = optional.get();
-			product.setEnable(true);
+			product.setEnabled(true);
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		} 
 		return new ResponseEntity<>(HttpStatus.CREATED);
