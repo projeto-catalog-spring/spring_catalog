@@ -35,7 +35,7 @@ public class Product {
 
 	@Getter
 	@Setter
-	private boolean enable;
+	private boolean enabled;
 
 	@Getter
 	@Setter
