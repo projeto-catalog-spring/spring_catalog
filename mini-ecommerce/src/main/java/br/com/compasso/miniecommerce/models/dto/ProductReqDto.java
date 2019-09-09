@@ -19,9 +19,9 @@ public class ProductReqDto {
 	@Getter @Setter private Long idBrand;
 	
 
-	public Product dtoToProduct (ProductResDTO productDTO) {
+	public Object dtoToProduct(ProductReqDto productDTO) {
 		Product entproduct = modelMapper.map(productDTO, Product.class);
 		return entproduct;
-    }
+	}
 	
 }

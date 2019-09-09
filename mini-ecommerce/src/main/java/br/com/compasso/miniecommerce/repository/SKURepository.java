@@ -6,4 +6,7 @@ import br.com.compasso.miniecommerce.models.SKU;
 
 public interface SKURepository extends JpaRepository<SKU, Long> {
 
+	boolean isEnabled(Long id);
+
+
 }

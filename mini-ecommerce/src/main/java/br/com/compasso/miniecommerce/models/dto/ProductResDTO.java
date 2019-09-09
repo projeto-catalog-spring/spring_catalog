@@ -1,16 +1,13 @@
 package br.com.compasso.miniecommerce.models.dto;
 
-import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 
 import br.com.compasso.miniecommerce.models.Product;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
-
+@AllArgsConstructor
 public class ProductResDTO {
-	@Autowired
-	static
-    ModelMapper modelMapper;
 	
 	@Getter private Long id; 
 	@Getter @Setter private String name;
@@ -19,9 +16,17 @@ public class ProductResDTO {
 	@Getter @Setter private Long idCategory;
 	@Getter @Setter private Long idBrand;
 	
-	public static ProductResDTO productToDTO (ProductReqDto productDTO) {
-		ProductResDTO productresdto = modelMapper.map(productDTO, ProductResDTO.class);
-		return productresdto;
+	ProductResDTO(Product product) {
+		this.id =  product.getId();
+		this.name = product.getName();
+		this.description = product.getDescription();
+		this.enable = isEnable();
+		this.idCategory = getIdCategory();
+		this.idBrand = getIdBrand();
+		
+	}
+	
+	public static Page<ProductResDTO> productToDTO (Page<Product> product) {
+		return product.map(ProductResDTO::new);
     }
 }
-	
