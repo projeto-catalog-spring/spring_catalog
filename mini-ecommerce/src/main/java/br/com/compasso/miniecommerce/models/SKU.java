@@ -5,7 +5,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import lombok.AllArgsConstructor;
@@ -16,8 +15,9 @@ import lombok.Setter;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "product")
-public class Product {
+@Table(name = "sku")
+public class SKU {
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Getter
@@ -33,20 +33,15 @@ public class Product {
 
 	@Getter
 	@Setter
-	private boolean enable;
+	private int stock;
+
+	@Getter
+	@Setter
+	private boolean enabled;
 
 	@Getter
 	@Setter
 	@ManyToOne
-	private Category category;
+	private Product product;
 
-	@Getter
-	@Setter
-	@ManyToOne
-	private Brand brand;
-
-	@Getter
-	@Setter
-	@OneToOne
-	private Price price;
 }
