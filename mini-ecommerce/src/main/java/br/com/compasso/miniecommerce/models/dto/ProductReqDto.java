@@ -18,10 +18,13 @@ public class ProductReqDto {
 	@Getter @Setter private Long idCategory;
 	@Getter @Setter private Long idBrand;
 	
+<<<<<<< HEAD:mini-ecommerce/src/main/java/br/com/compasso/miniecommerce/models/dto/ProductReqDto.java
 
 	public Object dtoToProduct(ProductReqDto productDTO) {
 		Product entproduct = modelMapper.map(productDTO, Product.class);
 		return entproduct;
 	}
 	
+=======
+>>>>>>> sprint-1:mini-ecommerce/src/main/java/br/com/compasso/miniecommerce/models/dto/ProductDto.java
 }
