@@ -18,7 +18,7 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import br.com.compasso.miniecommerce.models.Product;
-import br.com.compasso.miniecommerce.models.dto.SkuDtoReqAdd;
+import br.com.compasso.miniecommerce.models.dto.SkuDtoReq;
 
 @RunWith(MockitoJUnitRunner.class)
 public class SkuDtoTest {
@@ -26,7 +26,7 @@ public class SkuDtoTest {
 	private Validator validator;
 	
 	@Mock
-	private SkuDtoReqAdd mockedSKU;
+	private SkuDtoReq mockedSKU;
 	
 	@InjectMocks
 	private Product mockedProduct;
@@ -53,25 +53,25 @@ public class SkuDtoTest {
 	
 	@Test
 	public void skuDtoNameValidationTest() {
-		mockedSKU = new SkuDtoReqAdd("camiseta preta p", "camisa oh, top", 3, 1);
+		mockedSKU = new SkuDtoReq("camiseta preta p", "camisa oh, top", 3, 1, true);
 		mockedSKU.setName("");
-		Set<ConstraintViolation<SkuDtoReqAdd>> violations = validator.validate(mockedSKU);
+		Set<ConstraintViolation<SkuDtoReq>> violations = validator.validate(mockedSKU);
 		assertEquals(2, violations.size());	
 	}
 	
 	@Test
 	public void skuDtoDescriptionValidationTest() {
-		mockedSKU = new SkuDtoReqAdd("camiseta preta p", "camisa oh, top", 3, 1);
+		mockedSKU = new SkuDtoReq("camiseta preta p", "camisa oh, top", 3, 1, true);
 		mockedSKU.setDescription("");
-		Set<ConstraintViolation<SkuDtoReqAdd>> violations = validator.validate(mockedSKU);
+		Set<ConstraintViolation<SkuDtoReq>> violations = validator.validate(mockedSKU);
 		assertEquals(2, violations.size());
 	}
 	
 	@Test
 	public void skuDtoStockValidationTest() {
-		mockedSKU = new SkuDtoReqAdd("camiseta preta p", "camisa oh, top", 3, 1);
+		mockedSKU = new SkuDtoReq("camiseta preta p", "camisa oh, top", 3, 1, true);
 		mockedSKU.setStock(-2);
-		Set<ConstraintViolation<SkuDtoReqAdd>> violations = validator.validate(mockedSKU);
+		Set<ConstraintViolation<SkuDtoReq>> violations = validator.validate(mockedSKU);
 		assertEquals(1, violations.size());
 	}
 	

@@ -34,7 +34,7 @@ public class SKUTest {
 		assertEquals("camisapretap", mockedSKU.getName());
         assertEquals("camisa preta de tamanho p que cabe muito bem em voce", mockedSKU.getDescription());
         assertEquals(3, mockedSKU.getStock());
-        assertEquals(true, mockedSKU.isEnable());
+        assertEquals(true, mockedSKU.isEnabled());
         assertEquals(mockedProduct, mockedSKU.getProduct());
 	}
 	
@@ -64,8 +64,8 @@ public class SKUTest {
 	
 	@Test
     public void skuGetEnableTest() {
-		when(mockedSKU.isEnable()).thenReturn(true);
-        assertEquals(true, mockedSKU.isEnable());
+		when(mockedSKU.isEnabled()).thenReturn(true);
+        assertEquals(true, mockedSKU.isEnabled());
     }
 	
 	@Test
