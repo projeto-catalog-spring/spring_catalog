@@ -51,7 +51,7 @@ public class SKUController {
 
 	@GetMapping
 	public Page<SkuDtoRes> listAll(
-			@PageableDefault(sort = "id", direction = Direction.ASC, page = 0, size = 1) Pageable pagination) {
+			@PageableDefault(sort = "id", direction = Direction.ASC, page = 0, size = 10) Pageable pagination) {
 
 		Page<SKU> skus = skuRepository.findAll(pagination);
 

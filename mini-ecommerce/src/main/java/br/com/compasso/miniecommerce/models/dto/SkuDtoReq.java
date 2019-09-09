@@ -29,7 +29,6 @@ public class SkuDtoReq {
 
 	@Getter
 	@Setter
-
 	@PositiveOrZero
 	private int stock;
 
