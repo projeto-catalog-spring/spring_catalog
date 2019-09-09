@@ -7,8 +7,6 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.PositiveOrZero;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -47,8 +45,6 @@ public class Product {
 	@ManyToOne
 	private Brand brand;
 
-	@PositiveOrZero
-	@NotEmpty
 	@Getter
 	@Setter
 	@OneToOne
