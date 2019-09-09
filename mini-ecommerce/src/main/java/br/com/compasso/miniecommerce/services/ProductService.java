@@ -1,4 +1,4 @@
-package br.com.compasso.miniecommerce.service;
+package br.com.compasso.miniecommerce.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
