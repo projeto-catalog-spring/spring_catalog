@@ -1,14 +1,5 @@
 package br.com.compasso.miniecommerce.testesSKU;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import br.com.compasso.miniecommerce.models.Brand;
-import br.com.compasso.miniecommerce.models.Category;
-import br.com.compasso.miniecommerce.models.Price;
-import br.com.compasso.miniecommerce.models.Product;
-import br.com.compasso.miniecommerce.models.SKU;
-
 public class TesteSKUController {
 
 	public static void main(String[] args) {
