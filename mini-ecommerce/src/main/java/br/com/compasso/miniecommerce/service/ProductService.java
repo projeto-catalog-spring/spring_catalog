@@ -48,4 +48,23 @@ import br.com.compasso.miniecommerce.repository.SKURepository;
 	
 	
 
+	
+	//RN04 - Um produto ativo tem que ter pelo menos uma SKU com estoque
+//	public boolean validateStock(@NotEmpty @Validated Product product){
+//		
+//	} 
+//	
+//
+//	//RN05 - Um produto ativo tem que ter um preço valido
+//	public boolean validatePrice(@NotEmpty @Validated Product product){
+//		return false;}
+//	
+//	public void activeProduct (Product product) {
+//		if(validateSKU(product) && validatePrice(product)) {
+//			product.setEnabled(true);
+//		} 
+//	}
+//	
+//	
+//
 //}

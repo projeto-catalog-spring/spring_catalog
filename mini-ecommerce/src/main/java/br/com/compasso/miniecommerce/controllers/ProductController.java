@@ -2,6 +2,8 @@ package br.com.compasso.miniecommerce.controllers;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,6 +32,21 @@ public class ProductController {
 	public Product set(@Validated @RequestBody ProductDto products) {
 		return productrep.save(products);
 	}
+	
+//	@DeleteMapping("/{id}")
+//	public ResponseEntity<Product> delete(@PathVariable long id) {
+//		
+//		//RN07 - Um produto nunca será excluido, apenas desativado 
+//		Optional<Product> optional = productres.findById(id);
+//		
+//		if(!optional.isPresent()) {
+//			Product product = optional.get();
+//			product.setEnabled(true);
+//			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+//		} 
+//		return new ResponseEntity<>(HttpStatus.CREATED);
+//	}
+	
 
 //	@PutMapping("/{id}")
 //	public Product insert(@RequestBody ProductDto id) {
