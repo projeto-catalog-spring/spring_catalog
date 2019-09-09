@@ -42,7 +42,7 @@ public class ProductService {
 	
 	public void activeProduct (Product product) {
 		if(validateSKU(product) && validatePrice(product)) {
-			product.setEnable(true);
+			product.setEnabled(true);
 		} 
 	}
 	
