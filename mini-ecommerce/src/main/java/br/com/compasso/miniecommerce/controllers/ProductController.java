@@ -2,6 +2,8 @@ package br.com.compasso.miniecommerce.controllers;
 
 import java.util.Optional;
 
+import javax.validation.Valid;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.data.web.SpringDataWebProperties.Pageable;
@@ -44,10 +46,9 @@ public class ProductController {
 	}
 	
 	@PostMapping
-	public ResponseEntity<ProductResDTO> set(@RequestBody ProductReqDto productDTO) {
-		ModelMapper mapper = new ModelMapper();
-		Product product =  mapper.map(productDTO, Product.class);
-		productres.save(product);
+	public ResponseEntity<ProductResDTO> set(@RequestBody @Valid ProductReqDto productDTO) {
+		ProductReqDto reqprod = new ProductReqDto();
+		productres.save(reqprod.dtoToProduct(productDTO));
 		return new ResponseEntity<>(HttpStatus.CREATED);
 	} 
 
@@ -64,13 +65,12 @@ public class ProductController {
 		//RN07 - Um produto nunca será excluido, apenas desativado 
 		Optional<Product> optional = productres.findById(id);
 		
-		if(optional.isPresent()) {
+		if(!optional.isPresent()) {
 			Product product = optional.get();
-			product.setEnable(false);
-			return new ResponseEntity<>(HttpStatus.CREATED);
-		} else { 
+			product.setEnable(true);
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-		}
+		} 
+		return new ResponseEntity<>(HttpStatus.CREATED);
 	}
 	
 

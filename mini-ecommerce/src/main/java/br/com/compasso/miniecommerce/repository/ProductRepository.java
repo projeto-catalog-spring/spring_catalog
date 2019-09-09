@@ -5,7 +5,7 @@ import org.springframework.boot.autoconfigure.data.web.SpringDataWebProperties.P
 import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.repository.JpaRepository;
 import br.com.compasso.miniecommerce.models.Product;
-import br.com.compasso.miniecommerce.models.dto.ProductReqDto;
+
 
 
 public interface ProductRepository extends JpaRepository<Product, Long> {

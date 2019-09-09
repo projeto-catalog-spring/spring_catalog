@@ -1,5 +1,7 @@
 package br.com.compasso.miniecommerce.models.dto;
 
+import javax.validation.constraints.NotBlank;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -11,20 +13,16 @@ public class ProductReqDto {
 	@Autowired
     ModelMapper modelMapper;
 
-	@Getter private Long id; 
-	@Getter @Setter private String name;
-	@Getter @Setter private String description;
-	@Getter @Setter private boolean enable;
-	@Getter @Setter private Long idCategory;
-	@Getter @Setter private Long idBrand;
+	@Getter @NotBlank private Long id; 
+	@Getter @Setter @NotBlank private String name;
+	@Getter @Setter @NotBlank private String description;
+	@Getter @Setter @NotBlank private boolean enable;
+	@Getter @Setter @NotBlank private Long idCategory;
+	@Getter @Setter @NotBlank private Long idBrand;
 	
-<<<<<<< HEAD:mini-ecommerce/src/main/java/br/com/compasso/miniecommerce/models/dto/ProductReqDto.java
-
-	public Object dtoToProduct(ProductReqDto productDTO) {
+	public Product dtoToProduct(ProductReqDto productDTO) {
 		Product entproduct = modelMapper.map(productDTO, Product.class);
 		return entproduct;
 	}
 	
-=======
->>>>>>> sprint-1:mini-ecommerce/src/main/java/br/com/compasso/miniecommerce/models/dto/ProductDto.java
 }

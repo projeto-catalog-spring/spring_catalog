@@ -1,5 +1,6 @@
 package br.com.compasso.miniecommerce.models.dto;
 
+
 import org.springframework.data.domain.Page;
 
 import br.com.compasso.miniecommerce.models.Product;
