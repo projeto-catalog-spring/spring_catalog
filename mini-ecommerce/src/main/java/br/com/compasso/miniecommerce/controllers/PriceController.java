@@ -40,7 +40,6 @@ public class PriceController {
 	private PriceRepository priceRepository;
 	
 	
-	@SuppressWarnings("unchecked")
 	@GetMapping
 	@Cacheable(value = "listPrices")
 	public Page<PriceDtoRes> list(@PageableDefault (sort = "id", direction = Direction.DESC, page = 0, size = 10) Pageable paginacao) {
