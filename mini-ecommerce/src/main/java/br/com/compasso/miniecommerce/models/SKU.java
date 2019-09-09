@@ -5,10 +5,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.PositiveOrZero;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -18,8 +15,9 @@ import lombok.Setter;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "product")
-public class Product {
+@Table(name = "sku")
+public class SKU {
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Getter
@@ -35,22 +33,15 @@ public class Product {
 
 	@Getter
 	@Setter
+	private int stock;
+
+	@Getter
+	@Setter
 	private boolean enabled;
 
 	@Getter
 	@Setter
 	@ManyToOne
-	private Category category;
+	private Product product;
 
-	@Getter
-	@Setter
-	@ManyToOne
-	private Brand brand;
-
-	@PositiveOrZero
-	@NotEmpty
-	@Getter
-	@Setter
-	@OneToOne
-	private Price price;
 }
