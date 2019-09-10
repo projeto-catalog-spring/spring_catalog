@@ -23,11 +23,10 @@ public class PriceDtoReq {
     }
     
     public Price update(Long id, PriceRepository priceRepository) {
-		Price price = priceRepository.getOne(id);
 		
-		price.setPrice(this.price);
-		price.setSalePrice(this.salePrice);
+		priceRepository.getOne(id).setPrice(this.price);
+		priceRepository.getOne(id).setSalePrice(this.salePrice);
 		
-		return price;
+		return priceRepository.getOne(id);
 	}
 }
