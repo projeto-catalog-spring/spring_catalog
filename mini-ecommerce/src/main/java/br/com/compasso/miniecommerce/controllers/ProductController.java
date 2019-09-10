@@ -48,6 +48,21 @@ public class ProductController {
 		productres.save(reqprod.dtoToProduct(productDTO));
 		return new ResponseEntity<>(HttpStatus.CREATED);
 	}
+	
+//	@DeleteMapping("/{id}")
+//	public ResponseEntity<Product> delete(@PathVariable long id) {
+//		
+//		//RN07 - Um produto nunca será excluido, apenas desativado 
+//		Optional<Product> optional = productres.findById(id);
+//		
+//		if(!optional.isPresent()) {
+//			Product product = optional.get();
+//			product.setEnabled(true);
+//			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+//		} 
+//		return new ResponseEntity<>(HttpStatus.CREATED);
+//	}
+	
 
 	@PutMapping
 //	public ResponseEntity<Product> insert(@RequestBody ProductReqDto productDTO) {

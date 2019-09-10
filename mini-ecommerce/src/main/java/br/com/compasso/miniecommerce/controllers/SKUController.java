@@ -29,6 +29,7 @@ import br.com.compasso.miniecommerce.models.dto.SkuDtoReqEdit;
 import br.com.compasso.miniecommerce.models.dto.SkuDtoRes;
 import br.com.compasso.miniecommerce.repository.ProductRepository;
 import br.com.compasso.miniecommerce.repository.SKURepository;
+import br.com.compasso.miniecommerce.services.SkuService;
 
 @RestController
 @RequestMapping("/api/sku")
@@ -39,6 +40,8 @@ public class SKUController {
 
 	@Autowired
 	private ProductRepository productRepository;
+
+	private SkuService skuService = new SkuService();
 
 //	@GetMapping("/")
 //	public List<SkuDtoResAddList> listAll() {
@@ -63,47 +66,55 @@ public class SKUController {
 
 		ModelMapper mapper = new ModelMapper();
 
-		Optional<SKU> skuOp = skuRepository.findById(id);
+		SKU sku = skuService.getSku(id, skuRepository);
 
-		if (skuOp.isPresent()) {
-			return ResponseEntity.ok(mapper.map(skuOp.get(), SkuDtoRes.class));
-		}
+		if (sku != null)
+			return ResponseEntity.ok(mapper.map(sku, SkuDtoRes.class));
+
 		return ResponseEntity.notFound().build();
 
 	}
 
 	@PostMapping
-	@Transactional
+//	@Transactional
 	public ResponseEntity<SkuDtoRes> add(@RequestBody @Valid SkuDtoReq dto, UriComponentsBuilder uriBuilder) {
 
 		ModelMapper mapper = new ModelMapper();
 		SKU sku = mapper.map(dto, SKU.class);
 
+		// using this until product's service is ready
 		Optional<Product> prod = productRepository.findById((long) dto.getProductId());
 
 		if (prod.isPresent()) {
 			sku.setProduct(prod.get());
-			skuRepository.save(sku);
+			skuService.addSku(sku, skuRepository);
 			URI uri = uriBuilder.path("/sku/{id}").buildAndExpand(sku.getId()).toUri();
 			return ResponseEntity.created(uri).body(mapper.map(sku, SkuDtoRes.class));
 		}
 		return ResponseEntity.notFound().build();
+
 	}
 
 	@PutMapping("/{id}")
 	@Transactional
 	public ResponseEntity<SkuDtoRes> edit(@PathVariable Long id, @RequestBody @Valid SkuDtoReqEdit dto) {
 
-		Optional<SKU> skuOp = skuRepository.findById(id);
 		ModelMapper mapper = new ModelMapper();
 
-		if (skuOp.isPresent()) {
+		SKU sku = skuService.editSku(id, dto, skuRepository);
 
-			SKU sku = dto.update(id, skuRepository);
+		if (sku != null) {
 			return ResponseEntity.ok(mapper.map(sku, SkuDtoRes.class));
 		}
 
 		return ResponseEntity.notFound().build();
 	}
+
+//	@GetMapping("/addProduct")
+//	@Transactional
+//	public Product saveProduct() {
+//		Product product = new Product(545454L, "nome estranho1", "desc mais estranha1", true, null, null, null);
+//		return productRepository.save(product);
+//	}
 
 }
