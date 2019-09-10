@@ -6,7 +6,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 
 @EnableScheduling
 @SpringBootApplication
-//@EnableSwagger2
+@EnableSwagger2
 public class MiniEcommerceApplication {
 
 	public static void main(String[] args) {
