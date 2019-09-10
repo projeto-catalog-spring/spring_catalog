@@ -34,16 +34,16 @@ public class ERP {
 		Product product2 = new Product((long) 2, "Lápis", "Lápis Fodão", true, c1, b1, price2);
 		Product product3 = new Product((long) 3, "Toalha", "Toalha de rosto", true, c2, b2, price1);
 
-		SKU sku1 = new SKU((long) 1, "HB", "Lápis HB", 15000, true, product2);
+		SKU sku1 = new SKU((long) 1, "HB", "Lápis HB", 15001, true, product2);
 		SKU sku2 = new SKU((long) 2, "B2", "Lápis B2", 15000, true, product2);
 		SKU sku3 = new SKU((long) 3, "B4", "Lápis B4", 15000, true, product2);
 		SKU sku4 = new SKU((long) 4, "Preta", "Confortável", 100, true, product1);
 		SKU sku5 = new SKU((long) 5, "azul", "macia", 5000, true, product3);
 
 		ERPDtoSend tbe = new ERPDtoSend();
-		tbe.setProducts (Arrays.asList(product1, product2, product3));
-		tbe.setSkus     (Arrays.asList(sku1, sku2, sku3, sku4, sku5));
-		tbe.setPrices   (Arrays.asList(price1, price2, price3));
+		tbe.setProducts(Arrays.asList(product1, product2, product3));
+		tbe.setSkus(Arrays.asList(sku1, sku2, sku3, sku4, sku5));
+		tbe.setPrices(Arrays.asList(price1, price2, price3));
 
 		return ResponseEntity.ok().body(tbe);
 	}
