@@ -38,11 +38,11 @@ public class SkuDtoRes {
 
 	public SkuDtoRes(SKU sku) {
 		this.id = sku.getId();
-		this.description = sku.getDescription();
 		this.name = sku.getName();
+		this.description = sku.getDescription();
 		this.stock = sku.getStock();
-		this.enabled = sku.isEnabled();
 		this.productName = sku.getProduct().getName();
+		this.enabled = sku.isEnabled();
 	}
 
 	public static Page<SkuDtoRes> convert(Page<SKU> skus) {

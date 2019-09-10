@@ -28,7 +28,6 @@ import br.com.compasso.miniecommerce.models.dto.SkuDtoReq;
 import br.com.compasso.miniecommerce.models.dto.SkuDtoReqEdit;
 import br.com.compasso.miniecommerce.models.dto.SkuDtoRes;
 import br.com.compasso.miniecommerce.repository.ProductRepository;
-import br.com.compasso.miniecommerce.repository.SKURepository;
 import br.com.compasso.miniecommerce.services.SkuService;
 
 @RestController
@@ -36,12 +35,12 @@ import br.com.compasso.miniecommerce.services.SkuService;
 public class SKUController {
 
 	@Autowired
-	private SKURepository skuRepository;
-
-	@Autowired
 	private ProductRepository productRepository;
 
-	private SkuService skuService = new SkuService();
+	@Autowired
+	private SkuService skuService;
+	
+	private ModelMapper mapper = new ModelMapper();
 
 //	@GetMapping("/")
 //	public List<SkuDtoResAddList> listAll() {
@@ -56,31 +55,21 @@ public class SKUController {
 	public Page<SkuDtoRes> listAll(
 			@PageableDefault(sort = "id", direction = Direction.ASC, page = 0, size = 10) Pageable pagination) {
 
-		Page<SKU> skus = skuRepository.findAll(pagination);
+		Page<SkuDtoRes> skus = skuService.getAllSkus(pagination);
 
-		return SkuDtoRes.convert(skus);
+		return skus;
 	}
 
 	@GetMapping("/{id}")
 	public ResponseEntity<SkuDtoRes> getSku(@PathVariable Long id) {
-
-		ModelMapper mapper = new ModelMapper();
-
-		SKU sku = skuService.getSku(id);
-
-		if (sku != null)
-			return ResponseEntity.ok(mapper.map(sku, SkuDtoRes.class));
-
-		return ResponseEntity.notFound().build();
-
+		return ResponseEntity.ok(this.mapper.map(skuService.getSku(id), SkuDtoRes.class));
 	}
 
 	@PostMapping
 //	@Transactional
 	public ResponseEntity<SkuDtoRes> add(@RequestBody @Valid SkuDtoReq dto, UriComponentsBuilder uriBuilder) {
 
-		ModelMapper mapper = new ModelMapper();
-		SKU sku = mapper.map(dto, SKU.class);
+		SKU sku = this.mapper.map(dto, SKU.class);
 
 		// using this until product's service is ready
 		Optional<Product> prod = productRepository.findById((long) dto.getProductId());
@@ -99,12 +88,10 @@ public class SKUController {
 	@Transactional
 	public ResponseEntity<SkuDtoRes> edit(@PathVariable Long id, @RequestBody @Valid SkuDtoReqEdit dto) {
 
-		ModelMapper mapper = new ModelMapper();
-
 		SKU sku = skuService.editSku(id, dto);
 
 		if (sku != null) {
-			return ResponseEntity.ok(mapper.map(sku, SkuDtoRes.class));
+			return ResponseEntity.ok(this.mapper.map(sku, SkuDtoRes.class));
 		}
 
 		return ResponseEntity.notFound().build();

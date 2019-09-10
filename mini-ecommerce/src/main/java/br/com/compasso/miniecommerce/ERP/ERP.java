@@ -27,8 +27,8 @@ public class ERP {
 		Category c1 = new Category((long) 1, "Escritorio");
 		Category c2 = new Category((long) 2, "Cama mesa e banho");
 
-		Brand b1 = new Brand((long) 1, "FaberCastell");
-		Brand b2 = new Brand((long) 2, "Santista");
+		Brand b1 = new Brand(new Long(1), "FaberCastell");
+		Brand b2 = new Brand(new Long(2), "Santista");
 
 		Product product1 = new Product((long) 1, "Cadeira", "Ergonômica", true, c1, b1, price3);
 		Product product2 = new Product((long) 2, "Lápis", "Lápis Fodão", true, c1, b1, price2);

@@ -16,7 +16,7 @@ import br.com.compasso.miniecommerce.repository.SKURepository;
 
 @Service
 public class SkuService {
-	
+
 	@Autowired
 	private SKURepository repository;
 
@@ -33,19 +33,25 @@ public class SkuService {
 	public SKU getSku(Long id) {
 		Optional<SKU> skuOp = repository.findById(id);
 
-		if (skuOp.isPresent())
+		if (skuOp.isPresent()) {
 			return skuOp.get();
+		}
 
 		return null;
 	}
 
+	@Transactional
 	public SKU editSku(Long id, SkuDtoReqEdit dto) {
 		Optional<SKU> skuOp = repository.findById(id);
 
 		if (skuOp.isPresent()) {
 			return dto.update(id, repository);
 		}
-		
+
 		return null;
+	}
+
+	public static Page<SkuDtoRes> convert(Page<SKU> skus) {
+		return skus.map(SkuDtoRes::new);
 	}
 }

@@ -11,7 +11,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity
-@NoArgsConstructor @AllArgsConstructor
+@NoArgsConstructor
+@AllArgsConstructor
 public class Brand {
 		@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
 		@Getter private Long id; 

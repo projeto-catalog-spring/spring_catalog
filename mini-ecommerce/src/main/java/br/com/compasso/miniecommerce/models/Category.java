@@ -11,9 +11,10 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity
-@NoArgsConstructor @AllArgsConstructor
+@NoArgsConstructor
+@AllArgsConstructor
 public class Category {
-		@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-		@Getter private Long id; 
-	    @Getter @Setter private String name;
+	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Getter private Long id; 
+    @Getter @Setter private String name;
 }

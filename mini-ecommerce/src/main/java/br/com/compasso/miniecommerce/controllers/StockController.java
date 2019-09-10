@@ -31,35 +31,38 @@ public class StockController {
 
 	@Autowired
 	private SKURepository skuRep;
+	
+	@Autowired
+	private StockService stockService;
 
 	@GetMapping
 	public ResponseEntity<Page<StockDtoRes>> stockLevel(
 			@PageableDefault(sort = "id", direction = Direction.DESC, page = 0, size = 10) Pageable pageable) {
 
 		Page<SKU> skus = skuRep.findAllByEnabled(true, pageable);
-		
+
 		return new ResponseEntity<>(StockDtoRes.convert(skus), HttpStatus.OK);
 	}
 
 	@PutMapping("/add")
 	@Transactional
-	public ResponseEntity<SkuDtoRes> addStock(@Valid @RequestBody StockDtoReq stockReq, BindingResult result, UriComponentsBuilder uriBuilder) {
-		
+	public ResponseEntity<SkuDtoRes> addStock(@Valid @RequestBody StockDtoReq stockReq, BindingResult result,
+			UriComponentsBuilder uriBuilder) {
+
 		if (result.hasErrors())
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-		
-		StockService stockService = new StockService();
+
 		return stockService.add(skuRep, stockReq, uriBuilder);
 	}
 
 	@PutMapping("/remove")
 	@Transactional
-	public ResponseEntity<SkuDtoRes> removeStock(@Valid @RequestBody StockDtoReq stockReq, BindingResult result, UriComponentsBuilder uriBuilder) {
-		
+	public ResponseEntity<SkuDtoRes> removeStock(@Valid @RequestBody StockDtoReq stockReq, BindingResult result,
+			UriComponentsBuilder uriBuilder) {
+
 		if (result.hasErrors())
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 
-		StockService stockService = new StockService();
 		return stockService.remove(skuRep, stockReq, uriBuilder);
 	}
 }

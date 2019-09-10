@@ -17,17 +17,17 @@ public class PriceDtoReq {
     @Getter @Setter @NotNull @PositiveOrZero
     private double salePrice;
     
-    public PriceDtoReq(Price price2) { 
-    	  this.price = price2.getPrice();
-    	  this.salePrice = price2.getSalePrice();
+    public PriceDtoReq(Price p) { 
+    	  this.price = p.getPrice();
+    	  this.salePrice = p.getSalePrice();
     }
     
     public Price update(Long id, PriceRepository priceRepository) {
-		Price price = priceRepository.getOne(id);
+		Price p = priceRepository.getOne(id);
 		
-		price.setPrice(this.price);
-		price.setSalePrice(this.salePrice);
+		p.setPrice(this.price);
+		p.setSalePrice(this.salePrice);
 		
-		return price;
+		return p;
 	}
 }
