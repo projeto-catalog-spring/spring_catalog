@@ -43,5 +43,13 @@ public class SKU {
 	@Setter
 	@ManyToOne
 	private Product product;
+	
+	public void add(int qtd){
+		stock += qtd;
+	}
+	
+	public void remove(int qtd) {
+		stock -= qtd;
+	}
 
 }
