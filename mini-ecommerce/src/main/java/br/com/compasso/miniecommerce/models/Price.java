@@ -25,4 +25,5 @@ public class Price {
 	@Getter
 	@Setter
 	private double salePrice;
+
 }
