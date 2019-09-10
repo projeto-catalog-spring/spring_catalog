@@ -1,4 +1,4 @@
-package br.com.compasso.miniecommerce.service;
+package br.com.compasso.miniecommerce.services;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.PositiveOrZero;
