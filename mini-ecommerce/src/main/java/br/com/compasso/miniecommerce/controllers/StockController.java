@@ -22,6 +22,7 @@ import br.com.compasso.miniecommerce.models.SKU;
 import br.com.compasso.miniecommerce.models.dto.SkuDtoRes;
 import br.com.compasso.miniecommerce.models.dto.StockDtoReq;
 import br.com.compasso.miniecommerce.models.dto.StockDtoRes;
+import br.com.compasso.miniecommerce.repository.ProductRepository;
 import br.com.compasso.miniecommerce.repository.SKURepository;
 import br.com.compasso.miniecommerce.services.StockService;
 
@@ -31,6 +32,9 @@ public class StockController {
 
 	@Autowired
 	private SKURepository skuRep;
+	
+	@Autowired
+	private ProductRepository productRep;
 
 	@GetMapping
 	public ResponseEntity<Page<StockDtoRes>> stockLevel(
@@ -60,6 +64,6 @@ public class StockController {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 
 		StockService stockService = new StockService();
-		return stockService.remove(skuRep, stockReq, uriBuilder);
+		return stockService.remove(productRep, skuRep, stockReq, uriBuilder);
 	}
 }
