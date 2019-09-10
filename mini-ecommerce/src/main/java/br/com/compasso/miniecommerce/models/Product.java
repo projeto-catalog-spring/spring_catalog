@@ -1,5 +1,6 @@
 package br.com.compasso.miniecommerce.models;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -47,6 +48,6 @@ public class Product {
 
 	@Getter
 	@Setter
-	@OneToOne
+	@OneToOne(cascade = CascadeType.ALL, targetEntity=Price.class)
 	private Price price;
 }

@@ -1,24 +1,41 @@
 package br.com.compasso.miniecommerce.service;
 
+import java.util.Optional;
+
 import javax.validation.constraints.NotEmpty;
+
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
+import br.com.compasso.miniecommerce.models.Brand;
+import br.com.compasso.miniecommerce.models.Category;
+import br.com.compasso.miniecommerce.models.Price;
 import br.com.compasso.miniecommerce.models.Product;
+import br.com.compasso.miniecommerce.models.dto.ProductReqDto;
+import br.com.compasso.miniecommerce.repository.BrandRepository;
+import br.com.compasso.miniecommerce.repository.CategoryRepository;
+import br.com.compasso.miniecommerce.repository.PriceRepository;
 import br.com.compasso.miniecommerce.repository.ProductRepository;
 import br.com.compasso.miniecommerce.repository.SKURepository;
+import springfox.documentation.schema.Model;
 
 @Service("ProductService")
 public class ProductService {
 	@Autowired
 	public ProductRepository productrep;
 	public SKURepository skurep;
+	ModelMapper model = new ModelMapper();
+
 	
-	//RN03 - Um produto ativo deve ter pelo menos uma SKU ativa 
-	public boolean validateSKU(Product product){
-		//return (skurep.existsById(product.getId())) && skurep.isEnabled(product.getId()) ? true : false;
-		return false;
+	//RN03 - RN04 - Um produto ativo deve ter pelo menos uma SKU ativa
+	public void activeProduct (Product product) {
+		if(productrep.isActive(product.getId())) {
+			product.setEnabled(true);
+		} else {
+			product.setEnabled(false);
+		}		
 	}
 	
 	//RN05 - Um produto ativo tem que ter um preço valido
@@ -26,10 +43,29 @@ public class ProductService {
 		return (skurep.existsById(product.getId())) ? true: false;
 	}
 	
-	public void activeProduct (Product product) {
-		if(validateSKU(product) && validatePrice(product)) {
-			product.setEnabled(true);
-		} 
+	/* Verifica se o produto está ativo */
+	public boolean isEnabled(Product product) {
+		return productrep.isActive(product.getId());
 	}
+	
+	/* 
+	public boolean getIdprice(Long price) {
+		Optional<Price> priceobj = pricerep.findById((long) price);
+		return (priceobj.isPresent())? true: false;
+	}
+	
+
+	public  getIdcategory(Long cat) {
+		Optional<Category> catobj = catrep.findById((long) cat);
+		if(catobj.isPresent()) return
+	}
+	
+
+	public boolean getIdBrand(Long brand) {
+		Optional<Brand> brandobj = brandrep.findById((long) brand);
+		return (brandobj.isPresent())? true: false;
+	}
+*/	
+
 
 }

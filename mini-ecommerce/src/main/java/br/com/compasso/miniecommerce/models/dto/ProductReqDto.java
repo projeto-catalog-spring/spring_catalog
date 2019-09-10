@@ -4,25 +4,29 @@ import javax.validation.constraints.NotBlank;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import br.com.compasso.miniecommerce.models.Product;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+@AllArgsConstructor
+@NoArgsConstructor
 public class ProductReqDto {
 	@Autowired
-    ModelMapper modelMapper;
+    ModelMapper modelMapper = new ModelMapper();
 
-	@Getter @NotBlank private Long id; 
-	@Getter @Setter @NotBlank private String name;
-	@Getter @Setter @NotBlank private String description;
-	@Getter @Setter @NotBlank private boolean enable;
-	@Getter @Setter @NotBlank private Long idCategory;
-	@Getter @Setter @NotBlank private Long idBrand;
+	@Getter private Long id; 
+	@Getter @Setter  private String name;
+	@Getter @Setter  private String description;
+	@Getter @Setter  private boolean enabled;
+	@Getter @Setter  private Long idCategory;
+	@Getter @Setter  private Long idBrand;
+	@Getter @Setter  private Long idPrice;
 	
 	public Product dtoToProduct(ProductReqDto productDTO) {
 		Product entproduct = modelMapper.map(productDTO, Product.class);
 		return entproduct;
 	}
-	
+		
 }

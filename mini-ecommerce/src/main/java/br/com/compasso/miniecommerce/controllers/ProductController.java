@@ -1,10 +1,14 @@
 package br.com.compasso.miniecommerce.controllers;
 
+import java.net.URI;
 import java.util.Optional;
 
+import javax.transaction.Transactional;
 import javax.validation.Valid;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort.Direction;
@@ -18,25 +22,45 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.util.UriComponentsBuilder;
 
+import br.com.compasso.miniecommerce.models.Brand;
+import br.com.compasso.miniecommerce.models.Category;
+import br.com.compasso.miniecommerce.models.Price;
 import br.com.compasso.miniecommerce.models.Product;
 import br.com.compasso.miniecommerce.models.dto.ProductReqDto;
 import br.com.compasso.miniecommerce.models.dto.ProductResDTO;
+import br.com.compasso.miniecommerce.repository.BrandRepository;
+import br.com.compasso.miniecommerce.repository.CategoryRepository;
+import br.com.compasso.miniecommerce.repository.PriceRepository;
 import br.com.compasso.miniecommerce.repository.ProductRepository;
+import br.com.compasso.miniecommerce.service.ProductService;
+
 
 @RestController
-@RequestMapping("/products")
+@RequestMapping("API/products")
 public class ProductController {
 
 	@Autowired
 	private ProductRepository productres;
-
+	private PriceRepository pricerep;
+	private CategoryRepository catrep;
+	private BrandRepository brandrep;
+	
+	@Autowired
+	private ProductService service;
+	
+	
 	@GetMapping("/{id}")
-	public ResponseEntity<Product> getById(@RequestParam long id){
-		productres.findById(id);
-		return new ResponseEntity<>(HttpStatus.CREATED);
+	public ResponseEntity<ProductResDTO> getById(@PathVariable Long id){ 
+		Optional<Product> productget = productres.findById(id);
+		if(productget.isPresent()) {
+			return ResponseEntity.ok(new ProductResDTO(productget.get()));
+		} else {
+			return ResponseEntity.notFound().build();
+		}
 	}
 
 	@GetMapping
@@ -44,30 +68,51 @@ public class ProductController {
 		Page<Product> productget = productres.findAll(pag);
 		return ProductResDTO.productToDTO(productget);
 	}
-	
-	@PostMapping
-	public ResponseEntity<ProductResDTO> set(@RequestBody @Valid ProductReqDto productDTO) {
-		ProductReqDto reqprod = new ProductReqDto();
-		productres.save(reqprod.dtoToProduct(productDTO));
-		return new ResponseEntity<>(HttpStatus.CREATED);
-	} 
 
-	@PutMapping
-	public ResponseEntity<Product> insert(@RequestBody ProductReqDto productDTO) {
-		ProductReqDto reqProduct = new ProductReqDto();
-		productres.save(reqProduct.dtoToProduct(productDTO));
-		 return new ResponseEntity<>(HttpStatus.CREATED);
+	@PostMapping
+	@ResponseBody
+	@CacheEvict(value = "listPrices", allEntries = true)
+	public ResponseEntity<ProductResDTO> set(@RequestBody @Valid ProductReqDto productDTO, UriComponentsBuilder uriBuilder) {
+			
+		ModelMapper model = new ModelMapper(); 
+		Product product = model.map(productDTO, Product.class);
+		
+		Price price = pricerep.getOne(productDTO.getIdPrice());
+		Brand brand = brandrep.getOne(productDTO.getIdBrand());
+		Category category = catrep.getOne(productDTO.getIdCategory());
+		
+		
+			product.setPrice(price);
+			product.setBrand(brand);
+			product.setCategory(category);
+			productres.save(product);
+		
+			//return ResponseEntity.notFound().build();
+		
+		System.out.println(productres.save(product));
+		
+		ProductResDTO resdto = new ProductResDTO(product);		
+		URI uri = uriBuilder.path("/product/{id}").buildAndExpand(product.getId()).toUri();
+		return ResponseEntity.created(uri).body(resdto);
 	}
 	
+	@Transactional
+	@PutMapping("/{id}")
+	public Product insert(@RequestBody ProductReqDto productDTO) {
+		ProductReqDto reqProduct = new ProductReqDto();		
+		return productres.save(reqProduct.dtoToProduct(productDTO));
+	}
+	
+	@Transactional
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Product> delete(@PathVariable long id) {
 		
 		//RN07 - Um produto nunca será excluido, apenas desativado 
 		Optional<Product> productOptional = productres.findById(id);
 		
-		if(!productOptional.isPresent()) {
+		if(productOptional.isPresent()) {
 			Product product = productOptional.get();
-			product.setEnabled(true);
+			product.setEnabled(false);
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		} 
 		return new ResponseEntity<>(HttpStatus.CREATED);

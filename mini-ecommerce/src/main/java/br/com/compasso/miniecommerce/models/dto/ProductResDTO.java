@@ -16,18 +16,28 @@ public class ProductResDTO {
 	@Getter @Setter private boolean enable;
 	@Getter @Setter private Long idCategory;
 	@Getter @Setter private Long idBrand;
+	@Getter @Setter private Long idPrice;
 	
-	ProductResDTO(Product product) {
-		this.id =  product.getId();
+	public ProductResDTO(Product product) {
+		this.id = product.getId();
 		this.name = product.getName();
 		this.description = product.getDescription();
-		this.enable = isEnable();
-		this.idCategory = getIdCategory();
-		this.idBrand = getIdBrand();
+		this.enable = product.isEnabled();
+		this.idCategory = product.getCategory().getId();
+		this.idBrand = product.getBrand().getId();
+		this.idPrice = product.getPrice().getId();
 		
 	}
-	
+		
 	public static Page<ProductResDTO> productToDTO (Page<Product> product) {
 		return product.map(ProductResDTO::new);
     }
+	
+	/*
+	 * public static ProductResDTO transformaEmDTO(Product product) { return new
+	 * ProductResDTO(product.getId(), product.getName(), product.getDescription(),
+	 * product.isEnabled(), product.getCategory().getId(),
+	 * product.getBrand().getId()); }
+	 */
+	
 }
