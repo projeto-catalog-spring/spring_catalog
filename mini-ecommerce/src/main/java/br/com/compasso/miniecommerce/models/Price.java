@@ -25,5 +25,8 @@ public class Price {
 	@Getter
 	@Setter
 	private double salePrice;
+<<<<<<< HEAD
 
+=======
+>>>>>>> 16e05a0dbae3037f072935466ed5cab27641c4a0
 }

@@ -1,4 +1,4 @@
-package br.com.compasso.miniecommerce;
+package br.com.compasso.miniecommerce.models;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
