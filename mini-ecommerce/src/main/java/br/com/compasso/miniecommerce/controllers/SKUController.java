@@ -66,7 +66,7 @@ public class SKUController {
 
 		ModelMapper mapper = new ModelMapper();
 
-		SKU sku = skuService.getSku(id, skuRepository);
+		SKU sku = skuService.getSku(id);
 
 		if (sku != null)
 			return ResponseEntity.ok(mapper.map(sku, SkuDtoRes.class));
@@ -87,7 +87,7 @@ public class SKUController {
 
 		if (prod.isPresent()) {
 			sku.setProduct(prod.get());
-			skuService.addSku(sku, skuRepository);
+			skuService.addSku(sku);
 			URI uri = uriBuilder.path("/sku/{id}").buildAndExpand(sku.getId()).toUri();
 			return ResponseEntity.created(uri).body(mapper.map(sku, SkuDtoRes.class));
 		}
@@ -101,7 +101,7 @@ public class SKUController {
 
 		ModelMapper mapper = new ModelMapper();
 
-		SKU sku = skuService.editSku(id, dto, skuRepository);
+		SKU sku = skuService.editSku(id, dto);
 
 		if (sku != null) {
 			return ResponseEntity.ok(mapper.map(sku, SkuDtoRes.class));
