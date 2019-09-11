@@ -1,5 +1,4 @@
 package br.com.compasso.miniecommerce.controllers;
-
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 
@@ -39,7 +38,7 @@ public class StockController {
 	public ResponseEntity<Page<StockDtoRes>> stockLevel(
 			@PageableDefault(sort = "id", direction = Direction.DESC, page = 0, size = 10) Pageable pageable) {
 
-		Page<SKU> skus = skuRep.findAllByEnabled(true, pageable);
+		Page<SKU> skus = skuRep.findByEnabled(true, pageable);
 
 		return new ResponseEntity<>(StockDtoRes.convert(skus), HttpStatus.OK);
 	}
