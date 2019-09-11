@@ -1,4 +1,4 @@
-package br.com.compasso.miniecommerce.controllers;
+package br.com.compass.miniecommerce.services;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -8,7 +8,7 @@ import br.com.compasso.miniecommerce.models.Product;
 import br.com.compasso.miniecommerce.models.SKU;
 
 @RunWith(MockitoJUnitRunner.class)
-public class SkuControllerTest {
+public class SkuServiceTest {
 	
 	@Test
 	private void testListAllMethod() {

@@ -15,11 +15,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import br.com.compasso.miniecommerce.models.Price;
-import br.com.compasso.miniecommerce.models.SKU;
 import br.com.compasso.miniecommerce.models.dto.PriceDtoReq;
 import br.com.compasso.miniecommerce.models.dto.PriceDtoRes;
-import br.com.compasso.miniecommerce.models.dto.SkuDtoReqEdit;
-import br.com.compasso.miniecommerce.models.dto.SkuDtoRes;
 import br.com.compasso.miniecommerce.repository.PriceRepository;
 
 @Service
@@ -45,9 +42,10 @@ public class PriceService {
 		if (priceOptional.isPresent()) {
 			Price p = repository.getOne(id);
 			URI uri = uriBuilder.path("/{id}").buildAndExpand(id).toUri();
-			
+
 			return ResponseEntity.created(uri).body(this.mapper.map(p, PriceDtoRes.class));
 		} else {
+			System.out.println("invalid invalid invalid");
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 	}
@@ -55,7 +53,7 @@ public class PriceService {
 	@Transactional
 	public ResponseEntity<PriceDtoRes> editPrice(Long id, PriceDtoReq dto, UriComponentsBuilder uriBuilder) {
 		Optional<Price> priceOptional = repository.findById(id);
-
+		
 		if (priceOptional.isPresent()) {
 			Price p = dto.update(id, repository);
 			URI uri = uriBuilder.path("/{id}").buildAndExpand(id).toUri();

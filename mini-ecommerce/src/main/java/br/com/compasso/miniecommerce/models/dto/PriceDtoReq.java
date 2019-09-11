@@ -1,6 +1,7 @@
 package br.com.compasso.miniecommerce.models.dto;
 
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
 import javax.validation.constraints.PositiveOrZero;
 
 import br.com.compasso.miniecommerce.models.Price;
@@ -11,23 +12,32 @@ import lombok.Setter;
 
 @NoArgsConstructor
 public class PriceDtoReq {
-	 
-    @Getter @Setter @NotNull @PositiveOrZero
-    private double price;
-    @Getter @Setter @NotNull @PositiveOrZero
-    private double salePrice;
-    
-    public PriceDtoReq(Price p) { 
-    	  this.price = p.getPrice();
-    	  this.salePrice = p.getSalePrice();
-    }
-    
-    public Price update(Long id, PriceRepository priceRepository) {
+
+	@Getter
+	@Setter
+	@NotNull
+	@PositiveOrZero
+	private double price;
+
+	@Getter
+	@Setter
+	@NotNull
+	@PositiveOrZero
+	private double salePrice;
+
+	public PriceDtoReq(Price p) {
+		this.price = p.getPrice();
+		this.salePrice = p.getSalePrice();
+	}
+
+	public Price update(Long id, PriceRepository priceRepository) {
 		Price p = priceRepository.getOne(id);
-		
-		p.setPrice(this.price);
-		p.setSalePrice(this.salePrice);
-		
+
+		if (this.price > 0)
+			p.setPrice(this.price);
+		if (this.salePrice > 0)
+			p.setSalePrice(this.salePrice);
+
 		return p;
 	}
 }

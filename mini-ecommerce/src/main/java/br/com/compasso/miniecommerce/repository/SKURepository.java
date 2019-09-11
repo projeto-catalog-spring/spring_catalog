@@ -9,8 +9,7 @@ import br.com.compasso.miniecommerce.models.SKU;
 
 @Repository
 public interface SKURepository extends JpaRepository<SKU, Long> {
-    
-
 	
-	//public boolean findByEnabled(Long id);
+	Page<SKU> findAllByEnabled(boolean enable, Pageable pageable);
+
 }

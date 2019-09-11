@@ -45,7 +45,6 @@ public class PriceController {
 	public ResponseEntity<PriceDtoRes> add(@RequestBody @Valid PriceDtoReq priceDtoReq,
 			UriComponentsBuilder uriBuilder) {
 		Price price = new ModelMapper().map(priceDtoReq, Price.class);
-
 		priceService.addPrice(price);
 
 		URI uri = uriBuilder.path("/{id}").buildAndExpand(price.getId()).toUri();
@@ -53,8 +52,8 @@ public class PriceController {
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<PriceDtoRes> getPrice(@PathVariable Long id, @Valid PriceDtoReq dto,
-			BindingResult result, UriComponentsBuilder uriBuilder) {
+	public ResponseEntity<PriceDtoRes> getPrice(@PathVariable Long id, @Valid PriceDtoReq dto, BindingResult result,
+			UriComponentsBuilder uriBuilder) {
 
 		if (result.hasErrors())
 			return ResponseEntity.notFound().build();
@@ -66,8 +65,8 @@ public class PriceController {
 	@Transactional
 	public ResponseEntity<PriceDtoRes> update(@PathVariable Long id, @RequestBody @Valid PriceDtoReq dto,
 			BindingResult result, UriComponentsBuilder uriBuilder) {
-		
 		if (result.hasErrors()) {
+			System.out.println("entrou");
 			return ResponseEntity.notFound().build();
 		}
 

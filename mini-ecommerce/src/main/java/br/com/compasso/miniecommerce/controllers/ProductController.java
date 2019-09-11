@@ -1,14 +1,11 @@
 package br.com.compasso.miniecommerce.controllers;
 
-import java.net.URI;
 import java.util.Optional;
 
 import javax.transaction.Transactional;
-import javax.validation.Valid;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort.Direction;
@@ -22,21 +19,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.util.UriComponentsBuilder;
 
-import br.com.compasso.miniecommerce.models.Brand;
-import br.com.compasso.miniecommerce.models.Category;
-import br.com.compasso.miniecommerce.models.Price;
 import br.com.compasso.miniecommerce.models.Product;
 import br.com.compasso.miniecommerce.models.dto.ProductReqDto;
 import br.com.compasso.miniecommerce.models.dto.ProductResDTO;
-import br.com.compasso.miniecommerce.repository.BrandRepository;
-import br.com.compasso.miniecommerce.repository.CategoryRepository;
-import br.com.compasso.miniecommerce.repository.PriceRepository;
 import br.com.compasso.miniecommerce.repository.ProductRepository;
-import br.com.compasso.miniecommerce.service.ProductService;
 
 
 @RestController
@@ -44,13 +32,10 @@ import br.com.compasso.miniecommerce.service.ProductService;
 public class ProductController {
 
 	@Autowired
-	private ProductRepository productres;
-	private PriceRepository pricerep;
-	private CategoryRepository catrep;
-	private BrandRepository brandrep;
+	private ProductRepository productres;	
 	
 	@Autowired
-	private ProductService service;
+	//private ProductService service;
 	
 	
 	@GetMapping("/{id}")
