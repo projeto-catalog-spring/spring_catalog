@@ -29,7 +29,7 @@ public class SkuService {
 	public SKU addSku(SKU newSku) {
 		return repository.save(newSku);
 	}
-
+	
 	public SKU getSku(Long id) {
 		Optional<SKU> skuOp = repository.findById(id);
 
@@ -50,8 +50,22 @@ public class SkuService {
 
 		return null;
 	}
+	
+	@Transactional
+	public SKU removeSku(Long id, boolean status) {
+		Optional<SKU> skuOp = repository.findById(id);
 
+		if (skuOp.isPresent()) {
+			skuOp.get().setEnabled(status);
+			return skuOp.get();
+		}
+
+		return null;
+	}
+	
 	public static Page<SkuDtoRes> convert(Page<SKU> skus) {
 		return skus.map(SkuDtoRes::new);
 	}
+
+	
 }

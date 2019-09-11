@@ -43,29 +43,18 @@ public class SKUController {
 	private ModelMapper mapper = new ModelMapper();
 
 	@GetMapping
-	public Page<SkuDtoRes> listAll(
+	public Page<SkuDtoRes> getAllSkus(
 			@PageableDefault(sort = "id", direction = Direction.ASC, page = 0, size = 10) Pageable pagination) {
-
-		Page<SkuDtoRes> skus = skuService.getAllSkus(pagination);
-
-		return skus;
-	}
-
-	@GetMapping("/{id}")
-	public ResponseEntity<SkuDtoRes> getSku(@PathVariable Long id) {
-		return ResponseEntity.ok(this.mapper.map(skuService.getSku(id), SkuDtoRes.class));
+		return skuService.getAllSkus(pagination);
 	}
 
 	@PostMapping
-//	@Transactional
-	public ResponseEntity<SkuDtoRes> add(@RequestBody @Valid SkuDtoReq dto, UriComponentsBuilder uriBuilder) {
-
-		SKU sku = this.mapper.map(dto, SKU.class);
-
-		// using this until product's service is ready
+	@Transactional
+	public ResponseEntity<SkuDtoRes> addSku(@RequestBody @Valid SkuDtoReq dto, UriComponentsBuilder uriBuilder) {
 		Optional<Product> prod = productRepository.findById((long) dto.getProductId());
 
 		if (prod.isPresent()) {
+			SKU sku = this.mapper.map(dto, SKU.class);
 			sku.setProduct(prod.get());
 			skuService.addSku(sku);
 			URI uri = uriBuilder.path("/sku/{id}").buildAndExpand(sku.getId()).toUri();
@@ -75,10 +64,14 @@ public class SKUController {
 
 	}
 
+	@GetMapping("/{id}")
+	public ResponseEntity<SkuDtoRes> getSku(@PathVariable Long id) {
+		return ResponseEntity.ok(this.mapper.map(skuService.getSku(id), SkuDtoRes.class));
+	}
+
 	@PutMapping("/{id}")
 	@Transactional
-	public ResponseEntity<SkuDtoRes> edit(@PathVariable Long id, @RequestBody @Valid SkuDtoReqEdit dto) {
-
+	public ResponseEntity<SkuDtoRes> editSku(@PathVariable Long id, @RequestBody @Valid SkuDtoReqEdit dto) {
 		SKU sku = skuService.editSku(id, dto);
 
 		if (sku != null) {
@@ -87,12 +80,18 @@ public class SKUController {
 
 		return ResponseEntity.notFound().build();
 	}
+	
+	@PutMapping("/{id}/{status}")
+	@Transactional
+	public ResponseEntity<SkuDtoRes> editSku(@PathVariable Long id, @PathVariable boolean status, @RequestBody @Valid SkuDtoReqEdit dto) {
+		SKU sku = skuService.removeSku(id, status);
 
-//	@GetMapping("/addProduct")
-//	@Transactional
-//	public Product saveProduct() {
-//		Product product = new Product(545454L, "nome estranho1", "desc mais estranha1", true, null, null, null);
-//		return productRepository.save(product);
-//	}
+		if (sku != null) {
+			return ResponseEntity.ok(this.mapper.map(sku, SkuDtoRes.class));
+		}
 
+		return ResponseEntity.notFound().build();
+	}
+	
+	
 }

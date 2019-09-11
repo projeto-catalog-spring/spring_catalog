@@ -2,38 +2,34 @@ package br.com.compasso.miniecommerce.models.dto;
 
 import org.springframework.data.domain.Page;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import br.com.compasso.miniecommerce.models.SKU;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @NoArgsConstructor
 @AllArgsConstructor
+@Data
 public class SkuDtoRes {
-
-	@Getter
-	@Setter
+	
+	@JsonProperty("Id")
 	private Long id;
 
-	@Getter
-	@Setter
+	@JsonProperty("Name")
 	private String name;
 
-	@Getter
-	@Setter
+	@JsonProperty("Description")
 	private String description;
 
-	@Getter
-	@Setter
+	@JsonProperty("Stock")
 	private int stock;
 
-	@Getter
-	@Setter
+	@JsonProperty("Name")
 	private String productName;
-
-	@Getter
-	@Setter
+	
+	@JsonProperty("Enabled")
 	private boolean enabled;
 
 	public SkuDtoRes(SKU sku) {

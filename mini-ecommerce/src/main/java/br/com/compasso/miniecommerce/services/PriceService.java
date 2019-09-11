@@ -36,7 +36,6 @@ public class PriceService {
 		Price p = repository.save(price);
 		URI uri = uriBuilder.path("/" + p.getId()).buildAndExpand(p.getId()).toUri();
 		return ResponseEntity.created(uri).body(this.mapper.map(p, PriceDtoRes.class));
-//			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 	}
 
 	public ResponseEntity<PriceDtoRes> getPrice(Long id, PriceDtoReq dto, UriComponentsBuilder uriBuilder) {
