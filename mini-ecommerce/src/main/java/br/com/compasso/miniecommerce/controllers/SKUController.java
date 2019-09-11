@@ -1,7 +1,6 @@
 package br.com.compasso.miniecommerce.controllers;
 
 import java.net.URI;
-import java.util.Optional;
 
 import javax.validation.Valid;
 
@@ -21,20 +20,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import br.com.compasso.miniecommerce.models.Product;
 import br.com.compasso.miniecommerce.models.SKU;
 import br.com.compasso.miniecommerce.models.dto.SkuDtoReq;
 import br.com.compasso.miniecommerce.models.dto.SkuDtoReqEdit;
 import br.com.compasso.miniecommerce.models.dto.SkuDtoRes;
-import br.com.compasso.miniecommerce.repository.ProductRepository;
 import br.com.compasso.miniecommerce.services.SkuService;
 
 @RestController
 @RequestMapping("/sku")
 public class SKUController {
-
-	@Autowired
-	private ProductRepository productRepository;
 
 	@Autowired
 	private SkuService skuService;
@@ -49,18 +43,11 @@ public class SKUController {
 
 	@PostMapping
 	public ResponseEntity<SkuDtoRes> addSku(@RequestBody @Valid SkuDtoReq dto, UriComponentsBuilder uriBuilder) {
-		Optional<Product> prod = productRepository.findById((long) dto.getProductId());
-		
-		if (prod.isPresent()) {
-			SKU sku = this.mapper.map(dto, SKU.class);
-			
-			sku.setProduct(prod.get());
-			skuService.addSku(sku);
-			URI uri = uriBuilder.path("/sku/{id}").buildAndExpand(sku.getId()).toUri();
-			return ResponseEntity.created(uri).body(this.mapper.map(sku, SkuDtoRes.class));
-		}
-		return ResponseEntity.notFound().build();
+		SKU sku = this.mapper.map(dto, SKU.class);
+		skuService.addSku(sku);
 
+		URI uri = uriBuilder.path("/{id}").buildAndExpand(sku.getId()).toUri();
+		return ResponseEntity.created(uri).body(new SkuDtoRes(sku));
 	}
 
 	@GetMapping("/{id}")
@@ -78,9 +65,10 @@ public class SKUController {
 
 		return ResponseEntity.notFound().build();
 	}
-	
+
 	@PutMapping("/{id}/{status}")
-	public ResponseEntity<SkuDtoRes> editSku(@PathVariable Long id, @PathVariable boolean status, @RequestBody @Valid SkuDtoReqEdit dto) {
+	public ResponseEntity<SkuDtoRes> editSku(@PathVariable Long id, @PathVariable boolean status,
+			@RequestBody @Valid SkuDtoReqEdit dto) {
 		SKU sku = skuService.removeSku(id, status);
 
 		if (sku != null) {
@@ -89,6 +77,5 @@ public class SKUController {
 
 		return ResponseEntity.notFound().build();
 	}
-	
-	
+
 }

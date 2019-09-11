@@ -27,6 +27,7 @@ public class PriceService {
 
 	private ModelMapper mapper = new ModelMapper();
 
+	@Transactional
 	public Page<PriceDtoRes> getAllPrices(Pageable pagination) {
 		return PriceDtoRes.convert(repository.findAll(pagination));
 	}
@@ -38,6 +39,7 @@ public class PriceService {
 		return ResponseEntity.created(uri).body(this.mapper.map(p, PriceDtoRes.class));
 	}
 
+	@Transactional
 	public ResponseEntity<PriceDtoRes> getPrice(Long id, UriComponentsBuilder uriBuilder) {
 		Optional<Price> priceOptional = repository.findById(id);
 
@@ -47,7 +49,6 @@ public class PriceService {
 
 			return ResponseEntity.created(uri).body(this.mapper.map(p, PriceDtoRes.class));
 		} else {
-			System.out.println("invalid invalid invalid");
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 	}
