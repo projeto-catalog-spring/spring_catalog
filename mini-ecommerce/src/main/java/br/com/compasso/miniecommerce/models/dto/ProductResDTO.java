@@ -4,7 +4,6 @@ package br.com.compasso.miniecommerce.models.dto;
 import org.springframework.data.domain.Page;
 
 import com.fasterxml.jackson.annotation.JsonAlias;
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 import br.com.compasso.miniecommerce.models.Brand;
 import br.com.compasso.miniecommerce.models.Category;
@@ -50,6 +49,7 @@ public class ProductResDTO {
 	public static Page<ProductResDTO> productToDTO (Page<Product> product) {
 		return product.map(ProductResDTO::new);
     }
+	
 	/*
 	 * public static ProductResDTO transformaEmDTO(Product product) { return new
 	 * ProductResDTO(product.getId(), product.getName(), product.getDescription(),

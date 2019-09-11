@@ -4,7 +4,6 @@ import java.util.Optional;
 
 import javax.transaction.Transactional;
 
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -25,17 +24,21 @@ import br.com.compasso.miniecommerce.models.Product;
 import br.com.compasso.miniecommerce.models.dto.ProductReqDto;
 import br.com.compasso.miniecommerce.models.dto.ProductResDTO;
 import br.com.compasso.miniecommerce.repository.ProductRepository;
+import br.com.compasso.miniecommerce.services.ProductService;
 
 
 @RestController
-@RequestMapping("API/products")
+@RequestMapping("/products")
 public class ProductController {
 
 	@Autowired
 	private ProductRepository productres;	
 	
 	@Autowired
-	//private ProductService service;
+	private ProductService service;
+	
+	
+	
 	
 	
 	@GetMapping("/{id}")
@@ -55,35 +58,24 @@ public class ProductController {
 	}
 
 	@PostMapping
-	public ResponseEntity<Product> set(@RequestBody ProductReqDto productDTO) {
-			
-		ModelMapper model = new ModelMapper(); 
-		Product product = model.map(productDTO, Product.class);
-		
-		productres.save(product);		
+	public ResponseEntity<Product> set(@RequestBody ProductReqDto productDTO) {			
+		Product product = productDTO.dtoToProduct(productDTO);	
+		service.saveProduct(product);		
 		return ResponseEntity.status(HttpStatus.CREATED).build();
 	}
 	
 	@Transactional
 	@PutMapping("/{id}")
-	public Product insert(@RequestBody ProductReqDto productDTO) {
-		ProductReqDto reqProduct = new ProductReqDto();		
-		return productres.save(reqProduct.dtoToProduct(productDTO));
+	public ResponseEntity<Product> insert(@PathVariable Long id, @RequestBody ProductReqDto productDTO) {
+		service.editProduct(id, productDTO);
+		return ResponseEntity.status(HttpStatus.CREATED).build();
 	}
 	
 	@Transactional
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Product> delete(@PathVariable long id) {
-		
 		//RN07 - Um produto nunca será excluido, apenas desativado 
-		Optional<Product> productOptional = productres.findById(id);
-		
-		if(productOptional.isPresent()) {
-			Product product = productOptional.get();
-			product.setEnabled(false);
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-		} 
-		return new ResponseEntity<>(HttpStatus.CREATED);
+		return (service.deleteProduct(id))? new ResponseEntity<>(HttpStatus.CREATED): new ResponseEntity<>(HttpStatus.NOT_FOUND);
 	}
 	
 

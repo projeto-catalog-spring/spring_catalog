@@ -10,4 +10,7 @@ public interface BrandRepository extends JpaRepository<Brand, Long> {
 	
 	public Optional<Brand> findByName(String name);
 
+	//@Query("");
+	
+
 }
