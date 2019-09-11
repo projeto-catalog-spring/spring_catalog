@@ -50,13 +50,14 @@ public class SKUController {
 	@PostMapping
 	public ResponseEntity<SkuDtoRes> addSku(@RequestBody @Valid SkuDtoReq dto, UriComponentsBuilder uriBuilder) {
 		Optional<Product> prod = productRepository.findById((long) dto.getProductId());
-
+		
 		if (prod.isPresent()) {
 			SKU sku = this.mapper.map(dto, SKU.class);
+			
 			sku.setProduct(prod.get());
 			skuService.addSku(sku);
 			URI uri = uriBuilder.path("/sku/{id}").buildAndExpand(sku.getId()).toUri();
-			return ResponseEntity.created(uri).body(mapper.map(sku, SkuDtoRes.class));
+			return ResponseEntity.created(uri).body(this.mapper.map(sku, SkuDtoRes.class));
 		}
 		return ResponseEntity.notFound().build();
 

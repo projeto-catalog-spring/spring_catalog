@@ -9,28 +9,31 @@ import javax.persistence.Table;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "sku")
-@Data
+@Getter
 public class SKU {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	private String name;
+	@Setter private String name;
 
-	private String description;
+	@Setter private String description;
 
-	private int stock;
+	@Setter private int stock;
 
-	private boolean enabled;
+	@Setter private boolean enabled;
 
 	@ManyToOne
+	@Setter
 	private Product product;
 
 	public void add(int qtd) {
@@ -40,5 +43,13 @@ public class SKU {
 	public void remove(int qtd) {
 		stock -= qtd;
 	}
+
+	@Override
+	public String toString() {
+		return "SKU [id=" + id + ", name=" + name + ", description=" + description + ", stock=" + stock + ", enabled="
+				+ enabled + ", product=" + product + "]";
+	}
+	
+	
 
 }

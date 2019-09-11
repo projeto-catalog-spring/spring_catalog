@@ -16,6 +16,9 @@ public class SkuDtoRes {
 	
 	@JsonProperty("Id")
 	private Long id;
+	
+	@JsonProperty("ProductId")
+	private Long productId;
 
 	@JsonProperty("Name")
 	private String name;
@@ -26,7 +29,7 @@ public class SkuDtoRes {
 	@JsonProperty("Stock")
 	private int stock;
 
-	@JsonProperty("Name")
+	@JsonProperty("ProductName")
 	private String productName;
 	
 	@JsonProperty("Enabled")
@@ -39,6 +42,7 @@ public class SkuDtoRes {
 		this.stock = sku.getStock();
 		this.productName = sku.getProduct().getName();
 		this.enabled = sku.isEnabled();
+		this.productId = sku.getProduct().getId();
 	}
 
 	public static Page<SkuDtoRes> convert(Page<SKU> skus) {
