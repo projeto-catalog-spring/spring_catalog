@@ -1,5 +1,6 @@
 package br.com.compasso.miniecommerce.models;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -8,7 +9,11 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonAlias;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -17,36 +22,31 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "product")
+@Data
 public class Product {
+
+	@JsonProperty("Id")
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Getter
 	private Long id;
-
-	@Getter
-	@Setter
+	@JsonProperty("Name")
 	private String name;
-
-	@Getter
-	@Setter
+	
+	@JsonProperty("Description")
 	private String description;
-
-	@Getter
-	@Setter
+	
+	@JsonProperty("Enabled")
 	private boolean enabled;
-
-	@Getter
-	@Setter
+	
+	@JsonProperty("Category")
 	@ManyToOne
 	private Category category;
-
-	@Getter
-	@Setter
+	
+	@JsonProperty("Brand")
 	@ManyToOne
 	private Brand brand;
-
-	@Getter
-	@Setter
-	@OneToOne
+	
+	@JsonProperty("Price")
+	@OneToOne(cascade = CascadeType.ALL, targetEntity=Price.class)
 	private Price price;
 }
