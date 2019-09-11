@@ -3,7 +3,6 @@ package br.com.compasso.miniecommerce.controllers;
 import java.net.URI;
 import java.util.Optional;
 
-import javax.transaction.Transactional;
 import javax.validation.Valid;
 
 import org.modelmapper.ModelMapper;
@@ -49,7 +48,6 @@ public class SKUController {
 	}
 
 	@PostMapping
-	@Transactional
 	public ResponseEntity<SkuDtoRes> addSku(@RequestBody @Valid SkuDtoReq dto, UriComponentsBuilder uriBuilder) {
 		Optional<Product> prod = productRepository.findById((long) dto.getProductId());
 
@@ -70,7 +68,6 @@ public class SKUController {
 	}
 
 	@PutMapping("/{id}")
-	@Transactional
 	public ResponseEntity<SkuDtoRes> editSku(@PathVariable Long id, @RequestBody @Valid SkuDtoReqEdit dto) {
 		SKU sku = skuService.editSku(id, dto);
 
@@ -82,7 +79,6 @@ public class SKUController {
 	}
 	
 	@PutMapping("/{id}/{status}")
-	@Transactional
 	public ResponseEntity<SkuDtoRes> editSku(@PathVariable Long id, @PathVariable boolean status, @RequestBody @Valid SkuDtoReqEdit dto) {
 		SKU sku = skuService.removeSku(id, status);
 

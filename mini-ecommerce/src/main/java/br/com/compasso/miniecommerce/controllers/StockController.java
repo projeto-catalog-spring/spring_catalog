@@ -1,5 +1,4 @@
 package br.com.compasso.miniecommerce.controllers;
-import javax.transaction.Transactional;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,7 +43,6 @@ public class StockController {
 	}
 
 	@PutMapping("/add")
-	@Transactional
 	public ResponseEntity<SkuDtoRes> addStock(@Valid @RequestBody StockDtoReq stockReq, BindingResult result,
 			UriComponentsBuilder uriBuilder) {
 
@@ -55,7 +53,6 @@ public class StockController {
 	}
 
 	@PutMapping("/remove")
-	@Transactional
 	public ResponseEntity<SkuDtoRes> removeStock(@Valid @RequestBody StockDtoReq stockReq, BindingResult result,
 			UriComponentsBuilder uriBuilder) {
 

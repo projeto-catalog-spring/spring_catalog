@@ -25,21 +25,21 @@ import br.com.compasso.miniecommerce.models.Product;
 import br.com.compasso.miniecommerce.models.dto.ProductReqDto;
 import br.com.compasso.miniecommerce.models.dto.ProductResDTO;
 import br.com.compasso.miniecommerce.repository.ProductRepository;
+import br.com.compasso.miniecommerce.services.ProductService;
 
 
 @RestController
-@RequestMapping("API/products")
+@RequestMapping("/products")
 public class ProductController {
 
 	@Autowired
 	private ProductRepository productres;	
 	
 	@Autowired
-	//private ProductService service;
-	
+	private ProductService service;	
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<ProductResDTO> getById(@PathVariable Long id){ 
+	public ResponseEntity<ProductResDTO> getById(Long id){ 
 		Optional<Product> productget = productres.findById(id);
 		if(productget.isPresent()) {
 			return ResponseEntity.ok(new ProductResDTO(productget.get()));
@@ -64,16 +64,14 @@ public class ProductController {
 		return ResponseEntity.status(HttpStatus.CREATED).build();
 	}
 	
-	@Transactional
 	@PutMapping("/{id}")
 	public Product insert(@RequestBody ProductReqDto productDTO) {
 		ProductReqDto reqProduct = new ProductReqDto();		
 		return productres.save(reqProduct.dtoToProduct(productDTO));
 	}
 	
-	@Transactional
 	@DeleteMapping("/{id}")
-	public ResponseEntity<Product> delete(@PathVariable long id) {
+	public ResponseEntity<Product> delete(long id) {
 		
 		//RN07 - Um produto nunca será excluido, apenas desativado 
 		Optional<Product> productOptional = productres.findById(id);

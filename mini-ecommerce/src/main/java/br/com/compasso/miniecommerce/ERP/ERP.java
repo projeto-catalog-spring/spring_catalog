@@ -39,7 +39,6 @@ public class ERP {
 	@Autowired
 	SKURepository skuRepository;
 
-	@SuppressWarnings("unlikely-arg-type")
 	@GetMapping()
 	public ResponseEntity<ERPDtoSend> getData() {
 

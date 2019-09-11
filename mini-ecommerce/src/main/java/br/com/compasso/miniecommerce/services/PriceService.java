@@ -38,7 +38,7 @@ public class PriceService {
 		return ResponseEntity.created(uri).body(this.mapper.map(p, PriceDtoRes.class));
 	}
 
-	public ResponseEntity<PriceDtoRes> getPrice(Long id, PriceDtoReq dto, UriComponentsBuilder uriBuilder) {
+	public ResponseEntity<PriceDtoRes> getPrice(Long id, UriComponentsBuilder uriBuilder) {
 		Optional<Price> priceOptional = repository.findById(id);
 
 		if (priceOptional.isPresent()) {

@@ -2,7 +2,6 @@ package br.com.compasso.miniecommerce.models.dto;
 
 import org.springframework.data.domain.Page;
 
-import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import br.com.compasso.miniecommerce.models.Price;
