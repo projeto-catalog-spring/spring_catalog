@@ -1,22 +1,18 @@
 package br.com.compasso.miniecommerce.controllers;
 
 import java.net.URI;
-import java.util.Optional;
 
 import javax.transaction.Transactional;
 import javax.validation.Valid;
-import javax.validation.constraints.PositiveOrZero;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -29,59 +25,54 @@ import org.springframework.web.util.UriComponentsBuilder;
 import br.com.compasso.miniecommerce.models.dto.PriceDtoRes;
 import br.com.compasso.miniecommerce.models.dto.PriceDtoReq;
 import br.com.compasso.miniecommerce.models.Price;
-import br.com.compasso.miniecommerce.repository.PriceRepository;
-
+import br.com.compasso.miniecommerce.services.PriceService;
 
 @RestController
 @RequestMapping("/prices")
 public class PriceController {
-	
+
 	@Autowired
-	private PriceRepository priceRepository;
-	
-	
+	private PriceService priceService;
+
 	@GetMapping
-	@Cacheable(value = "listPrices")
-	public Page<PriceDtoRes> list(@PageableDefault (sort = "id", direction = Direction.DESC, page = 0, size = 10) Pageable paginacao) {
-			Page<Price> prices = priceRepository.findAll(paginacao);
-			return PriceDtoRes.toConvert(prices);
+	public Page<PriceDtoRes> list(
+			@PageableDefault(sort = "id", direction = Direction.ASC, page = 0, size = 10) Pageable pagination) {
+		return priceService.getAllPrices(pagination);
 	}
-	
+
 	@PostMapping
 	@Transactional
-	@CacheEvict(value = "listPrices", allEntries = true)
-	public ResponseEntity<PriceDtoRes> add(@RequestBody @Valid PriceDtoReq priceDtoReq, UriComponentsBuilder uriBuilder) {
-		ModelMapper mapper = new ModelMapper();
-		Price price =  mapper.map(priceDtoReq, Price.class);
-		priceRepository.save(price);
-		
-		URI uri = uriBuilder.path("/prices/{id}").buildAndExpand(price.getId()).toUri();
+	public ResponseEntity<PriceDtoRes> add(@RequestBody @Valid PriceDtoReq priceDtoReq,
+			UriComponentsBuilder uriBuilder) {
+		Price price = new ModelMapper().map(priceDtoReq, Price.class);
+		priceService.addPrice(price);
+
+		URI uri = uriBuilder.path("/{id}").buildAndExpand(price.getId()).toUri();
 		return ResponseEntity.created(uri).body(new PriceDtoRes(price));
 	}
-	
+
 	@GetMapping("/{id}")
-	public ResponseEntity<PriceDtoRes> findById(@PathVariable Long id) {
-		Optional<Price> price = priceRepository.findById(id);
-		if(price.isPresent()) {
-			return ResponseEntity.ok(new PriceDtoRes(price.get()));
-		}
-		return ResponseEntity.notFound().build();
+	public ResponseEntity<PriceDtoRes> getPrice(@PathVariable Long id, @Valid PriceDtoReq dto, BindingResult result,
+			UriComponentsBuilder uriBuilder) {
+
+		if (result.hasErrors())
+			return ResponseEntity.notFound().build();
+
+		return priceService.getPrice(id, dto, uriBuilder);
 	}
-	
+
 	@PutMapping("/{id}")
 	@Transactional
-	@CacheEvict(value = "listPrices", allEntries = true)
-	public ResponseEntity<PriceDtoRes> update(@PathVariable Long id, @RequestBody @Valid PriceDtoReq priceDtoReq) {
-		Optional<Price> optional = priceRepository.findById(id);
-		if (optional.isPresent()) {
-			Price price = priceDtoReq.update(id, priceRepository);
-			return ResponseEntity.ok(new PriceDtoRes(price));
+	public ResponseEntity<PriceDtoRes> update(@PathVariable Long id, @RequestBody @Valid PriceDtoReq dto,
+			BindingResult result, UriComponentsBuilder uriBuilder) {
+		if (result.hasErrors()) {
+			System.out.println("entrou");
+			return ResponseEntity.notFound().build();
 		}
-		
-		return ResponseEntity.notFound().build();
+
+		return priceService.editPrice(id, dto, uriBuilder);
 	}
-	
-	
+
 	/*
 	 * @DeleteMapping("/{id}")
 	 * 
@@ -94,6 +85,5 @@ public class PriceController {
 	 * 
 	 * return ResponseEntity.notFound().build(); }
 	 */
-	 
 
 }

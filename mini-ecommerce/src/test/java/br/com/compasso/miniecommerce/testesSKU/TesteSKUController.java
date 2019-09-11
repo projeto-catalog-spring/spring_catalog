@@ -14,7 +14,5 @@ public class TesteSKUController {
 //		List<SKU> lista = new ArrayList<>();
 //		lista.add(sku_p1);
 //		p1.setSkus(lista);
-
 	}
-
 }

@@ -22,4 +22,5 @@ public class Price {
 	private double price;
 	
 	private double salePrice;
+
 }

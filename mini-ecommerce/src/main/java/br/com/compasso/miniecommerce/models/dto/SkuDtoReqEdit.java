@@ -40,8 +40,8 @@ public class SkuDtoReqEdit {
 	private boolean enabled;
 
 	public SKU update(Long id, SKURepository skuRepository) {
-
 		SKU sku = skuRepository.getOne(id);
+		
 		sku.setName(this.name);
 		sku.setDescription(this.description);
 		sku.setStock(this.stock);

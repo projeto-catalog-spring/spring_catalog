@@ -1,6 +1,4 @@
-package br.com.compasso.miniecommerce.service;
-
-import java.util.Optional;
+package br.com.compasso.miniecommerce.services;
 
 import javax.validation.constraints.NotEmpty;
 
@@ -9,17 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
-import br.com.compasso.miniecommerce.models.Brand;
-import br.com.compasso.miniecommerce.models.Category;
-import br.com.compasso.miniecommerce.models.Price;
 import br.com.compasso.miniecommerce.models.Product;
-import br.com.compasso.miniecommerce.models.dto.ProductReqDto;
-import br.com.compasso.miniecommerce.repository.BrandRepository;
-import br.com.compasso.miniecommerce.repository.CategoryRepository;
-import br.com.compasso.miniecommerce.repository.PriceRepository;
 import br.com.compasso.miniecommerce.repository.ProductRepository;
 import br.com.compasso.miniecommerce.repository.SKURepository;
-import springfox.documentation.schema.Model;
 
 @Service("ProductService")
 public class ProductService {
