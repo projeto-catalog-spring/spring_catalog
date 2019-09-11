@@ -3,6 +3,7 @@ package br.com.compasso.miniecommerce.models.dto;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import br.com.compasso.miniecommerce.models.Brand;
@@ -21,12 +22,22 @@ public class ProductReqDto {
 	@Autowired
     ModelMapper modelMapper = new ModelMapper();
 	
-	@JsonProperty("Name")
+	@JsonAlias({"name", "Name"})
 	private String name;
+	
+	@JsonAlias({"description", "Description"})
 	private String description;
+	
+	@JsonAlias({"enabled", "Enabled"})
 	private boolean enabled;
+	
+	@JsonAlias({"category", "Category"})
 	private Category category;
+	
+	@JsonAlias({"brand", "Brand"})
 	private Brand brand;
+	
+	@JsonAlias({"price", "Price"})
 	private Price price;
 	
 	public Product dtoToProduct(ProductReqDto productDTO) {

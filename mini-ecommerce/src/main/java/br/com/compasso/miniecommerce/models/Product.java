@@ -9,6 +9,9 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonAlias;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
@@ -24,19 +27,24 @@ public class Product {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-
+	@JsonProperty("Name")
 	private String name;
-
+	
+	@JsonProperty("Description")
 	private String description;
-
+	
+	@JsonProperty("Enabled")
 	private boolean enabled;
 	
+	@JsonProperty("Category")
 	@ManyToOne
 	private Category category;
-
+	
+	@JsonProperty("Brand")
 	@ManyToOne
 	private Brand brand;
 	
+	@JsonProperty("Price")
 	@OneToOne(cascade = CascadeType.ALL, targetEntity=Price.class)
 	private Price price;
 }
