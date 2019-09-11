@@ -10,6 +10,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -18,36 +19,24 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "product")
+@Data
 public class Product {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Getter
 	private Long id;
 
-	@Getter
-	@Setter
 	private String name;
 
-	@Getter
-	@Setter
 	private String description;
 
-	@Getter
-	@Setter
 	private boolean enabled;
-
-	@Getter
-	@Setter
+	
 	@ManyToOne
 	private Category category;
 
-	@Getter
-	@Setter
 	@ManyToOne
 	private Brand brand;
-
-	@Getter
-	@Setter
+	
 	@OneToOne(cascade = CascadeType.ALL, targetEntity=Price.class)
 	private Price price;
 }

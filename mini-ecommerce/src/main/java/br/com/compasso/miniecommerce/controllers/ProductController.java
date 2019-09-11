@@ -70,30 +70,13 @@ public class ProductController {
 	}
 
 	@PostMapping
-	@ResponseBody
-	@CacheEvict(value = "listPrices", allEntries = true)
-	public ResponseEntity<ProductResDTO> set(@RequestBody @Valid ProductReqDto productDTO, UriComponentsBuilder uriBuilder) {
+	public ResponseEntity<Product> set(@RequestBody ProductReqDto productDTO) {
 			
 		ModelMapper model = new ModelMapper(); 
 		Product product = model.map(productDTO, Product.class);
 		
-		Price price = pricerep.getOne(productDTO.getIdPrice());
-		Brand brand = brandrep.getOne(productDTO.getIdBrand());
-		Category category = catrep.getOne(productDTO.getIdCategory());
-		
-		
-			product.setPrice(price);
-			product.setBrand(brand);
-			product.setCategory(category);
-			productres.save(product);
-		
-			//return ResponseEntity.notFound().build();
-		
-		System.out.println(productres.save(product));
-		
-		ProductResDTO resdto = new ProductResDTO(product);		
-		URI uri = uriBuilder.path("/product/{id}").buildAndExpand(product.getId()).toUri();
-		return ResponseEntity.created(uri).body(resdto);
+		productres.save(product);		
+		return ResponseEntity.status(HttpStatus.CREATED).build();
 	}
 	
 	@Transactional

@@ -1,28 +1,33 @@
 package br.com.compasso.miniecommerce.models.dto;
 
-import javax.validation.constraints.NotBlank;
-
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import br.com.compasso.miniecommerce.models.Brand;
+import br.com.compasso.miniecommerce.models.Category;
+import br.com.compasso.miniecommerce.models.Price;
 import br.com.compasso.miniecommerce.models.Product;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
+
 
 @AllArgsConstructor
 @NoArgsConstructor
+@Data
 public class ProductReqDto {
 	@Autowired
     ModelMapper modelMapper = new ModelMapper();
-
-	@Getter private Long id; 
-	@Getter @Setter  private String name;
-	@Getter @Setter  private String description;
-	@Getter @Setter  private boolean enabled;
-	@Getter @Setter  private Long idCategory;
-	@Getter @Setter  private Long idBrand;
-	@Getter @Setter  private Long idPrice;
+	
+	@JsonProperty("Name")
+	private String name;
+	private String description;
+	private boolean enabled;
+	private Category category;
+	private Brand brand;
+	private Price price;
 	
 	public Product dtoToProduct(ProductReqDto productDTO) {
 		Product entproduct = modelMapper.map(productDTO, Product.class);

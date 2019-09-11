@@ -10,10 +10,10 @@ import lombok.Setter;
 @AllArgsConstructor
 public class ProductResDTO {
 	
-	@Getter private Long id; 
+	@Getter @Setter private Long id; 
 	@Getter @Setter private String name;
 	@Getter @Setter private String description;
-	@Getter @Setter private boolean enable;
+	@Getter @Setter private boolean enabled;
 	@Getter @Setter private Long idCategory;
 	@Getter @Setter private Long idBrand;
 	@Getter @Setter private Long idPrice;
@@ -22,16 +22,21 @@ public class ProductResDTO {
 		this.id = product.getId();
 		this.name = product.getName();
 		this.description = product.getDescription();
-		this.enable = product.isEnabled();
+		this.enabled = product.isEnabled();
 		this.idCategory = product.getCategory().getId();
 		this.idBrand = product.getBrand().getId();
 		this.idPrice = product.getPrice().getId();
 		
 	}
+	
+	
 		
 	public static Page<ProductResDTO> productToDTO (Page<Product> product) {
 		return product.map(ProductResDTO::new);
     }
+
+	
+	
 	
 	/*
 	 * public static ProductResDTO transformaEmDTO(Product product) { return new
