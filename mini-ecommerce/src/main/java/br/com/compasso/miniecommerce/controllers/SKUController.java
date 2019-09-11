@@ -39,17 +39,8 @@ public class SKUController {
 
 	@Autowired
 	private SkuService skuService;
-	
-	private ModelMapper mapper = new ModelMapper();
 
-//	@GetMapping("/")
-//	public List<SkuDtoResAddList> listAll() {
-//
-//		ModelMapper mapper = new ModelMapper();
-//
-//		List<SKU> list = skuRepository.findAll();
-//		return list.stream().map(sku_temp -> mapper.map(sku_temp, SkuDtoResAddList.class)).collect(Collectors.toList());
-//	}
+	private ModelMapper mapper = new ModelMapper();
 
 	@GetMapping
 	public Page<SkuDtoRes> listAll(
