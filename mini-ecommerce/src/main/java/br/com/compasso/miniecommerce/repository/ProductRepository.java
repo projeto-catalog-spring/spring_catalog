@@ -1,14 +1,17 @@
 package br.com.compasso.miniecommerce.repository;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import br.com.compasso.miniecommerce.models.Product;
-import br.com.compasso.miniecommerce.models.dto.ProductDto;
 
 public interface ProductRepository extends JpaRepository<Product, Long> {
 
-	Product save(ProductDto products);
+	Page<Product> findById(Long id, Pageable paginacao);
 
-//	Product findOne(ProductDto id);
+	Page<Product> findAll(Pageable pag);
+
+//	void saveAll(Object dtoToProduct);
 
 }

@@ -12,4 +12,9 @@ public interface SKURepository extends JpaRepository<SKU, Long> {
 	
 	Page<SKU> findAllByEnabled(boolean enable, Pageable pageable);
 
+//	boolean isEnabled(Long id);
+
+//	@Query("SELECT u FROM User u WHERE u.status = 1")
+//	ProductRepository findActiveProduct();
+
 }
