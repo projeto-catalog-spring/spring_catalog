@@ -31,7 +31,7 @@ import br.com.compasso.miniecommerce.repository.ProductRepository;
 import br.com.compasso.miniecommerce.services.SkuService;
 
 @RestController
-@RequestMapping("/api/sku")
+@RequestMapping("/sku")
 public class SKUController {
 
 	@Autowired

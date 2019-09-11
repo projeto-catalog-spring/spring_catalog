@@ -22,9 +22,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import br.com.compasso.miniecommerce.models.dto.PriceDtoRes;
-import br.com.compasso.miniecommerce.models.dto.PriceDtoReq;
 import br.com.compasso.miniecommerce.models.Price;
+import br.com.compasso.miniecommerce.models.dto.PriceDtoReq;
+import br.com.compasso.miniecommerce.models.dto.PriceDtoRes;
 import br.com.compasso.miniecommerce.services.PriceService;
 
 @RestController
@@ -45,7 +45,7 @@ public class PriceController {
 	public ResponseEntity<PriceDtoRes> add(@RequestBody @Valid PriceDtoReq priceDtoReq,
 			UriComponentsBuilder uriBuilder) {
 		Price price = new ModelMapper().map(priceDtoReq, Price.class);
-		priceService.addPrice(price);
+		priceService.addPrice(price, uriBuilder);
 
 		URI uri = uriBuilder.path("/{id}").buildAndExpand(price.getId()).toUri();
 		return ResponseEntity.created(uri).body(new PriceDtoRes(price));
@@ -54,7 +54,6 @@ public class PriceController {
 	@GetMapping("/{id}")
 	public ResponseEntity<PriceDtoRes> getPrice(@PathVariable Long id, @Valid PriceDtoReq dto, BindingResult result,
 			UriComponentsBuilder uriBuilder) {
-
 		if (result.hasErrors())
 			return ResponseEntity.notFound().build();
 
@@ -72,18 +71,5 @@ public class PriceController {
 
 		return priceService.editPrice(id, dto, uriBuilder);
 	}
-
-	/*
-	 * @DeleteMapping("/{id}")
-	 * 
-	 * @Transactional
-	 * 
-	 * @CacheEvict(value = "listPrices", allEntries = true) public ResponseEntity<?>
-	 * remove(@PathVariable Long id) { Price price = priceRepository.getOne(id); if
-	 * (price != null) { price.update(id, priceRepository); return
-	 * ResponseEntity.ok().build(); }
-	 * 
-	 * return ResponseEntity.notFound().build(); }
-	 */
 
 }
