@@ -1,26 +1,21 @@
 package br.com.compasso.miniecommerce.models.dto;
 
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Positive;
 import javax.validation.constraints.PositiveOrZero;
 
 import br.com.compasso.miniecommerce.models.Price;
 import br.com.compasso.miniecommerce.repository.PriceRepository;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @NoArgsConstructor
+@Data
 public class PriceDtoReq {
 
-	@Getter
-	@Setter
 	@NotNull
 	@PositiveOrZero
 	private double price;
 
-	@Getter
-	@Setter
 	@NotNull
 	@PositiveOrZero
 	private double salePrice;

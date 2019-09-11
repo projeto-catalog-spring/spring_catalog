@@ -8,5 +8,5 @@ import br.com.compasso.miniecommerce.models.Price;
 
 public interface PriceRepository extends JpaRepository<Price, Long> {
 	Page<Price> findById(Long id, Pageable paginacao);
-	
+
 }

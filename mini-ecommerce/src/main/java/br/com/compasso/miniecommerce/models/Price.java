@@ -14,13 +14,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Data
 public class Price {
-
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	
-	private double price;
-	
-	private double salePrice;
 
+	private double price;
+
+	private double salePrice;
 }
