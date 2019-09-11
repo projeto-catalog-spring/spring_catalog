@@ -1,14 +1,7 @@
 package br.com.compasso.miniecommerce.controllers;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import br.com.compasso.miniecommerce.models.Product;
 
 @RestController
 @RequestMapping("/products")
@@ -51,7 +44,7 @@ public class ProductController {
 //		return new ResponseEntity<>(HttpStatus.CREATED);
 //	}
 
-	@PutMapping
+	// @PutMapping
 //	public ResponseEntity<Product> insert(@RequestBody ProductReqDto productDTO) {
 //		ProductReqDto reqProduct = new ProductReqDto();
 //		productres.saveAll(reqProduct.dtoToProduct(productDTO));
