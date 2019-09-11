@@ -1,7 +1,9 @@
 package br.com.compasso.miniecommerce.ERP;
 
 import java.util.Arrays;
+import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,17 +14,32 @@ import br.com.compasso.miniecommerce.models.Category;
 import br.com.compasso.miniecommerce.models.Price;
 import br.com.compasso.miniecommerce.models.Product;
 import br.com.compasso.miniecommerce.models.SKU;
+import br.com.compasso.miniecommerce.repository.CategoryRepository;
+import br.com.compasso.miniecommerce.repository.PriceRepository;
 
 @RestController
 @RequestMapping("/ERP")
 public class ERP {
 
+	@Autowired
+	PriceRepository priceRepository;
+
+	@Autowired
+	CategoryRepository categoryRepository;
+
+	@SuppressWarnings("unlikely-arg-type")
 	@GetMapping()
 	public ResponseEntity<ERPDtoSend> getData() {
 
-		Price price1 = new Price((long) 1, 15.90, 12.90);
-		Price price2 = new Price((long) 2, 25.90, 18.90);
-		Price price3 = new Price((long) 3, 115.90, 99.90);
+		List<Price> prices = priceRepository.findAll();
+		Price price = prices.get(prices.size() - 1);
+
+		Price price1 = new Price(price.getId() + 1, 15.90, 12.90);
+		Price price2 = new Price(price.getId() + 2, 25.90, 18.90);
+		Price price3 = new Price(price.getId() + 3, 115.90, 99.90);
+
+		List<Category> categorys = categoryRepository.findAll();
+		Price price = prices.get(prices.size() - 1);
 
 		Category c1 = new Category((long) 1, "Escritorio");
 		Category c2 = new Category((long) 2, "Cama mesa e banho");
