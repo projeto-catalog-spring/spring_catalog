@@ -24,6 +24,8 @@ import lombok.Setter;
 @Table(name = "product")
 @Data
 public class Product {
+
+	@JsonProperty("Id")
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;

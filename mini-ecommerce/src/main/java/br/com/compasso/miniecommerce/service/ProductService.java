@@ -48,24 +48,6 @@ public class ProductService {
 		return productrep.isActive(product.getId());
 	}
 	
-	/* 
-	public boolean getIdprice(Long price) {
-		Optional<Price> priceobj = pricerep.findById((long) price);
-		return (priceobj.isPresent())? true: false;
-	}
 	
-
-	public  getIdcategory(Long cat) {
-		Optional<Category> catobj = catrep.findById((long) cat);
-		if(catobj.isPresent()) return
-	}
-	
-
-	public boolean getIdBrand(Long brand) {
-		Optional<Brand> brandobj = brandrep.findById((long) brand);
-		return (brandobj.isPresent())? true: false;
-	}
-*/	
-
 
 }
