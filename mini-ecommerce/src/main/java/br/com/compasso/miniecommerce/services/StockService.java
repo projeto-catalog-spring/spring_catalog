@@ -3,6 +3,8 @@ package br.com.compasso.miniecommerce.services;
 import java.net.URI;
 import java.util.Optional;
 
+import javax.transaction.Transactional;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +21,7 @@ public class StockService {
 
 	private ModelMapper mapper = new ModelMapper();
 
+	@Transactional
 	public ResponseEntity<SkuDtoRes> add(SKURepository skuRep, StockDtoReq stockReq, UriComponentsBuilder uriBuilder) {
 
 		Optional<SKU> skuOptional = skuRep.findById(stockReq.getId());
@@ -34,6 +37,7 @@ public class StockService {
 		}
 	}
 
+	@Transactional
 	public ResponseEntity<SkuDtoRes> remove(SKURepository skuRep, StockDtoReq stockReq,
 			UriComponentsBuilder uriBuilder) {
 

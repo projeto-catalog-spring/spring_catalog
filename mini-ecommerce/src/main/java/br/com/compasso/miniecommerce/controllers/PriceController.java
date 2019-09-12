@@ -1,7 +1,5 @@
 package br.com.compasso.miniecommerce.controllers;
 
-import java.net.URI;
-
 import javax.validation.Valid;
 
 import org.modelmapper.ModelMapper;
@@ -33,6 +31,8 @@ public class PriceController {
 	@Autowired
 	private PriceService priceService;
 
+	private ModelMapper mapper = new ModelMapper();
+
 	@GetMapping
 	public Page<PriceDtoRes> getAllPrices(
 			@PageableDefault(sort = "id", direction = Direction.ASC, page = 0, size = 10) Pageable pagination) {
@@ -40,21 +40,16 @@ public class PriceController {
 	}
 
 	@PostMapping
-	public ResponseEntity<PriceDtoRes> addPrice(@RequestBody @Valid PriceDtoReq priceDtoReq,
-			UriComponentsBuilder uriBuilder) {
-		Price price = new ModelMapper().map(priceDtoReq, Price.class);
-		priceService.addPrice(price, uriBuilder);
-
-		URI uri = uriBuilder.path("/{id}").buildAndExpand(price.getId()).toUri();
-		return ResponseEntity.created(uri).body(new PriceDtoRes(price));
-	}
-
-	@GetMapping("/{id}")
-	public ResponseEntity<PriceDtoRes> getPrice(@PathVariable Long id, BindingResult result,
+	public ResponseEntity<PriceDtoRes> addPrice(@RequestBody @Valid PriceDtoReq priceDtoReq, BindingResult result,
 			UriComponentsBuilder uriBuilder) {
 		if (result.hasErrors())
 			return ResponseEntity.notFound().build();
 
+		return priceService.addPrice(mapper.map(priceDtoReq, Price.class), uriBuilder);
+	}
+
+	@GetMapping("/{id}")
+	public ResponseEntity<PriceDtoRes> getPrice(@PathVariable Long id, UriComponentsBuilder uriBuilder) {
 		return priceService.getPrice(id, uriBuilder);
 	}
 
