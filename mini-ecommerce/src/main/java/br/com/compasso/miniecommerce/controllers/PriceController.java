@@ -1,8 +1,5 @@
 package br.com.compasso.miniecommerce.controllers;
 
-import java.net.URI;
-
-import javax.transaction.Transactional;
 import javax.validation.Valid;
 
 import org.modelmapper.ModelMapper;
@@ -22,9 +19,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import br.com.compasso.miniecommerce.models.dto.PriceDtoRes;
-import br.com.compasso.miniecommerce.models.dto.PriceDtoReq;
 import br.com.compasso.miniecommerce.models.Price;
+import br.com.compasso.miniecommerce.models.dto.PriceDtoReq;
+import br.com.compasso.miniecommerce.models.dto.PriceDtoRes;
 import br.com.compasso.miniecommerce.services.PriceService;
 
 @RestController
@@ -34,56 +31,36 @@ public class PriceController {
 	@Autowired
 	private PriceService priceService;
 
+	private ModelMapper mapper = new ModelMapper();
+
 	@GetMapping
-	public Page<PriceDtoRes> list(
+	public Page<PriceDtoRes> getAllPrices(
 			@PageableDefault(sort = "id", direction = Direction.ASC, page = 0, size = 10) Pageable pagination) {
 		return priceService.getAllPrices(pagination);
 	}
 
 	@PostMapping
-	@Transactional
-	public ResponseEntity<PriceDtoRes> add(@RequestBody @Valid PriceDtoReq priceDtoReq,
+	public ResponseEntity<PriceDtoRes> addPrice(@RequestBody @Valid PriceDtoReq priceDtoReq, BindingResult result,
 			UriComponentsBuilder uriBuilder) {
-		Price price = new ModelMapper().map(priceDtoReq, Price.class);
-		priceService.addPrice(price);
-
-		URI uri = uriBuilder.path("/{id}").buildAndExpand(price.getId()).toUri();
-		return ResponseEntity.created(uri).body(new PriceDtoRes(price));
-	}
-
-	@GetMapping("/{id}")
-	public ResponseEntity<PriceDtoRes> getPrice(@PathVariable Long id, @Valid PriceDtoReq dto, BindingResult result,
-			UriComponentsBuilder uriBuilder) {
-
 		if (result.hasErrors())
 			return ResponseEntity.notFound().build();
 
-		return priceService.getPrice(id, dto, uriBuilder);
+		return priceService.addPrice(mapper.map(priceDtoReq, Price.class), uriBuilder);
+	}
+
+	@GetMapping("/{id}")
+	public ResponseEntity<PriceDtoRes> getPrice(@PathVariable Long id, UriComponentsBuilder uriBuilder) {
+		return priceService.getPrice(id, uriBuilder);
 	}
 
 	@PutMapping("/{id}")
-	@Transactional
-	public ResponseEntity<PriceDtoRes> update(@PathVariable Long id, @RequestBody @Valid PriceDtoReq dto,
+	public ResponseEntity<PriceDtoRes> editPrice(@PathVariable Long id, @RequestBody @Valid PriceDtoReq dto,
 			BindingResult result, UriComponentsBuilder uriBuilder) {
 		if (result.hasErrors()) {
-			System.out.println("entrou");
 			return ResponseEntity.notFound().build();
 		}
 
 		return priceService.editPrice(id, dto, uriBuilder);
 	}
-
-	/*
-	 * @DeleteMapping("/{id}")
-	 * 
-	 * @Transactional
-	 * 
-	 * @CacheEvict(value = "listPrices", allEntries = true) public ResponseEntity<?>
-	 * remove(@PathVariable Long id) { Price price = priceRepository.getOne(id); if
-	 * (price != null) { price.update(id, priceRepository); return
-	 * ResponseEntity.ok().build(); }
-	 * 
-	 * return ResponseEntity.notFound().build(); }
-	 */
 
 }

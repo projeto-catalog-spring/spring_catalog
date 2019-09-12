@@ -2,23 +2,23 @@ package br.com.compasso.miniecommerce.models.dto;
 
 import org.springframework.data.domain.Page;
 
-import br.com.compasso.miniecommerce.models.Price;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-import lombok.Getter;
+import br.com.compasso.miniecommerce.models.Price;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @NoArgsConstructor
+@Data
 public class PriceDtoRes {
 
-	@Getter
-	@Setter
+	@JsonProperty("Id")
 	private Long id;
-	@Getter
-	@Setter
+
+	@JsonProperty("Price")
 	private double price;
-	@Getter
-	@Setter
+
+	@JsonProperty("SalePrice")
 	private double salePrice;
 
 	public PriceDtoRes(Price p) {

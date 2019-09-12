@@ -4,10 +4,17 @@ import javax.validation.constraints.Min;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.Setter;
 
 @AllArgsConstructor
+@Getter
+@Setter
 public class StockDtoReq {
 
-	@Min(0) @Getter private long id;
-	@Min(1) @Getter private int qtd;
+	@Min(0)
+	private long id;
+
+	@Min(1)
+	private int qtd;
+	
 }

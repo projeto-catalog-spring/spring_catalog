@@ -3,7 +3,7 @@ package br.com.compasso.miniecommerce.models.dto;
 
 import org.springframework.data.domain.Page;
 
-import com.fasterxml.jackson.annotation.JsonAlias;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import br.com.compasso.miniecommerce.models.Brand;
 import br.com.compasso.miniecommerce.models.Category;
@@ -11,28 +11,30 @@ import br.com.compasso.miniecommerce.models.Price;
 import br.com.compasso.miniecommerce.models.Product;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+
 @AllArgsConstructor
 @Data
 public class ProductResDTO {
-	@JsonAlias({"id", "Id"})
+	
+	@JsonProperty("Id")
 	private Long id; 
 
-	@JsonAlias({"name", "Name"})
+	@JsonProperty("Name")
 	private String name;
 	
-	@JsonAlias({"description", "Description"})
+	@JsonProperty("Description")
 	private String description;
 	
-	@JsonAlias({"enabled", "Enabled"})
+	@JsonProperty("Enabled")
 	private boolean enabled;
 	
-	@JsonAlias({"category", "Category"})
+	@JsonProperty("Category")
 	private Category category;
 	
-	@JsonAlias({"brand", "Brand"})
+	@JsonProperty("Brand")
 	private Brand brand;
 	
-	@JsonAlias({"price", "Price"})
+	@JsonProperty("Price")
 	private Price price;
 	
 	public ProductResDTO(Product product) {
@@ -43,7 +45,6 @@ public class ProductResDTO {
 		this.category = product.getCategory();
 		this.brand = product.getBrand();
 		this.price = product.getPrice();
-		
 	}
 			
 	public static Page<ProductResDTO> productToDTO (Page<Product> product) {

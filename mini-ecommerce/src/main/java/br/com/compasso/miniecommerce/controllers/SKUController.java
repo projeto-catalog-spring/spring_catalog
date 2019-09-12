@@ -1,9 +1,7 @@
 package br.com.compasso.miniecommerce.controllers;
 
 import java.net.URI;
-import java.util.Optional;
 
-import javax.transaction.Transactional;
 import javax.validation.Valid;
 
 import org.modelmapper.ModelMapper;
@@ -22,42 +20,34 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import br.com.compasso.miniecommerce.models.Product;
 import br.com.compasso.miniecommerce.models.SKU;
 import br.com.compasso.miniecommerce.models.dto.SkuDtoReq;
 import br.com.compasso.miniecommerce.models.dto.SkuDtoReqEdit;
 import br.com.compasso.miniecommerce.models.dto.SkuDtoRes;
-import br.com.compasso.miniecommerce.repository.ProductRepository;
 import br.com.compasso.miniecommerce.services.SkuService;
 
 @RestController
-@RequestMapping("/api/sku")
+@RequestMapping("/sku")
 public class SKUController {
 
 	@Autowired
-	private ProductRepository productRepository;
-
-	@Autowired
 	private SkuService skuService;
-	
+
 	private ModelMapper mapper = new ModelMapper();
 
-//	@GetMapping("/")
-//	public List<SkuDtoResAddList> listAll() {
-//
-//		ModelMapper mapper = new ModelMapper();
-//
-//		List<SKU> list = skuRepository.findAll();
-//		return list.stream().map(sku_temp -> mapper.map(sku_temp, SkuDtoResAddList.class)).collect(Collectors.toList());
-//	}
-
 	@GetMapping
-	public Page<SkuDtoRes> listAll(
+	public Page<SkuDtoRes> getAllSkus(
 			@PageableDefault(sort = "id", direction = Direction.ASC, page = 0, size = 10) Pageable pagination) {
+		return skuService.getAllSkus(pagination);
+	}
 
-		Page<SkuDtoRes> skus = skuService.getAllSkus(pagination);
+	@PostMapping
+	public ResponseEntity<SkuDtoRes> addSku(@RequestBody @Valid SkuDtoReq dto, UriComponentsBuilder uriBuilder) {
+		SKU sku = this.mapper.map(dto, SKU.class);
+		skuService.addSku(sku);
 
-		return skus;
+		URI uri = uriBuilder.path("/{id}").buildAndExpand(sku.getId()).toUri();
+		return ResponseEntity.created(uri).body(new SkuDtoRes(sku));
 	}
 
 	@GetMapping("/{id}")
@@ -65,29 +55,8 @@ public class SKUController {
 		return ResponseEntity.ok(this.mapper.map(skuService.getSku(id), SkuDtoRes.class));
 	}
 
-	@PostMapping
-//	@Transactional
-	public ResponseEntity<SkuDtoRes> add(@RequestBody @Valid SkuDtoReq dto, UriComponentsBuilder uriBuilder) {
-
-		SKU sku = this.mapper.map(dto, SKU.class);
-
-		// using this until product's service is ready
-		Optional<Product> prod = productRepository.findById((long) dto.getProductId());
-
-		if (prod.isPresent()) {
-			sku.setProduct(prod.get());
-			skuService.addSku(sku);
-			URI uri = uriBuilder.path("/sku/{id}").buildAndExpand(sku.getId()).toUri();
-			return ResponseEntity.created(uri).body(mapper.map(sku, SkuDtoRes.class));
-		}
-		return ResponseEntity.notFound().build();
-
-	}
-
 	@PutMapping("/{id}")
-	@Transactional
-	public ResponseEntity<SkuDtoRes> edit(@PathVariable Long id, @RequestBody @Valid SkuDtoReqEdit dto) {
-
+	public ResponseEntity<SkuDtoRes> editSku(@PathVariable Long id, @RequestBody @Valid SkuDtoReqEdit dto) {
 		SKU sku = skuService.editSku(id, dto);
 
 		if (sku != null) {
@@ -97,11 +66,15 @@ public class SKUController {
 		return ResponseEntity.notFound().build();
 	}
 
-//	@GetMapping("/addProduct")
-//	@Transactional
-//	public Product saveProduct() {
-//		Product product = new Product(545454L, "nome estranho1", "desc mais estranha1", true, null, null, null);
-//		return productRepository.save(product);
-//	}
+	@PutMapping("/{id}/{status}")
+	public ResponseEntity<SkuDtoRes> removeSku(@PathVariable Long id, @PathVariable boolean status) {
+		SKU sku = skuService.removeSku(id, status);
+
+		if (sku != null) {
+			return ResponseEntity.ok(this.mapper.map(sku, SkuDtoRes.class));
+		}
+
+		return ResponseEntity.notFound().build();
+	}
 
 }

@@ -13,32 +13,24 @@ import lombok.Setter;
 
 @AllArgsConstructor
 @NoArgsConstructor
+@Getter
+@Setter
 public class SkuDtoReq {
 
-	@Getter
-	@Setter
 	@NotBlank
 	@Length(min = 1)
 	private String name;
 
-	@Getter
-	@Setter
 	@NotBlank
 	@Length(min = 1)
 	private String description;
 
-	@Getter
-	@Setter
 	@PositiveOrZero
 	private int stock;
-	
-	@Getter
-	@Setter
+
 	@PositiveOrZero
 	private int productId;
 
-	@Getter
-	@Setter
 	@NotNull
 	private boolean enabled;
 

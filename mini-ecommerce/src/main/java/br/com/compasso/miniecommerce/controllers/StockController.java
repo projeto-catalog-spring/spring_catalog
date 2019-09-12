@@ -1,5 +1,4 @@
 package br.com.compasso.miniecommerce.controllers;
-import javax.transaction.Transactional;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +35,7 @@ public class StockController {
 
 	@GetMapping
 	public ResponseEntity<Page<StockDtoRes>> stockLevel(
-			@PageableDefault(sort = "id", direction = Direction.DESC, page = 0, size = 10) Pageable pageable) {
+			@PageableDefault(sort = "id", direction = Direction.ASC, page = 0, size = 10) Pageable pageable) {
 
 		Page<SKU> skus = skuRep.findAllByEnabled(true, pageable);
 
@@ -44,7 +43,6 @@ public class StockController {
 	}
 
 	@PutMapping("/add")
-	@Transactional
 	public ResponseEntity<SkuDtoRes> addStock(@Valid @RequestBody StockDtoReq stockReq, BindingResult result,
 			UriComponentsBuilder uriBuilder) {
 
@@ -55,7 +53,6 @@ public class StockController {
 	}
 
 	@PutMapping("/remove")
-	@Transactional
 	public ResponseEntity<SkuDtoRes> removeStock(@Valid @RequestBody StockDtoReq stockReq, BindingResult result,
 			UriComponentsBuilder uriBuilder) {
 

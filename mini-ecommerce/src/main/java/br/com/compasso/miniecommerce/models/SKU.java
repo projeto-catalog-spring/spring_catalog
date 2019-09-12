@@ -16,40 +16,41 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "sku")
+@Getter
 public class SKU {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Getter
 	private Long id;
 
-	@Getter
 	@Setter
 	private String name;
 
-	@Getter
 	@Setter
 	private String description;
 
-	@Getter
 	@Setter
 	private int stock;
 
-	@Getter
 	@Setter
 	private boolean enabled;
 
-	@Getter
-	@Setter
 	@ManyToOne
+	@Setter
 	private Product product;
-	
-	public void add(int qtd){
+
+	public void add(int qtd) {
 		stock += qtd;
 	}
-	
+
 	public void remove(int qtd) {
 		stock -= qtd;
+	}
+
+	@Override
+	public String toString() {
+		return "SKU [id=" + id + ", name=" + name + ", description=" + description + ", stock=" + stock + ", enabled="
+				+ enabled + ", product=" + product + "]";
 	}
 
 }
