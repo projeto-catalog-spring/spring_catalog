@@ -8,20 +8,13 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 
 import br.com.compasso.miniecommerce.models.Price;
-import br.com.compasso.miniecommerce.models.dto.PriceDtoReq;
-import br.com.compasso.miniecommerce.repository.PriceRepository;
 
 @RunWith(MockitoJUnitRunner.class)
 public class TestesPriceDtoReq {
 	Price price  = new Price(new Long(3), 3.15, 6.17);
 	Price price2  = new Price(new Long(4), 3.19, 6.00);
-	
-	@Autowired
-	private PriceRepository priceRepository;
 	
 	@Mock
 	private PriceDtoReq mockedPriceDtoReq;
@@ -29,15 +22,13 @@ public class TestesPriceDtoReq {
 	@Before
     public void setup() {
 		//price;
-		
-    }
+	}
     
 	@Test
     public void constructorTest(){
 	mockedPriceDtoReq = new PriceDtoReq(price);
 	   assertEquals("O preço está errado.", 3.15, mockedPriceDtoReq.getPrice(), 0);
 	   assertEquals("O preço de venda está errado.", 6.17, mockedPriceDtoReq.getSalePrice(), 0);
-	    
     }
 	
 	@Test
@@ -51,6 +42,7 @@ public class TestesPriceDtoReq {
 		when(mockedPriceDtoReq.getSalePrice()).thenReturn(6.17);
     	assertEquals("O preço de venda está errado.", 6.17, mockedPriceDtoReq.getSalePrice(), 0);
 	}
+	
 	/*
 	 * @Test public void priceDtoReqUpdateTest() { when(mockedPriceDtoReq.update(new
 	 * Long(3), priceRepository)).thenReturn(price);

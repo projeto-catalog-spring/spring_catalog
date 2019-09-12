@@ -9,9 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -32,7 +30,7 @@ import br.com.compasso.miniecommerce.services.ProductService;
 public class ProductController {
 
 	@Autowired
-	private ProductRepository productres;
+	private ProductRepository repository;
 
 	@Autowired
 	private ProductService service;
@@ -42,23 +40,21 @@ public class ProductController {
 	@GetMapping
 	public Page<ProductResDTO> getAllProducts(
 			@PageableDefault(sort = "id", direction = Direction.ASC, page = 0, size = 10) Pageable pag) {
-		Page<Product> productget = productres.findAll(pag);
+		Page<Product> productget = repository.findAll(pag);
 		return ProductResDTO.productToDTO(productget);
 	}
 
 	@PostMapping
-	public ResponseEntity<ProductResDTO> addProduct(@RequestBody ProductReqDto productDTO,
-			UriComponentsBuilder uriBuilder) {
-		Product product = mapper.map(productDTO, Product.class);
-		service.addProduct(product);
+	public ResponseEntity<ProductResDTO> addProduct(@RequestBody ProductReqDto dto, UriComponentsBuilder uriBuilder) {
+		Product product = service.addProduct(mapper.map(dto, Product.class));
 
-		URI uri = uriBuilder.path("/{id}").buildAndExpand(product.getId()).toUri();
+		URI uri = uriBuilder.path("/{id}").buildAndExpand(product).toUri();
 		return ResponseEntity.created(uri).body(new ProductResDTO(product));
 	}
 
 	@GetMapping("/{id}")
 	public ResponseEntity<ProductResDTO> getProduct(@PathVariable Long id) {
-		Optional<Product> productget = productres.findById(id);
+		Optional<Product> productget = repository.findById(id);
 		if (productget.isPresent()) {
 			return ResponseEntity.ok(new ProductResDTO(productget.get()));
 		} else {
@@ -72,11 +68,10 @@ public class ProductController {
 		return service.editProduct(id, productDTO, uriBuilder);
 	}
 
-	@DeleteMapping("/{id}")
-	public ResponseEntity<Product> removeProduct(@PathVariable long id) {
-		// RN07 - Um produto nunca será excluido, apenas desativado
-		return (service.deleteProduct(id)) ? new ResponseEntity<>(HttpStatus.CREATED)
-				: new ResponseEntity<>(HttpStatus.NOT_FOUND);
+	@PutMapping("/{id}/{status}")
+	public ResponseEntity<ProductResDTO> removeProduct(@PathVariable long id, @PathVariable boolean status,
+			UriComponentsBuilder uriBuilder) {
+		return service.removeProduct(id, status, uriBuilder);
 	}
 
 }

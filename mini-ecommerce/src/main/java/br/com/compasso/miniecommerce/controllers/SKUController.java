@@ -67,7 +67,7 @@ public class SKUController {
 	}
 
 	@PutMapping("/{id}/{status}")
-	public ResponseEntity<SkuDtoRes> editSku(@PathVariable Long id, @PathVariable boolean status,
+	public ResponseEntity<SkuDtoRes> removeSku(@PathVariable Long id, @PathVariable boolean status,
 			@RequestBody @Valid SkuDtoReqEdit dto) {
 		SKU sku = skuService.removeSku(id, status);
 

@@ -39,11 +39,11 @@ public class Product {
 	private boolean enabled;
 	
 	@JsonProperty("Category")
-	@ManyToOne
+	@ManyToOne(cascade = CascadeType.ALL, targetEntity=Category.class)
 	private Category category;
 	
 	@JsonProperty("Brand")
-	@ManyToOne
+	@ManyToOne(cascade = CascadeType.ALL, targetEntity=Brand.class)
 	private Brand brand;
 	
 	@JsonProperty("Price")
