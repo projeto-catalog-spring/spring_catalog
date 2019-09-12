@@ -39,8 +39,16 @@ public class ProductController {
 
 	@GetMapping
 	public Page<ProductResDTO> getAllProducts(
-			@PageableDefault(sort = "id", direction = Direction.ASC, page = 0, size = 10) Pageable pag) {
-		Page<Product> productget = repository.findAll(pag);
+			@PageableDefault(sort = "id", direction = Direction.ASC, page = 0, size = 10) Pageable page) {
+		Page<Product> products = repository.findAll(page);
+		return ProductResDTO.productToDTO(products);
+	}
+
+	@GetMapping("/{id}/skus")
+	public Page<ProductResDTO> getProductSkus(
+			@PageableDefault(sort = "id", direction = Direction.ASC, page = 0, size = 10) Pageable page,
+			@PathVariable Long id) {
+		Page<Product> productget = repository.findAllSkus(id, page);
 		return ProductResDTO.productToDTO(productget);
 	}
 
