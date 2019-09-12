@@ -35,7 +35,7 @@ public class StockController {
 
 	@GetMapping
 	public ResponseEntity<Page<StockDtoRes>> stockLevel(
-			@PageableDefault(sort = "id", direction = Direction.DESC, page = 0, size = 10) Pageable pageable) {
+			@PageableDefault(sort = "id", direction = Direction.ASC, page = 0, size = 10) Pageable pageable) {
 
 		Page<SKU> skus = skuRep.findAllByEnabled(true, pageable);
 

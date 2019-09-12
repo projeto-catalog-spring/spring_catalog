@@ -1,15 +1,15 @@
 package br.com.compasso.miniecommerce.models.dto;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
+@Data
 public class ProductDto {
 
-	@Getter private Long id; 
-	@Getter @Setter private String name;
-	@Getter @Setter private String description;
-	@Getter @Setter private boolean enable;
-	@Getter @Setter private Long idCategory;
-	@Getter @Setter private Long idBrand;
+	private Long id; 
+	private String name;
+	private String description;
+	private boolean enable;
+	private Long idCategory;
+	private Long idBrand;
 	
 }

@@ -8,6 +8,6 @@ import br.com.compasso.miniecommerce.models.Brand;
 
 public interface BrandRepository extends JpaRepository<Brand, Long> {
 	
-	public Optional<Brand> findByName(String name);
+	public Optional<Brand> findByName(String name);	
 
 }
