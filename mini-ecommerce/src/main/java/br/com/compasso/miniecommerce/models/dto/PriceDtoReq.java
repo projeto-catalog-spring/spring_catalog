@@ -28,13 +28,8 @@ public class PriceDtoReq {
 	public Price update(Long id, PriceRepository priceRepository) {
 		Price p = priceRepository.getOne(id);
 
-		if (this.price > 0) {
-			p.setPrice(this.price);
-		}
-		
-		if (this.salePrice > 0) {
-			p.setSalePrice(this.salePrice);			
-		}
+		p.setPrice(this.price);
+		p.setSalePrice(this.salePrice);
 
 		return p;
 	}

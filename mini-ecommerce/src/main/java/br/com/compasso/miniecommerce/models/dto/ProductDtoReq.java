@@ -17,8 +17,13 @@ import lombok.NoArgsConstructor;
 
 @AllArgsConstructor
 @NoArgsConstructor
+<<<<<<< HEAD:mini-ecommerce/src/main/java/br/com/compasso/miniecommerce/models/dto/ProductReqDto.java
 @Getter 
 public class ProductReqDto {
+=======
+@Data
+public class ProductDtoReq {
+>>>>>>> feat_api_product_dtosName:mini-ecommerce/src/main/java/br/com/compasso/miniecommerce/models/dto/ProductDtoReq.java
 
 	@NotBlank
 	private String name;
@@ -34,7 +39,7 @@ public class ProductReqDto {
 	@Positive
 	private Price price;
 	
-	public Product update(ProductReqDto dto) {
+	public Product update(ProductDtoReq dto) {
 		return new ModelMapper().map(dto, Product.class);
 	}
 

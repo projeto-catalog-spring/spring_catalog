@@ -14,7 +14,7 @@ import lombok.Data;
 
 @AllArgsConstructor
 @Data
-public class ProductResDTO {
+public class ProductDtoRes {
 	
 	@JsonProperty("Id")
 	private Long id; 
@@ -37,7 +37,7 @@ public class ProductResDTO {
 	@JsonProperty("Price")
 	private Price price;
 	
-	public ProductResDTO(Product product) {
+	public ProductDtoRes(Product product) {
 		this.id = product.getId();
 		this.name = product.getName();
 		this.description = product.getDescription();
@@ -47,8 +47,8 @@ public class ProductResDTO {
 		this.price = product.getPrice();
 	}
 			
-	public static Page<ProductResDTO> productToDTO (Page<Product> product) {
-		return product.map(ProductResDTO::new);
+	public static Page<ProductDtoRes> productToDTO (Page<Product> product) {
+		return product.map(ProductDtoRes::new);
     }
 	
 	/*
