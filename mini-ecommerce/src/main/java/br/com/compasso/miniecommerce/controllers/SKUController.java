@@ -27,7 +27,7 @@ import br.com.compasso.miniecommerce.models.dto.SkuDtoRes;
 import br.com.compasso.miniecommerce.services.SkuService;
 
 @RestController
-@RequestMapping("/sku")
+@RequestMapping("/skus")
 public class SKUController {
 
 	@Autowired
@@ -44,6 +44,7 @@ public class SKUController {
 	@PostMapping
 	public ResponseEntity<SkuDtoRes> addSku(@RequestBody @Valid SkuDtoReq dto, UriComponentsBuilder uriBuilder) {
 		SKU sku = this.mapper.map(dto, SKU.class);
+
 		skuService.addSku(sku);
 
 		URI uri = uriBuilder.path("/{id}").buildAndExpand(sku.getId()).toUri();
@@ -69,7 +70,7 @@ public class SKUController {
 	@PutMapping("/{id}/{status}")
 	public ResponseEntity<SkuDtoRes> removeSku(@PathVariable Long id, @PathVariable boolean status) {
 		SKU sku = skuService.removeSku(id, status);
-
+		
 		if (sku != null) {
 			return ResponseEntity.ok(this.mapper.map(sku, SkuDtoRes.class));
 		}

@@ -9,9 +9,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import br.com.compasso.miniecommerce.models.Product;
 import br.com.compasso.miniecommerce.models.SKU;
 import br.com.compasso.miniecommerce.models.dto.SkuDtoReqEdit;
 import br.com.compasso.miniecommerce.models.dto.SkuDtoRes;
+import br.com.compasso.miniecommerce.repository.ProductRepository;
 import br.com.compasso.miniecommerce.repository.SKURepository;
 
 @Service
@@ -19,6 +21,9 @@ public class SkuService {
 
 	@Autowired
 	private SKURepository repository;
+
+	@Autowired
+	private ProductRepository productRepository;
 
 	@Transactional
 	public Page<SkuDtoRes> getAllSkus(Pageable pagination) {
@@ -28,9 +33,15 @@ public class SkuService {
 
 	@Transactional
 	public SKU addSku(SKU sku) {
+		Optional<Product> product = productRepository.findById(sku.getProduct().getId());
+
+		if (product.isPresent()) {
+			sku.setProduct(product.get());
+		}
+
 		return repository.save(sku);
 	}
-	
+
 	@Transactional
 	public SKU getSku(Long id) {
 		Optional<SKU> skuOp = repository.findById(id);
@@ -52,22 +63,31 @@ public class SkuService {
 
 		return null;
 	}
-	
+
 	@Transactional
 	public SKU removeSku(Long id, boolean status) {
 		Optional<SKU> skuOp = repository.findById(id);
 
 		if (skuOp.isPresent()) {
 			skuOp.get().setEnabled(status);
+			
+			Product product = productRepository.getOne(skuOp.get().getProduct().getId());
+			
+			int numeroDeSkusAtivas = productRepository.findAllSkus(product.getId());
+
+			if (numeroDeSkusAtivas == 0) {
+				product.setEnabled(false);
+			}
+
 			return skuOp.get();
 		}
+		
 
 		return null;
 	}
-	
+
 	public static Page<SkuDtoRes> convert(Page<SKU> skus) {
 		return skus.map(SkuDtoRes::new);
 	}
 
-	
 }

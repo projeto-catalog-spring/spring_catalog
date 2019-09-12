@@ -17,12 +17,11 @@ public class ProductReqDto {
 
 	private String name;
 	private String description;
-	private boolean enabled;
 	private Category category;
 	private Brand brand;
 	private Price price;
 	
-	public Product update(Long id, ProductReqDto dto) {
+	public Product update(ProductReqDto dto) {
 		return new ModelMapper().map(dto, Product.class);
 	}
 
