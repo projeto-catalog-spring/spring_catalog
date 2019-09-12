@@ -20,8 +20,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import br.com.compasso.miniecommerce.models.Product;
-import br.com.compasso.miniecommerce.models.dto.ProductReqDto;
-import br.com.compasso.miniecommerce.models.dto.ProductResDTO;
+import br.com.compasso.miniecommerce.models.dto.ProductDtoReq;
+import br.com.compasso.miniecommerce.models.dto.ProductDtoRes;
 import br.com.compasso.miniecommerce.repository.ProductRepository;
 import br.com.compasso.miniecommerce.services.ProductService;
 
@@ -38,47 +38,47 @@ public class ProductController {
 	private ModelMapper mapper = new ModelMapper();
 
 	@GetMapping
-	public Page<ProductResDTO> getAllProducts(
+	public Page<ProductDtoRes> getAllProducts(
 			@PageableDefault(sort = "id", direction = Direction.ASC, page = 0, size = 10) Pageable page) {
 		Page<Product> products = repository.findAll(page);
-		return ProductResDTO.productToDTO(products);
+		return ProductDtoRes.productToDTO(products);
 	}
 
 	@GetMapping("/{id}/skus")
-	public Page<ProductResDTO> getProductSkus(
+	public Page<ProductDtoRes> getProductSkus(
 			@PageableDefault(sort = "id", direction = Direction.ASC, page = 0, size = 10) Pageable page,
 			@PathVariable Long id) {
 
 		Page<Product> productget = repository.findAllSkusPaginated(id, page);
-		return ProductResDTO.productToDTO(productget);
+		return ProductDtoRes.productToDTO(productget);
 	}
 
 	@PostMapping
-	public ResponseEntity<ProductResDTO> addProduct(@RequestBody ProductReqDto dto, UriComponentsBuilder uriBuilder) {
+	public ResponseEntity<ProductDtoRes> addProduct(@RequestBody ProductDtoReq dto, UriComponentsBuilder uriBuilder) {
 		Product product = service.addProduct(mapper.map(dto, Product.class));
 
 		URI uri = uriBuilder.path("/{id}").buildAndExpand(product).toUri();
-		return ResponseEntity.created(uri).body(new ProductResDTO(product));
+		return ResponseEntity.created(uri).body(new ProductDtoRes(product));
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<ProductResDTO> getProduct(@PathVariable Long id) {
+	public ResponseEntity<ProductDtoRes> getProduct(@PathVariable Long id) {
 		Optional<Product> productget = repository.findById(id);
 		if (productget.isPresent()) {
-			return ResponseEntity.ok(new ProductResDTO(productget.get()));
+			return ResponseEntity.ok(new ProductDtoRes(productget.get()));
 		} else {
 			return ResponseEntity.notFound().build();
 		}
 	}
 
 	@PutMapping("/{id}")
-	public ResponseEntity<ProductResDTO> editProduct(@PathVariable Long id, @RequestBody ProductReqDto productDTO,
+	public ResponseEntity<ProductDtoRes> editProduct(@PathVariable Long id, @RequestBody ProductDtoReq productDTO,
 			UriComponentsBuilder uriBuilder) {
 		return service.editProduct(id, productDTO, uriBuilder);
 	}
 
 	@PutMapping("/{id}/{status}")
-	public ResponseEntity<ProductResDTO> removeProduct(@PathVariable long id, @PathVariable boolean status,
+	public ResponseEntity<ProductDtoRes> removeProduct(@PathVariable long id, @PathVariable boolean status,
 			UriComponentsBuilder uriBuilder) {
 		return service.removeProduct(id, status, uriBuilder);
 	}

@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class ProductReqDto {
+public class ProductDtoReq {
 
 	private String name;
 	private String description;
@@ -21,7 +21,7 @@ public class ProductReqDto {
 	private Brand brand;
 	private Price price;
 	
-	public Product update(ProductReqDto dto) {
+	public Product update(ProductDtoReq dto) {
 		return new ModelMapper().map(dto, Product.class);
 	}
 
