@@ -12,20 +12,23 @@ import javax.persistence.Table;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "product")
-@Data
+@Getter
+@Setter
 public class Product {
 
-	@JsonProperty("Id")
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@JsonProperty("Id")
 	private Long id;
+	
 	@JsonProperty("Name")
 	private String name;
 	
@@ -46,4 +49,5 @@ public class Product {
 	@JsonProperty("Price")
 	@OneToOne(cascade = CascadeType.ALL, targetEntity=Price.class)
 	private Price price;
+	
 }

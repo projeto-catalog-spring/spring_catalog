@@ -19,7 +19,7 @@ import br.com.compasso.miniecommerce.models.dto.PriceDtoReq;
 import br.com.compasso.miniecommerce.models.dto.PriceDtoRes;
 import br.com.compasso.miniecommerce.repository.PriceRepository;
 
-@Service
+@Service("PriceService")
 public class PriceService {
 
 	@Autowired

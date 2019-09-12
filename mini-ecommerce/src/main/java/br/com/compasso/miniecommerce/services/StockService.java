@@ -16,7 +16,7 @@ import br.com.compasso.miniecommerce.repository.SKURepository;
 
 @Service
 public class StockService {
-	
+
 	private ModelMapper mapper = new ModelMapper();
 
 	public ResponseEntity<SkuDtoRes> add(SKURepository skuRep, StockDtoReq stockReq, UriComponentsBuilder uriBuilder) {
@@ -26,16 +26,17 @@ public class StockService {
 		if (skuOptional.isPresent()) {
 			SKU sku = skuOptional.get();
 			sku.add(stockReq.getQtd());
-			
+
 			URI uri = uriBuilder.path("/stock/{id}").buildAndExpand(sku.getId()).toUri();
 			return ResponseEntity.created(uri).body(this.mapper.map(sku, SkuDtoRes.class));
 		} else {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 	}
-	
-	public ResponseEntity<SkuDtoRes> remove(SKURepository skuRep, StockDtoReq stockReq, UriComponentsBuilder uriBuilder) {
-		
+
+	public ResponseEntity<SkuDtoRes> remove(SKURepository skuRep, StockDtoReq stockReq,
+			UriComponentsBuilder uriBuilder) {
+
 		Optional<SKU> skuOptional = skuRep.findById(stockReq.getId());
 
 		if (skuOptional.isPresent()) {
