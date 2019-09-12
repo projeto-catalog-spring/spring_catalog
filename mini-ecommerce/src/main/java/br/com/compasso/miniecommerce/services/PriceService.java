@@ -15,15 +15,20 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import br.com.compasso.miniecommerce.models.Price;
+import br.com.compasso.miniecommerce.models.Product;
 import br.com.compasso.miniecommerce.models.dto.PriceDtoReq;
 import br.com.compasso.miniecommerce.models.dto.PriceDtoRes;
 import br.com.compasso.miniecommerce.repository.PriceRepository;
+import br.com.compasso.miniecommerce.repository.ProductRepository;
 
 @Service("PriceService")
 public class PriceService {
 
 	@Autowired
 	private PriceRepository repository;
+
+	@Autowired
+	private ProductRepository productRepository;
 
 	private ModelMapper mapper = new ModelMapper();
 
@@ -58,7 +63,16 @@ public class PriceService {
 		Optional<Price> priceOptional = repository.findById(id);
 
 		if (priceOptional.isPresent()) {
+
 			Price p = dto.update(id, repository);
+
+			if (dto.getPrice() <= 0) {
+				Product prod = productRepository.findProductByPrice(id);
+				if (prod.isEnabled()) {
+					prod.setEnabled(false);
+				}
+			}
+
 			URI uri = uriBuilder.path("/{id}").buildAndExpand(id).toUri();
 			return ResponseEntity.created(uri).body(this.mapper.map(p, PriceDtoRes.class));
 		} else {
