@@ -1,5 +1,7 @@
 package br.com.compasso.miniecommerce.models.dto;
 
+import java.util.Optional;
+
 import javax.transaction.Transactional;
 
 import org.modelmapper.ModelMapper;
@@ -53,7 +55,7 @@ public class ProductReqDto {
 		return entproduct;
 	}
 	
-	@Transactional
+	
 	public Product update(Long id, ProductRepository productrep) {
 		Product product = productrep.getOne(id);
 		
@@ -61,16 +63,17 @@ public class ProductReqDto {
 		product.setDescription(this.description);
 		product.setEnabled(this.enabled);
 		product.setBrand(this.brand);
-		//catrep.setName(this.category.getId());
-		//brandrep.setName(this.brand.getId());
-		
+		product.setCategory(this.category);
 		
 		return product;
 
 	}
+	
 	/*
-	public void setNamecategory(Product product) {
+	
+	public void setCategory(Product product) {
 		long id = product.getCategory().getId();
+		System.out.println(id);
 		Optional<Category> cat = catrep.findById(id);
 	
 		if(cat.isPresent()) {
@@ -78,7 +81,7 @@ public class ProductReqDto {
 		}
 	}
 	
-	public void setNamebrand(Product product) {
+	public void setBrand(Product product) {
 		long id = product.getCategory().getId();
 		Optional<Brand> brandid = brandrep.findById(id);
 	
@@ -86,7 +89,9 @@ public class ProductReqDto {
 			brand.setName(brandid.get().getName());
 		}
 	}
+	
 	*/
+	
 
 	
 		
