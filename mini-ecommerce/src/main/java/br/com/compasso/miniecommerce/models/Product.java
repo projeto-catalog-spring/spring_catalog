@@ -37,7 +37,7 @@ public class Product {
 	
 	@JsonProperty("Enabled")
 	private boolean enabled;
-	
+		
 	@JsonProperty("Category")
 	@ManyToOne(cascade = CascadeType.ALL, targetEntity=Category.class)
 	private Category category;

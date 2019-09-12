@@ -24,6 +24,7 @@ import br.com.compasso.miniecommerce.models.dto.ProductReqDto;
 import br.com.compasso.miniecommerce.models.dto.ProductResDTO;
 import br.com.compasso.miniecommerce.repository.ProductRepository;
 import br.com.compasso.miniecommerce.services.ProductService;
+import br.com.compasso.miniecommerce.services.StockService;
 
 @RestController
 @RequestMapping("/products")
@@ -34,13 +35,28 @@ public class ProductController {
 
 	@Autowired
 	private ProductService service;
-
+	
+	@Autowired
+	private StockService stockService;
+	
 	private ModelMapper mapper = new ModelMapper();
 
 	@GetMapping
 	public Page<ProductResDTO> getAllProducts(
-			@PageableDefault(sort = "id", direction = Direction.ASC, page = 0, size = 10) Pageable pag) {
-		Page<Product> productget = repository.findAll(pag);
+			@PageableDefault(sort = "id", direction = Direction.ASC, page = 0, size = 10) Pageable page) {
+		Page<Product> products = repository.findAll(page);
+		return ProductResDTO.productToDTO(products);
+	}
+
+	@GetMapping("/{id}/skus")
+	public Page<ProductResDTO> getProductSkus(
+			@PageableDefault(sort = "id", direction = Direction.ASC, page = 0, size = 10) Pageable page,
+			@PathVariable Long id) {
+		
+		
+		
+		
+		Page<Product> productget = repository.findAllSkusPaginated(id, page);
 		return ProductResDTO.productToDTO(productget);
 	}
 

@@ -28,10 +28,10 @@ import br.com.compasso.miniecommerce.repository.SKURepository;
 public class ProductService {
 
 	@Autowired
-	public ProductRepository repository;
+	private ProductRepository repository;
 
 	@Autowired
-	public SKURepository skurep;
+	private SKURepository skuRepository;
 
 	@Autowired
 	private BrandRepository brandRepository;
@@ -63,7 +63,7 @@ public class ProductService {
 
 	@Transactional
 	public ResponseEntity<ProductResDTO> editProduct(Long id, ProductReqDto dto, UriComponentsBuilder uriBuilder) {
-		Product updatedProduct = dto.update(id, dto);
+		Product updatedProduct = dto.update(dto);
 
 		Optional<Product> product = repository.findById(id);
 
@@ -102,7 +102,16 @@ public class ProductService {
 
 		if (productOptional.isPresent()) {
 			Product product = productOptional.get();
-			product.setEnabled(status);
+			if (status) {
+				int numeroDeSkusAtivas = repository.findAllSkus(id);
+
+				if (numeroDeSkusAtivas > 0 && product.getPrice().getPrice() > 0) {
+					product.setEnabled(status);
+				}
+				
+			} else {
+				product.setEnabled(status);
+			}
 
 			URI uri = uriBuilder.path("/{id}").buildAndExpand(id).toUri();
 			return ResponseEntity.created(uri).body(new ProductResDTO(repository.save(productOptional.get())));
@@ -111,18 +120,13 @@ public class ProductService {
 		return ResponseEntity.notFound().build();
 	}
 
-	// RN03 - RN04 - Um produto ativo deve ter pelo menos uma SKU ativa
-	public void activeProduct(Product product) {
-		if (repository.isActive(product.getId())) {
-			product.setEnabled(true);
-		} else {
-			product.setEnabled(false);
-		}
+	public void activateProduct(Product product) {
+		product.setEnabled(true);
 	}
 
 	// RN05 - Um produto ativo tem que ter um preço valido
 	public boolean validatePrice(@NotEmpty @Validated Product product) {
-		return (skurep.existsById(product.getId())) ? true : false;
+		return (skuRepository.existsById(product.getId())) ? true : false;
 	}
 
 	/* Verifica se o produto está ativo */

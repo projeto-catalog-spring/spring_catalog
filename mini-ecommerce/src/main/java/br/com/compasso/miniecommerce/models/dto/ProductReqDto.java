@@ -34,7 +34,7 @@ public class ProductReqDto {
 	@Positive
 	private Price price;
 	
-	public Product update(Long id, ProductReqDto dto) {
+	public Product update(ProductReqDto dto) {
 		return new ModelMapper().map(dto, Product.class);
 	}
 
