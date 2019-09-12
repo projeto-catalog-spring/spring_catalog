@@ -72,9 +72,8 @@ public class ProductDtoTest {
 	
 	@Test
 	public void updateDTO() {
-		when(productmock.update((long) 1, productmock))
-		.thenReturn(null).thenThrow(new IllegalArgumentException());
-		assertEquals(product, productmock.update((long) 1, productmock));
+		when(productmock.update(productmock)).thenReturn(null).thenThrow(new IllegalArgumentException());
+		assertEquals(product, productmock.update(productmock));
 	}
 	
 }

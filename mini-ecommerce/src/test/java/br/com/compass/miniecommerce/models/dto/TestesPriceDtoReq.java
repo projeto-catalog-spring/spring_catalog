@@ -1,4 +1,4 @@
-package br.com.compasso.miniecommerce.models.dto;
+package br.com.compass.miniecommerce.models.dto;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
@@ -10,6 +10,7 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import br.com.compasso.miniecommerce.models.Price;
+import br.com.compasso.miniecommerce.models.dto.PriceDtoReq;
 
 @RunWith(MockitoJUnitRunner.class)
 public class TestesPriceDtoReq {
