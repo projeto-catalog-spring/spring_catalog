@@ -66,7 +66,6 @@ public class PriceController {
 	public ResponseEntity<PriceDtoRes> update(@PathVariable Long id, @RequestBody @Valid PriceDtoReq dto,
 			BindingResult result, UriComponentsBuilder uriBuilder) {
 		if (result.hasErrors()) {
-			System.out.println("entrou");
 			return ResponseEntity.notFound().build();
 		}
 
