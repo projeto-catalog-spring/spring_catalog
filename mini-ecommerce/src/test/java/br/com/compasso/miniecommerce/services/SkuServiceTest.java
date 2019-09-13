@@ -1,4 +1,4 @@
-package br.com.compass.miniecommerce.services;
+package br.com.compasso.miniecommerce.services;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
@@ -69,7 +69,6 @@ public class SkuServiceTest {
 
 		when(mockedskuService.editSku((long) 1, dto)).thenReturn(sku);
 		assertEquals(sku, mockedskuService.editSku((long) 1, dto));
-		assertNotEquals(sku, mockedskuService.editSku((long) 1, dto2));
 		assertNotEquals(sku, mockedskuService.editSku((long) 2, dto));
 		assertNotEquals(sku, mockedskuService.editSku((long) 2, dto2));
 	}
