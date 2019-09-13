@@ -67,9 +67,7 @@ public class ProductService {
 
 		if (product.isPresent()) {
 			updatedProduct.setId(product.get().getId());
-		}
 
-		if (true) {
 			Optional<Brand> brand = brandRepository.findByName(dto.getBrand().getName());
 			if (brand.isPresent()) {
 				updatedProduct.setBrand(brand.get());
@@ -88,9 +86,12 @@ public class ProductService {
 			if (price.isPresent()) {
 				updatedProduct.setPrice(price.get());
 			}
+
+			return ResponseEntity.ok(new ProductDtoRes(repository.save(updatedProduct)));
 		}
 
-		return ResponseEntity.ok(new ProductDtoRes(repository.save(updatedProduct)));
+		return ResponseEntity.notFound().build();
+
 	}
 
 	@Transactional
