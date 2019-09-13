@@ -16,8 +16,8 @@ import br.com.compasso.miniecommerce.models.Brand;
 import br.com.compasso.miniecommerce.models.Category;
 import br.com.compasso.miniecommerce.models.Price;
 import br.com.compasso.miniecommerce.models.Product;
-import br.com.compasso.miniecommerce.models.dto.ProductReqDto;
-import br.com.compasso.miniecommerce.models.dto.ProductResDTO;
+import br.com.compasso.miniecommerce.models.dto.ProductDtoReq;
+import br.com.compasso.miniecommerce.models.dto.ProductDtoRes;
 import br.com.compasso.miniecommerce.repository.BrandRepository;
 import br.com.compasso.miniecommerce.repository.CategoryRepository;
 import br.com.compasso.miniecommerce.repository.PriceRepository;
@@ -62,7 +62,7 @@ public class ProductService {
 	}
 
 	@Transactional
-	public ResponseEntity<ProductResDTO> editProduct(Long id, ProductReqDto dto, UriComponentsBuilder uriBuilder) {
+	public ResponseEntity<ProductDtoRes> editProduct(Long id, ProductDtoReq dto, UriComponentsBuilder uriBuilder) {
 		Product updatedProduct = dto.update(dto);
 
 		Optional<Product> product = repository.findById(id);
@@ -93,11 +93,11 @@ public class ProductService {
 		}
 
 		URI uri = uriBuilder.path("/{id}").buildAndExpand(id).toUri();
-		return ResponseEntity.created(uri).body(new ProductResDTO(repository.save(updatedProduct)));
+		return ResponseEntity.created(uri).body(new ProductDtoRes(repository.save(updatedProduct)));
 	}
 
 	@Transactional
-	public ResponseEntity<ProductResDTO> removeProduct(long id, boolean status, UriComponentsBuilder uriBuilder) {
+	public ResponseEntity<ProductDtoRes> removeProduct(long id, boolean status, UriComponentsBuilder uriBuilder) {
 		Optional<Product> productOptional = repository.findById(id);
 
 		if (productOptional.isPresent()) {
@@ -114,7 +114,7 @@ public class ProductService {
 			}
 
 			URI uri = uriBuilder.path("/{id}").buildAndExpand(id).toUri();
-			return ResponseEntity.created(uri).body(new ProductResDTO(repository.save(productOptional.get())));
+			return ResponseEntity.created(uri).body(new ProductDtoRes(repository.save(productOptional.get())));
 		}
 
 		return ResponseEntity.notFound().build();

@@ -1,6 +1,6 @@
 package br.com.compasso.miniecommerce.clients;
 
-import br.com.compasso.miniecommerce.models.dto.ERPDto;
+import br.com.compasso.miniecommerce.ERP.ERPDto;
 import feign.RequestLine;
 
 
