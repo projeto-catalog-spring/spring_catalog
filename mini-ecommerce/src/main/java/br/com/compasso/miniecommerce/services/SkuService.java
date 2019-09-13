@@ -58,6 +58,14 @@ public class SkuService {
 		Optional<SKU> skuOp = repository.findById(id);
 
 		if (skuOp.isPresent()) {
+			int quantidadeSkusValidas = productRepository.findAllSkus(id);
+
+			if (quantidadeSkusValidas <= 0) {
+				Product prod = productRepository.getOne(skuOp.get().getProduct().getId());
+				prod.setEnabled(false);
+				productRepository.save(prod);
+			}
+
 			return dto.update(id, repository);
 		}
 
@@ -70,9 +78,9 @@ public class SkuService {
 
 		if (skuOp.isPresent()) {
 			skuOp.get().setEnabled(status);
-			
+
 			Product product = productRepository.getOne(skuOp.get().getProduct().getId());
-			
+
 			int numeroDeSkusAtivas = productRepository.findAllSkus(product.getId());
 
 			if (numeroDeSkusAtivas == 0) {
@@ -81,7 +89,6 @@ public class SkuService {
 
 			return skuOp.get();
 		}
-		
 
 		return null;
 	}

@@ -1,6 +1,5 @@
 package br.com.compasso.miniecommerce.services;
 
-import java.net.URI;
 import java.util.Optional;
 
 import javax.transaction.Transactional;
@@ -10,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.util.UriComponentsBuilder;
 
 import br.com.compasso.miniecommerce.models.Brand;
 import br.com.compasso.miniecommerce.models.Category;
@@ -62,7 +60,7 @@ public class ProductService {
 	}
 
 	@Transactional
-	public ResponseEntity<ProductDtoRes> editProduct(Long id, ProductDtoReq dto, UriComponentsBuilder uriBuilder) {
+	public ResponseEntity<ProductDtoRes> editProduct(Long id, ProductDtoReq dto) {
 		Product updatedProduct = dto.update(dto);
 
 		Optional<Product> product = repository.findById(id);
@@ -92,12 +90,11 @@ public class ProductService {
 			}
 		}
 
-		URI uri = uriBuilder.path("/{id}").buildAndExpand(id).toUri();
-		return ResponseEntity.created(uri).body(new ProductDtoRes(repository.save(updatedProduct)));
+		return ResponseEntity.ok(new ProductDtoRes(repository.save(updatedProduct)));
 	}
 
 	@Transactional
-	public ResponseEntity<ProductDtoRes> removeProduct(long id, boolean status, UriComponentsBuilder uriBuilder) {
+	public ResponseEntity<ProductDtoRes> removeProduct(long id, boolean status) {
 		Optional<Product> productOptional = repository.findById(id);
 
 		if (productOptional.isPresent()) {
@@ -108,13 +105,12 @@ public class ProductService {
 				if (numeroDeSkusAtivas > 0 && product.getPrice().getPrice() > 0) {
 					product.setEnabled(status);
 				}
-				
+
 			} else {
 				product.setEnabled(status);
 			}
 
-			URI uri = uriBuilder.path("/{id}").buildAndExpand(id).toUri();
-			return ResponseEntity.created(uri).body(new ProductDtoRes(repository.save(productOptional.get())));
+			return ResponseEntity.ok(new ProductDtoRes(repository.save(productOptional.get())));
 		}
 
 		return ResponseEntity.notFound().build();

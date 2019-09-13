@@ -45,21 +45,15 @@ public class PriceService {
 	}
 
 	@Transactional
-	public ResponseEntity<PriceDtoRes> getPrice(Long id, UriComponentsBuilder uriBuilder) {
-		Optional<Price> priceOptional = repository.findById(id);
-
-		if (priceOptional.isPresent()) {
-			Price p = repository.getOne(id);
-			URI uri = uriBuilder.path("/{id}").buildAndExpand(id).toUri();
-
-			return ResponseEntity.created(uri).body(this.mapper.map(p, PriceDtoRes.class));
-		} else {
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+	public ResponseEntity<PriceDtoRes> getPrice(Long id) {
+		if (repository.findById(id).isPresent()) {
+			return ResponseEntity.ok(this.mapper.map(repository.getOne(id), PriceDtoRes.class));
 		}
+		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 	}
 
 	@Transactional
-	public ResponseEntity<PriceDtoRes> editPrice(Long id, PriceDtoReq dto, UriComponentsBuilder uriBuilder) {
+	public ResponseEntity<PriceDtoRes> editPrice(Long id, PriceDtoReq dto) {
 		Optional<Price> priceOptional = repository.findById(id);
 
 		if (priceOptional.isPresent()) {
@@ -73,8 +67,7 @@ public class PriceService {
 				}
 			}
 
-			URI uri = uriBuilder.path("/{id}").buildAndExpand(id).toUri();
-			return ResponseEntity.created(uri).body(this.mapper.map(p, PriceDtoRes.class));
+			return ResponseEntity.ok(this.mapper.map(p, PriceDtoRes.class));
 		} else {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}

@@ -72,15 +72,13 @@ public class ProductController {
 	}
 
 	@PutMapping("/{id}")
-	public ResponseEntity<ProductDtoRes> editProduct(@PathVariable Long id, @RequestBody ProductDtoReq productDTO,
-			UriComponentsBuilder uriBuilder) {
-		return service.editProduct(id, productDTO, uriBuilder);
+	public ResponseEntity<ProductDtoRes> editProduct(@PathVariable Long id, @RequestBody ProductDtoReq productDTO) {
+		return service.editProduct(id, productDTO);
 	}
 
 	@PutMapping("/{id}/{status}")
-	public ResponseEntity<ProductDtoRes> removeProduct(@PathVariable long id, @PathVariable boolean status,
-			UriComponentsBuilder uriBuilder) {
-		return service.removeProduct(id, status, uriBuilder);
+	public ResponseEntity<ProductDtoRes> removeProduct(@PathVariable long id, @PathVariable boolean status) {
+		return service.removeProduct(id, status);
 	}
 
 }

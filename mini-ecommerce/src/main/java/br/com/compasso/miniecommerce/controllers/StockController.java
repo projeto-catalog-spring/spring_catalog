@@ -1,4 +1,5 @@
 package br.com.compasso.miniecommerce.controllers;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +15,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.util.UriComponentsBuilder;
 
 import br.com.compasso.miniecommerce.models.SKU;
 import br.com.compasso.miniecommerce.models.dto.SkuDtoRes;
@@ -29,36 +29,31 @@ public class StockController {
 
 	@Autowired
 	private SKURepository skuRep;
-	
+
 	@Autowired
 	private StockService stockService;
 
 	@GetMapping
 	public ResponseEntity<Page<StockDtoRes>> stockLevel(
 			@PageableDefault(sort = "id", direction = Direction.ASC, page = 0, size = 10) Pageable pageable) {
-
 		Page<SKU> skus = skuRep.findAllByEnabled(true, pageable);
 
 		return new ResponseEntity<>(StockDtoRes.convert(skus), HttpStatus.OK);
 	}
 
 	@PutMapping("/add")
-	public ResponseEntity<SkuDtoRes> addStock(@Valid @RequestBody StockDtoReq stockReq, BindingResult result,
-			UriComponentsBuilder uriBuilder) {
-
+	public ResponseEntity<SkuDtoRes> addStock(@Valid @RequestBody StockDtoReq stockReq, BindingResult result) {
 		if (result.hasErrors())
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 
-		return stockService.add(skuRep, stockReq, uriBuilder);
+		return stockService.add(skuRep, stockReq);
 	}
 
 	@PutMapping("/remove")
-	public ResponseEntity<SkuDtoRes> removeStock(@Valid @RequestBody StockDtoReq stockReq, BindingResult result,
-			UriComponentsBuilder uriBuilder) {
-
+	public ResponseEntity<SkuDtoRes> removeStock(@Valid @RequestBody StockDtoReq stockReq, BindingResult result) {
 		if (result.hasErrors())
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 
-		return stockService.remove(skuRep, stockReq, uriBuilder);
+		return stockService.remove(skuRep, stockReq);
 	}
 }

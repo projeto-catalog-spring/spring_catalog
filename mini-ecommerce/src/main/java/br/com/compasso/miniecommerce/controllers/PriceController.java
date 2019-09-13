@@ -49,18 +49,18 @@ public class PriceController {
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<PriceDtoRes> getPrice(@PathVariable Long id, UriComponentsBuilder uriBuilder) {
-		return priceService.getPrice(id, uriBuilder);
+	public ResponseEntity<PriceDtoRes> getPrice(@PathVariable Long id) {
+		return priceService.getPrice(id);
 	}
 
 	@PutMapping("/{id}")
 	public ResponseEntity<PriceDtoRes> editPrice(@PathVariable Long id, @RequestBody @Valid PriceDtoReq dto,
-			BindingResult result, UriComponentsBuilder uriBuilder) {
+			BindingResult result) {
 		if (result.hasErrors()) {
 			return ResponseEntity.notFound().build();
 		}
 
-		return priceService.editPrice(id, dto, uriBuilder);
+		return priceService.editPrice(id, dto);
 	}
 
 }
