@@ -1,4 +1,4 @@
-package br.com.compasso.miniecommerce.models.dto;
+package br.com.compasso.miniecommerce.ERP;
 
 import java.util.List;
 
