@@ -14,6 +14,8 @@ import org.springframework.web.util.UriComponentsBuilder;
 import br.com.compasso.miniecommerce.models.SKU;
 import br.com.compasso.miniecommerce.models.dto.SkuDtoRes;
 import br.com.compasso.miniecommerce.models.dto.StockDtoReq;
+import br.com.compasso.miniecommerce.models.helpers.HelperProduct;
+import br.com.compasso.miniecommerce.repository.ProductRepository;
 import br.com.compasso.miniecommerce.repository.SKURepository;
 
 @Service
@@ -50,7 +52,10 @@ public class StockService {
 			else {
 				sku.remove(stockReq.getQtd());
 				URI uri = uriBuilder.path("/stock/{id}").buildAndExpand(sku.getId()).toUri();
-				return ResponseEntity.created(uri).body(this.mapper.map(sku, SkuDtoRes.class));
+				//verificar se product ainda esta disponível
+				if(sku.getStock() == 0)
+					HelperProduct.productValidation(skuRep, sku.getProduct().getId());
+				return ResponseEntity.created(uri).body(mapper.map(sku, SkuDtoRes.class));
 			}
 		} else {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
