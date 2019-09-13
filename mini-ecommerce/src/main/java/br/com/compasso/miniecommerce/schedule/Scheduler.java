@@ -42,7 +42,7 @@ public class Scheduler {
 	@Autowired
 	private SKURepository skuRepo;
 
-	@Scheduled(cron = "0 0 0/1 * * *")
+	@Scheduled(cron = "0 0 0 0/1 * * *")
 	public void jobSchedule() {
 
 		ConsumerERP erp = Feign.builder().client(new OkHttpClient()).encoder(new GsonEncoder())

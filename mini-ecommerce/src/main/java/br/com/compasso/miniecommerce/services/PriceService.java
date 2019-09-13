@@ -68,9 +68,9 @@ public class PriceService {
 			}
 
 			return ResponseEntity.ok(this.mapper.map(p, PriceDtoRes.class));
-		} else {
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-		}
+		} 
+
+		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 	}
 
 	public static Page<PriceDtoRes> convert(Page<Price> prices) {
