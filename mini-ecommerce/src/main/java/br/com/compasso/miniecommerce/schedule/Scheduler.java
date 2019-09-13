@@ -9,13 +9,13 @@ import org.springframework.stereotype.Component;
 import br.com.compasso.miniecommerce.clients.ConsumerERP;
 import br.com.compasso.miniecommerce.models.Price;
 import br.com.compasso.miniecommerce.models.Product;
-import br.com.compasso.miniecommerce.models.SKU;
+import br.com.compasso.miniecommerce.models.Sku;
 import br.com.compasso.miniecommerce.models.helpers.HelperUpdate;
 import br.com.compasso.miniecommerce.repository.BrandRepository;
 import br.com.compasso.miniecommerce.repository.CategoryRepository;
 import br.com.compasso.miniecommerce.repository.PriceRepository;
 import br.com.compasso.miniecommerce.repository.ProductRepository;
-import br.com.compasso.miniecommerce.repository.SKURepository;
+import br.com.compasso.miniecommerce.repository.SkuRepository;
 import feign.Feign;
 import feign.Logger;
 import feign.gson.GsonDecoder;
@@ -40,7 +40,7 @@ public class Scheduler {
 	private PriceRepository priceRepo;
 
 	@Autowired
-	private SKURepository skuRepo;
+	private SkuRepository skuRepo;
 
 	@Scheduled(cron = "0 0 0/1 * * *")
 	public void jobSchedule() {
@@ -59,7 +59,7 @@ public class Scheduler {
 			HelperUpdate.updateProduct(productRepo, product);
 		}
 
-		for (SKU sku : erp.getData().getSkus()) {
+		for (Sku sku : erp.getData().getSkus()) {
 			HelperUpdate.updateSKU(skuRepo, sku);
 		}
 

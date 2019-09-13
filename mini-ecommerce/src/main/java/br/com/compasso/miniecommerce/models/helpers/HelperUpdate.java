@@ -8,12 +8,12 @@ import br.com.compasso.miniecommerce.models.Brand;
 import br.com.compasso.miniecommerce.models.Category;
 import br.com.compasso.miniecommerce.models.Price;
 import br.com.compasso.miniecommerce.models.Product;
-import br.com.compasso.miniecommerce.models.SKU;
+import br.com.compasso.miniecommerce.models.Sku;
 import br.com.compasso.miniecommerce.repository.BrandRepository;
 import br.com.compasso.miniecommerce.repository.CategoryRepository;
 import br.com.compasso.miniecommerce.repository.PriceRepository;
 import br.com.compasso.miniecommerce.repository.ProductRepository;
-import br.com.compasso.miniecommerce.repository.SKURepository;
+import br.com.compasso.miniecommerce.repository.SkuRepository;
 
 @Transactional
 public class HelperUpdate {
@@ -45,10 +45,10 @@ public class HelperUpdate {
 		}
 	}
 
-	public static void updateSKU(SKURepository skuRepo, SKU sku) {
-		Optional<SKU> skuOp = skuRepo.findById(sku.getId());
+	public static void updateSKU(SkuRepository skuRepo, Sku sku) {
+		Optional<Sku> skuOp = skuRepo.findById(sku.getId());
 		if (skuOp.isPresent()) {
-			SKU s = skuOp.get();
+			Sku s = skuOp.get();
 			s.setStock(sku.getStock());
 		} else {
 			skuRepo.save(sku);

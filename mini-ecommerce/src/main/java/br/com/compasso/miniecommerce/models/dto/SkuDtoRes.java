@@ -4,7 +4,7 @@ import org.springframework.data.domain.Page;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import br.com.compasso.miniecommerce.models.SKU;
+import br.com.compasso.miniecommerce.models.Sku;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -35,7 +35,7 @@ public class SkuDtoRes {
 	@JsonProperty("Enabled")
 	private boolean enabled;
 
-	public SkuDtoRes(SKU sku) {
+	public SkuDtoRes(Sku sku) {
 		this.id = sku.getId();
 		this.name = sku.getName();
 		this.description = sku.getDescription();
@@ -45,8 +45,7 @@ public class SkuDtoRes {
 		this.productId = sku.getProduct().getId();
 	}
 
-	public static Page<SkuDtoRes> convert(Page<SKU> skus) {
-
+	public static Page<SkuDtoRes> convert(Page<Sku> skus) {
 		return skus.map(SkuDtoRes::new);
 	}
 }

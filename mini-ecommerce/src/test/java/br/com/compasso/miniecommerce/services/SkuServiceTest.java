@@ -14,7 +14,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import br.com.compasso.miniecommerce.models.Product;
-import br.com.compasso.miniecommerce.models.SKU;
+import br.com.compasso.miniecommerce.models.Sku;
 import br.com.compasso.miniecommerce.models.dto.SkuDtoReqEdit;
 import br.com.compasso.miniecommerce.models.dto.SkuDtoRes;
 
@@ -39,8 +39,8 @@ public class SkuServiceTest {
 	@Test
 	public void testAddSkuMethod() {
 		Product product = new Product((long) 50, "produto", "descrição", true, null, null, null);
-		SKU sku = new SKU((long) 50, "nomeSku", "descrição", 50, true, product);
-		SKU sku2 = new SKU((long) 51, "nomeSku", "descrição", 50, true, product);
+		Sku sku = new Sku((long) 50, "nomeSku", "descrição", 50, true, product);
+		Sku sku2 = new Sku((long) 51, "nomeSku", "descrição", 50, true, product);
 
 		when(mockedskuService.addSku(sku)).thenReturn(sku);
 		assertEquals(sku, mockedskuService.addSku(sku));
@@ -51,7 +51,7 @@ public class SkuServiceTest {
 	@Test
 	public void testGetSkuMethod() {
 
-		SKU sku = Mockito.mock(SKU.class);
+		Sku sku = Mockito.mock(Sku.class);
 
 		when(mockedskuService.getSku((long) 50)).thenReturn(sku);
 		assertEquals(sku, mockedskuService.getSku((long) 50));
@@ -64,7 +64,7 @@ public class SkuServiceTest {
 
 		SkuDtoReqEdit dto = new SkuDtoReqEdit("nome", "descrição", 56, true);
 		SkuDtoReqEdit dto2 = new SkuDtoReqEdit("nome", "descrição", 56, true);
-		SKU sku = Mockito.mock(SKU.class);
+		Sku sku = Mockito.mock(Sku.class);
 
 		when(mockedskuService.editSku((long) 1, dto)).thenReturn(sku);
 		assertEquals(sku, mockedskuService.editSku((long) 1, dto));
@@ -75,7 +75,7 @@ public class SkuServiceTest {
 	@Test
 	public void testConvertMethod() {
 
-		Page<SKU> skus = Mockito.mock(Page.class);
+		Page<Sku> skus = Mockito.mock(Page.class);
 		Page<SkuDtoRes> skusRes = Mockito.mock(Page.class);
 
 		when(mockedskuService.convert(skus)).thenReturn(skusRes);

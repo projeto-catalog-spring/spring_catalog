@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import br.com.compasso.miniecommerce.models.SKU;
+import br.com.compasso.miniecommerce.models.Sku;
 import br.com.compasso.miniecommerce.models.dto.SkuDtoReq;
 import br.com.compasso.miniecommerce.models.dto.SkuDtoReqEdit;
 import br.com.compasso.miniecommerce.models.dto.SkuDtoRes;
@@ -28,7 +28,7 @@ import br.com.compasso.miniecommerce.services.SkuService;
 
 @RestController
 @RequestMapping("/skus")
-public class SKUController {
+public class SkuController {
 
 	@Autowired
 	private SkuService skuService;
@@ -43,7 +43,7 @@ public class SKUController {
 
 	@PostMapping
 	public ResponseEntity<SkuDtoRes> addSku(@RequestBody @Valid SkuDtoReq dto, UriComponentsBuilder uriBuilder) {
-		SKU sku = this.mapper.map(dto, SKU.class);
+		Sku sku = this.mapper.map(dto, Sku.class);
 
 		skuService.addSku(sku);
 
@@ -53,7 +53,7 @@ public class SKUController {
 
 	@GetMapping("/{id}")
 	public ResponseEntity<SkuDtoRes> getSku(@PathVariable Long id) {
-		SKU sku = skuService.getSku(id);
+		Sku sku = skuService.getSku(id);
 
 		if (sku != null) {
 			return ResponseEntity.ok(this.mapper.map(sku, SkuDtoRes.class));
@@ -64,7 +64,7 @@ public class SKUController {
 
 	@PutMapping("/{id}")
 	public ResponseEntity<SkuDtoRes> editSku(@PathVariable Long id, @RequestBody @Valid SkuDtoReqEdit dto) {
-		SKU sku = skuService.editSku(id, dto);
+		Sku sku = skuService.editSku(id, dto);
 
 		if (sku != null) {
 			return ResponseEntity.ok(this.mapper.map(sku, SkuDtoRes.class));
@@ -75,7 +75,7 @@ public class SKUController {
 
 	@PutMapping("/{id}/{status}")
 	public ResponseEntity<SkuDtoRes> removeSku(@PathVariable Long id, @PathVariable boolean status) {
-		SKU sku = skuService.removeSku(id, status);
+		Sku sku = skuService.removeSku(id, status);
 
 		if (sku != null) {
 			return ResponseEntity.ok(this.mapper.map(sku, SkuDtoRes.class));

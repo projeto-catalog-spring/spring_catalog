@@ -5,11 +5,13 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import br.com.compasso.miniecommerce.models.SKU;
+import br.com.compasso.miniecommerce.models.Sku;
 
 @Repository
-public interface SKURepository extends JpaRepository<SKU, Long> {
+public interface SkuRepository extends JpaRepository<Sku, Long> {
 	
-	Page<SKU> findAllByEnabled(boolean enable, Pageable pageable);
+	Page<Sku> findAllByEnabled(boolean enable, Pageable pageable);
+	
+	Page<Sku> findByProductId(Long id, Pageable pageable);
 
 }

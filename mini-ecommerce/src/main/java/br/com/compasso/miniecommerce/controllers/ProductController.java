@@ -1,7 +1,6 @@
 package br.com.compasso.miniecommerce.controllers;
 
 import java.net.URI;
-import java.util.Optional;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +21,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import br.com.compasso.miniecommerce.models.Product;
 import br.com.compasso.miniecommerce.models.dto.ProductDtoReq;
 import br.com.compasso.miniecommerce.models.dto.ProductDtoRes;
-import br.com.compasso.miniecommerce.repository.ProductRepository;
+import br.com.compasso.miniecommerce.models.dto.SkuDtoRes;
 import br.com.compasso.miniecommerce.services.ProductService;
 
 @RestController
@@ -30,27 +29,21 @@ import br.com.compasso.miniecommerce.services.ProductService;
 public class ProductController {
 
 	@Autowired
-	private ProductRepository repository;
-	
-	@Autowired
 	private ProductService service;
 
 	private ModelMapper mapper = new ModelMapper();
 
 	@GetMapping
-	public Page<ProductDtoRes> getAllProducts(
+	public ResponseEntity<Page<ProductDtoRes>> getAllProducts(
 			@PageableDefault(sort = "id", direction = Direction.ASC, page = 0, size = 10) Pageable page) {
-		Page<Product> products = repository.findAll(page);
-		return ProductDtoRes.productToDTO(products);
+		return service.getAllProducts(page);
 	}
 
 	@GetMapping("/{id}/skus")
-	public Page<ProductDtoRes> getProductSkus(
+	public ResponseEntity<Page<SkuDtoRes>> getProductSkus(
 			@PageableDefault(sort = "id", direction = Direction.ASC, page = 0, size = 10) Pageable page,
 			@PathVariable Long id) {
-
-		Page<Product> productget = repository.findAllSkusPaginated(id, page);
-		return ProductDtoRes.productToDTO(productget);
+		return service.getProductSkus(id, page);
 	}
 
 	@PostMapping
@@ -62,13 +55,8 @@ public class ProductController {
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<ProductDtoRes> getProduct(@PathVariable Long id) {
-		Optional<Product> productget = repository.findById(id);
-		if (productget.isPresent()) {
-			return ResponseEntity.ok(new ProductDtoRes(productget.get()));
-		} else {
-			return ResponseEntity.notFound().build();
-		}
+	public ResponseEntity<ProductDtoRes> getProduct(@PathVariable Long id, Pageable page) {
+		return service.getProduct(id, page);
 	}
 
 	@PutMapping("/{id}")

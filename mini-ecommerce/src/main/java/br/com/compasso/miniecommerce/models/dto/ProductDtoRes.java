@@ -1,6 +1,5 @@
 package br.com.compasso.miniecommerce.models.dto;
 
-
 import org.springframework.data.domain.Page;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -10,30 +9,34 @@ import br.com.compasso.miniecommerce.models.Category;
 import br.com.compasso.miniecommerce.models.Price;
 import br.com.compasso.miniecommerce.models.Product;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+@NoArgsConstructor
 @AllArgsConstructor
-@Data
+@Getter
+@Setter
 public class ProductDtoRes {
-	
+
 	@JsonProperty("Id")
-	private Long id; 
+	private Long id;
 
 	@JsonProperty("Name")
 	private String name;
-	
+
 	@JsonProperty("Description")
 	private String description;
-	
+
 	@JsonProperty("Enabled")
 	private boolean enabled;
-	
+
 	@JsonProperty("Category")
 	private Category category;
-	
+
 	@JsonProperty("Brand")
 	private Brand brand;
-	
+
 	@JsonProperty("Price")
 	private Price price;
 	
@@ -46,16 +49,9 @@ public class ProductDtoRes {
 		this.brand = product.getBrand();
 		this.price = product.getPrice();
 	}
-			
-	public static Page<ProductDtoRes> productToDTO (Page<Product> product) {
-		return product.map(ProductDtoRes::new);
-    }
-	
-	/*
-	 * public static ProductResDTO transformaEmDTO(Product product) { return new
-	 * ProductResDTO(product.getId(), product.getName(), product.getDescription(),
-	 * product.isEnabled(), product.getCategory().getId(),
-	 * product.getBrand().getId()); }
-	 */
-	
+
+	public static Page<ProductDtoRes> convert(Page<Product> products) {
+		return products.map(ProductDtoRes::new);
+	}
+
 }

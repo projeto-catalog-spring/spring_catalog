@@ -16,11 +16,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.compasso.miniecommerce.models.SKU;
+import br.com.compasso.miniecommerce.models.Sku;
 import br.com.compasso.miniecommerce.models.dto.SkuDtoRes;
 import br.com.compasso.miniecommerce.models.dto.StockDtoReq;
 import br.com.compasso.miniecommerce.models.dto.StockDtoRes;
-import br.com.compasso.miniecommerce.repository.SKURepository;
+import br.com.compasso.miniecommerce.repository.SkuRepository;
 import br.com.compasso.miniecommerce.services.StockService;
 
 @RestController
@@ -28,7 +28,7 @@ import br.com.compasso.miniecommerce.services.StockService;
 public class StockController {
 
 	@Autowired
-	private SKURepository skuRep;
+	private SkuRepository skuRep;
 
 	@Autowired
 	private StockService stockService;
@@ -36,15 +36,16 @@ public class StockController {
 	@GetMapping
 	public ResponseEntity<Page<StockDtoRes>> stockLevel(
 			@PageableDefault(sort = "id", direction = Direction.ASC, page = 0, size = 10) Pageable pageable) {
-		Page<SKU> skus = skuRep.findAllByEnabled(true, pageable);
+		Page<Sku> skus = skuRep.findAllByEnabled(true, pageable);
 
 		return new ResponseEntity<>(StockDtoRes.convert(skus), HttpStatus.OK);
 	}
 
 	@PutMapping("/add")
 	public ResponseEntity<SkuDtoRes> addStock(@Valid @RequestBody StockDtoReq stockReq, BindingResult result) {
-		if (result.hasErrors())
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		if (result.hasErrors()) {
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);			
+		}
 
 		return stockService.add(skuRep, stockReq);
 	}

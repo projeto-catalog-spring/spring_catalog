@@ -11,6 +11,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 
 import br.com.compasso.miniecommerce.models.Product;
 import br.com.compasso.miniecommerce.models.dto.ProductDtoReq;
+import br.com.compasso.miniecommerce.models.dto.ProductDtoRes;
 import br.com.compasso.miniecommerce.repository.ProductRepository;
 
 public class ProductServiceTest {
@@ -24,8 +25,8 @@ public class ProductServiceTest {
 		@InjectMocks
 		private ProductRepository repository;
 		private Product product;
-		private ProductDtoReq productDTO;
-		private ProductDtoReq productDTOres;
+		private ProductDtoReq productDtoReq;
+		private ProductDtoRes productDtores;
 
 		@Test(expected = IllegalArgumentException.class)
 		public void addProduct() {
@@ -35,7 +36,7 @@ public class ProductServiceTest {
 
 		@Test(expected = IllegalArgumentException.class)
 		public void editProduct() {
-			when(prodServ.editProduct(product.getId(), productDTO)).thenReturn(null)
+			when(prodServ.editProduct(product.getId(), productDtoReq)).thenReturn(null)
 					.thenThrow(new IllegalArgumentException());
 			assertEquals(product, product);
 		}
@@ -44,7 +45,7 @@ public class ProductServiceTest {
 		public void removeProduct() {
 			when(prodServ.removeProduct(product.getId(), true)).thenReturn(null)
 					.thenThrow(new IllegalArgumentException());
-			assertEquals(productDTOres, productDTOres);
+			assertEquals(productDtoReq, productDtores);
 		}
 
 	}

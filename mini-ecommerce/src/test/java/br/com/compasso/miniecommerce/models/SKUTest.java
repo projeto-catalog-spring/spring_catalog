@@ -11,13 +11,13 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import br.com.compasso.miniecommerce.models.Product;
-import br.com.compasso.miniecommerce.models.SKU;
+import br.com.compasso.miniecommerce.models.Sku;
 
 @RunWith(MockitoJUnitRunner.class)
 public class SKUTest {
 	
 	@Mock
-	private SKU mockedSKU;
+	private Sku mockedSKU;
 	
 	@InjectMocks
 	private Product mockedProduct;
@@ -29,7 +29,7 @@ public class SKUTest {
 	
 	@Test
 	public void skuConstructorTest() {
-		mockedSKU = new SKU(new Long(4), "camisapretap", "camisa preta de tamanho p que cabe muito bem em voce", 3, true, mockedProduct);
+		mockedSKU = new Sku(new Long(4), "camisapretap", "camisa preta de tamanho p que cabe muito bem em voce", 3, true, mockedProduct);
 		assertEquals(new Long(4), mockedSKU.getId());
 		assertEquals("camisapretap", mockedSKU.getName());
         assertEquals("camisa preta de tamanho p que cabe muito bem em voce", mockedSKU.getDescription());

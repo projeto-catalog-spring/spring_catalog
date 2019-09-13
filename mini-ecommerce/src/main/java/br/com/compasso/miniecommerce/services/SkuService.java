@@ -10,29 +10,29 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import br.com.compasso.miniecommerce.models.Product;
-import br.com.compasso.miniecommerce.models.SKU;
+import br.com.compasso.miniecommerce.models.Sku;
 import br.com.compasso.miniecommerce.models.dto.SkuDtoReqEdit;
 import br.com.compasso.miniecommerce.models.dto.SkuDtoRes;
 import br.com.compasso.miniecommerce.repository.ProductRepository;
-import br.com.compasso.miniecommerce.repository.SKURepository;
+import br.com.compasso.miniecommerce.repository.SkuRepository;
 
 @Service
 public class SkuService {
 
 	@Autowired
-	private SKURepository repository;
+	private SkuRepository repository;
 
 	@Autowired
 	private ProductRepository productRepository;
 
 	@Transactional
 	public Page<SkuDtoRes> getAllSkus(Pageable pagination) {
-		Page<SKU> skus = repository.findAll(pagination);
+		Page<Sku> skus = repository.findAll(pagination);
 		return SkuDtoRes.convert(skus);
 	}
 
 	@Transactional
-	public SKU addSku(SKU sku) {
+	public Sku addSku(Sku sku) {
 		Optional<Product> product = productRepository.findById(sku.getProduct().getId());
 
 		if (product.isPresent()) {
@@ -43,8 +43,8 @@ public class SkuService {
 	}
 
 	@Transactional
-	public SKU getSku(Long id) {
-		Optional<SKU> skuOp = repository.findById(id);
+	public Sku getSku(Long id) {
+		Optional<Sku> skuOp = repository.findById(id);
 
 		if (skuOp.isPresent()) {
 			return skuOp.get();
@@ -54,8 +54,8 @@ public class SkuService {
 	}
 
 	@Transactional
-	public SKU editSku(Long id, SkuDtoReqEdit dto) {
-		Optional<SKU> skuOp = repository.findById(id);
+	public Sku editSku(Long id, SkuDtoReqEdit dto) {
+		Optional<Sku> skuOp = repository.findById(id);
 
 		if (skuOp.isPresent()) {
 			int quantidadeSkusValidas = productRepository.findAllSkus(id);
@@ -73,8 +73,8 @@ public class SkuService {
 	}
 
 	@Transactional
-	public SKU removeSku(Long id, boolean status) {
-		Optional<SKU> skuOp = repository.findById(id);
+	public Sku removeSku(Long id, boolean status) {
+		Optional<Sku> skuOp = repository.findById(id);
 
 		if (skuOp.isPresent()) {
 			skuOp.get().setEnabled(status);
@@ -93,7 +93,7 @@ public class SkuService {
 		return null;
 	}
 
-	public static Page<SkuDtoRes> convert(Page<SKU> skus) {
+	public static Page<SkuDtoRes> convert(Page<Sku> skus) {
 		return skus.map(SkuDtoRes::new);
 	}
 

@@ -6,8 +6,8 @@ import javax.validation.constraints.PositiveOrZero;
 
 import org.hibernate.validator.constraints.Length;
 
-import br.com.compasso.miniecommerce.models.SKU;
-import br.com.compasso.miniecommerce.repository.SKURepository;
+import br.com.compasso.miniecommerce.models.Sku;
+import br.com.compasso.miniecommerce.repository.SkuRepository;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -31,8 +31,8 @@ public class SkuDtoReqEdit {
 	@NotNull
 	private boolean enabled;
 
-	public SKU update(Long id, SKURepository skuRepository) {
-		SKU sku = skuRepository.getOne(id);
+	public Sku update(Long id, SkuRepository skuRepository) {
+		Sku sku = skuRepository.getOne(id);
 
 		sku.setName(this.name);
 		sku.setDescription(this.description);

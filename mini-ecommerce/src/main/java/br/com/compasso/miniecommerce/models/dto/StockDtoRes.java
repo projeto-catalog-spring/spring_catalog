@@ -4,7 +4,7 @@ import org.springframework.data.domain.Page;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import br.com.compasso.miniecommerce.models.SKU;
+import br.com.compasso.miniecommerce.models.Sku;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -21,13 +21,13 @@ public class StockDtoRes {
 	@JsonProperty("Stock")
 	private int stock;
 
-	public StockDtoRes(SKU sku) {
+	public StockDtoRes(Sku sku) {
 		this.id = sku.getId();
 		this.name = sku.getName();
 		this.stock = sku.getStock();
 	}
 
-	public static Page<StockDtoRes> convert(Page<SKU> skuPage) {
+	public static Page<StockDtoRes> convert(Page<Sku> skuPage) {
 		return skuPage.map(StockDtoRes::new);
 	}
 }

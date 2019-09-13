@@ -3,24 +3,28 @@ package br.com.compasso.miniecommerce.services;
 import java.util.Optional;
 
 import javax.transaction.Transactional;
-import javax.validation.constraints.NotEmpty;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.validation.annotation.Validated;
 
 import br.com.compasso.miniecommerce.models.Brand;
 import br.com.compasso.miniecommerce.models.Category;
 import br.com.compasso.miniecommerce.models.Price;
 import br.com.compasso.miniecommerce.models.Product;
+import br.com.compasso.miniecommerce.models.Sku;
 import br.com.compasso.miniecommerce.models.dto.ProductDtoReq;
 import br.com.compasso.miniecommerce.models.dto.ProductDtoRes;
+import br.com.compasso.miniecommerce.models.dto.SkuDtoRes;
 import br.com.compasso.miniecommerce.repository.BrandRepository;
 import br.com.compasso.miniecommerce.repository.CategoryRepository;
 import br.com.compasso.miniecommerce.repository.PriceRepository;
 import br.com.compasso.miniecommerce.repository.ProductRepository;
-import br.com.compasso.miniecommerce.repository.SKURepository;
+import br.com.compasso.miniecommerce.repository.SkuRepository;
 
 @Service("ProductService")
 public class ProductService {
@@ -29,8 +33,8 @@ public class ProductService {
 	private ProductRepository repository;
 
 	@Autowired
-	private SKURepository skuRepository;
-
+	private SkuRepository skuRepository;
+	
 	@Autowired
 	private BrandRepository brandRepository;
 
@@ -40,6 +44,35 @@ public class ProductService {
 	@Autowired
 	private PriceRepository priceRepository;
 
+	private ModelMapper mapper = new ModelMapper();
+
+	@Transactional
+	public ResponseEntity<Page<ProductDtoRes>> getAllProducts(Pageable page) {
+		return new ResponseEntity<>(ProductDtoRes.convert(repository.findAll(page)), HttpStatus.OK);
+	}
+
+	@Transactional
+	public ResponseEntity<ProductDtoRes> getProduct(Long id, Pageable page) {
+		Optional<Product> product = repository.findById(id);
+		if (product.isPresent()) {
+			return new ResponseEntity<>(this.mapper.map(product.get(), ProductDtoRes.class), HttpStatus.OK);
+		}
+
+		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+	}
+
+	@Transactional
+	public ResponseEntity<Page<SkuDtoRes>> getProductSkus(Long id, Pageable page) {
+		Page<Sku> skus = skuRepository.findByProductId(id, page);
+
+		if (repository.findById(id).isPresent()) {
+			return new ResponseEntity<>(SkuDtoRes.convert(skus), HttpStatus.OK);
+		}
+
+		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+	}
+
+	@Transactional
 	public Product addProduct(Product product) {
 		Optional<Brand> branch = brandRepository.findByName(product.getBrand().getName());
 		if (branch.isPresent()) {
@@ -119,16 +152,6 @@ public class ProductService {
 
 	public void activateProduct(Product product) {
 		product.setEnabled(true);
-	}
-
-	// RN05 - Um produto ativo tem que ter um preço valido
-	public boolean validatePrice(@NotEmpty @Validated Product product) {
-		return (skuRepository.existsById(product.getId())) ? true : false;
-	}
-
-	/* Verifica se o produto está ativo */
-	public boolean isEnabled(Product product) {
-		return repository.isActive(product.getId());
 	}
 
 }
