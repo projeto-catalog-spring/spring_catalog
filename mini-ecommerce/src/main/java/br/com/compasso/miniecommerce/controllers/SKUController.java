@@ -53,7 +53,13 @@ public class SKUController {
 
 	@GetMapping("/{id}")
 	public ResponseEntity<SkuDtoRes> getSku(@PathVariable Long id) {
-		return ResponseEntity.ok(this.mapper.map(skuService.getSku(id), SkuDtoRes.class));
+		SKU sku = skuService.getSku(id);
+
+		if (sku != null) {
+			return ResponseEntity.ok(this.mapper.map(sku, SkuDtoRes.class));
+		}
+
+		return ResponseEntity.notFound().build();
 	}
 
 	@PutMapping("/{id}")
@@ -70,7 +76,7 @@ public class SKUController {
 	@PutMapping("/{id}/{status}")
 	public ResponseEntity<SkuDtoRes> removeSku(@PathVariable Long id, @PathVariable boolean status) {
 		SKU sku = skuService.removeSku(id, status);
-		
+
 		if (sku != null) {
 			return ResponseEntity.ok(this.mapper.map(sku, SkuDtoRes.class));
 		}

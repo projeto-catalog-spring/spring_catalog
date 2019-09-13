@@ -43,7 +43,7 @@ public class PriceController {
 	public ResponseEntity<PriceDtoRes> addPrice(@RequestBody @Valid PriceDtoReq priceDtoReq, BindingResult result,
 			UriComponentsBuilder uriBuilder) {
 		if (result.hasErrors())
-			return ResponseEntity.notFound().build();
+			return ResponseEntity.badRequest().build();
 
 		return priceService.addPrice(mapper.map(priceDtoReq, Price.class), uriBuilder);
 	}
