@@ -17,7 +17,6 @@ import br.com.compasso.miniecommerce.models.Product;
 import br.com.compasso.miniecommerce.models.SKU;
 import br.com.compasso.miniecommerce.models.dto.SkuDtoReqEdit;
 import br.com.compasso.miniecommerce.models.dto.SkuDtoRes;
-import br.com.compasso.miniecommerce.services.SkuService;
 
 @RunWith(MockitoJUnitRunner.class)
 public class SkuServiceTest {
