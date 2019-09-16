@@ -49,5 +49,6 @@ public class Product {
 	@JsonProperty("Price")
 	@OneToOne(cascade = CascadeType.ALL, targetEntity=Price.class)
 	private Price price;
-	
+
+
 }
