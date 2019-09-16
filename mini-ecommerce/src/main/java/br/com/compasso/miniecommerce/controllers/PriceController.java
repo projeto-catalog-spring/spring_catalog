@@ -27,12 +27,12 @@ import br.com.compasso.miniecommerce.services.PriceService;
 public class PriceController {
 
 	@Autowired
-	private PriceService priceService;
+	private PriceService service;
 
 	@GetMapping
 	public ResponseEntity<Page<PriceDtoRes>> getAllPrices(
 			@PageableDefault(sort = "id", direction = Direction.ASC, page = 0, size = 10) Pageable pagination) {
-		return priceService.getAllPrices(pagination);
+		return service.getAllPrices(pagination);
 	}
 
 	@PostMapping
@@ -41,12 +41,12 @@ public class PriceController {
 		if (result.hasErrors())
 			return ResponseEntity.badRequest().build();
 
-		return priceService.addPrice(dto, uriBuilder);
+		return service.addPrice(dto, uriBuilder);
 	}
 
 	@GetMapping("/{id}")
 	public ResponseEntity<PriceDtoRes> getPrice(@PathVariable Long id) {
-		return priceService.getPrice(id);
+		return service.getPrice(id);
 	}
 
 	@PutMapping("/{id}")
@@ -56,7 +56,7 @@ public class PriceController {
 			return ResponseEntity.notFound().build();
 		}
 
-		return priceService.editPrice(id, dto);
+		return service.editPrice(id, dto);
 	}
 
 }

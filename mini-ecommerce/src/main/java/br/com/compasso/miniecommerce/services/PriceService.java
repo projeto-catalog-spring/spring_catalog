@@ -30,6 +30,7 @@ public class PriceService {
 	@Autowired
 	private ProductRepository productRepository;
 
+	@Autowired
 	private ModelMapper mapper = new ModelMapper();
 
 	@Transactional

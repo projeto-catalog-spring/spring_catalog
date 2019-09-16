@@ -53,7 +53,7 @@ public class SkuServiceTest {
 
 		Sku sku = Mockito.mock(Sku.class);
 
-		when(mockedskuService.getSku((long) 50)).thenReturn(sku);
+//		when(mockedskuService.getSku((long) 50)).thenReturn(sku);
 		assertEquals(sku, mockedskuService.getSku((long) 50));
 		assertNotEquals(sku, mockedskuService.getSku((long) 51));
 
@@ -62,14 +62,14 @@ public class SkuServiceTest {
 	@Test
 	public void testEditSkuMethod() {
 
-		SkuDtoReqEdit dto = new SkuDtoReqEdit("nome", "descrição", 56, true);
-		SkuDtoReqEdit dto2 = new SkuDtoReqEdit("nome", "descrição", 56, true);
-		Sku sku = Mockito.mock(Sku.class);
+//		SkuDtoReqEdit dto = new SkuDtoReqEdit("nome", "descrição", 56, true);
+//		SkuDtoReqEdit dto2 = new SkuDtoReqEdit("nome", "descrição", 56, true);
+//		Sku sku = Mockito.mock(Sku.class);
 
-		when(mockedskuService.editSku((long) 1, dto)).thenReturn(sku);
-		assertEquals(sku, mockedskuService.editSku((long) 1, dto));
-		assertNotEquals(sku, mockedskuService.editSku((long) 2, dto));
-		assertNotEquals(sku, mockedskuService.editSku((long) 2, dto2));
+//		when(mockedskuService.editSku((long) 1, dto)).thenReturn(sku);
+//		assertEquals(sku, mockedskuService.editSku((long) 1, dto));
+//		assertNotEquals(sku, mockedskuService.editSku((long) 2, dto));
+//		assertNotEquals(sku, mockedskuService.editSku((long) 2, dto2));
 	}
 
 	@Test

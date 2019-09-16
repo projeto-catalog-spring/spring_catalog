@@ -31,6 +31,7 @@ public class SkuService {
 	@Autowired
 	private ProductRepository productRepository;
 
+	@Autowired
 	private ModelMapper mapper = new ModelMapper();
 
 	@Transactional
@@ -47,21 +48,23 @@ public class SkuService {
 	}
 
 	@Transactional
-	public Sku getSku(Long id) {
-		Optional<Sku> skuOp = repository.findById(id);
+	public ResponseEntity<SkuDtoRes> getSku(Long id) {
+		Optional<Sku> sku = repository.findById(id);
 
-		if (skuOp.isPresent()) {
-			return skuOp.get();
+		if (sku.isPresent()) {
+			return ResponseEntity.ok(this.mapper.map(sku.get(), SkuDtoRes.class));
 		}
 
-		return null;
+		return ResponseEntity.notFound().build();
 	}
 
 	@Transactional
-	public Sku editSku(Long id, SkuDtoReqEdit dto) {
+	public ResponseEntity<SkuDtoRes> editSku(Long id, SkuDtoReqEdit dto) {
 		Optional<Sku> skuOp = repository.findById(id);
 
 		if (skuOp.isPresent()) {
+			Sku sku = dto.update(id, repository);
+
 			int quantidadeSkusValidas = productRepository.findAllSkus(id);
 
 			if (quantidadeSkusValidas <= 0) {
@@ -70,10 +73,10 @@ public class SkuService {
 				productRepository.save(prod);
 			}
 
-			return dto.update(id, repository);
+			return ResponseEntity.ok(this.mapper.map(repository.save(sku), SkuDtoRes.class));
 		}
 
-		return null;
+		return ResponseEntity.notFound().build();
 	}
 
 	@Transactional

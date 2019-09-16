@@ -13,10 +13,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Data
 public class SkuDtoRes {
-	
+
 	@JsonProperty("Id")
 	private Long id;
-	
+
 	@JsonProperty("ProductId")
 	private Long productId;
 
@@ -31,7 +31,7 @@ public class SkuDtoRes {
 
 	@JsonProperty("ProductName")
 	private String productName;
-	
+
 	@JsonProperty("Enabled")
 	private boolean enabled;
 
@@ -48,8 +48,5 @@ public class SkuDtoRes {
 	public static Page<SkuDtoRes> convert(Page<Sku> skus) {
 		return skus.map(SkuDtoRes::new);
 	}
-}
 
-//public static Page<TopicoDto> converter(Page<Topico> topicos) {
-//return topicos.map(TopicoDto::new);
-//}
+}

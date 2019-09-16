@@ -29,4 +29,5 @@ public class MapperConfigurations {
 			map().getPrice().setId(source.getPrice().getId());
 		}
 	};
+
 }

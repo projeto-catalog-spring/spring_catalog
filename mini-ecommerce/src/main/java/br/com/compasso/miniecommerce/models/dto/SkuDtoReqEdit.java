@@ -27,7 +27,7 @@ public class SkuDtoReqEdit {
 
 	@PositiveOrZero
 	private int stock;
-
+	
 	@NotNull
 	private boolean enabled;
 
