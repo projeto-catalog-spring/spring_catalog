@@ -56,8 +56,12 @@ public class ProductController {
 	}
 
 	@PutMapping("/{id}")
-	public ResponseEntity<ProductDtoRes> editProduct(@PathVariable Long id, @RequestBody ProductDtoReq productDTO) {
-		return service.editProduct(id, productDTO);
+	public ResponseEntity<ProductDtoRes> editProduct(@RequestBody ProductDtoReq dto, @PathVariable Long id,
+			BindingResult result) {
+		if (result.hasErrors())
+			return ResponseEntity.badRequest().build();
+
+		return service.editProduct(id, dto);
 	}
 
 	@PutMapping("/{id}/{status}")
