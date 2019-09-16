@@ -30,7 +30,7 @@ public class ProductServiceTest {
 
 		@Test(expected = IllegalArgumentException.class)
 		public void addProduct() {
-			when(prodServ.addProduct(product)).thenReturn(null).thenThrow(new IllegalArgumentException());
+			when(prodServ.addProduct(productDtoReq, null)).thenReturn(null).thenThrow(new IllegalArgumentException());
 			assertEquals(product, product);
 		}
 

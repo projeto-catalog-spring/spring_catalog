@@ -33,15 +33,16 @@ public class PriceService {
 	private ModelMapper mapper = new ModelMapper();
 
 	@Transactional
-	public Page<PriceDtoRes> getAllPrices(Pageable pagination) {
-		return PriceDtoRes.convert(repository.findAll(pagination));
+	public ResponseEntity<Page<PriceDtoRes>> getAllPrices(Pageable page) {
+		return ResponseEntity.ok(PriceDtoRes.convert(repository.findAll(page)));
 	}
 
 	@Transactional
-	public ResponseEntity<PriceDtoRes> addPrice(Price price, UriComponentsBuilder uriBuilder) {
-		Price p = repository.save(price);
-		URI uri = uriBuilder.path("/" + p.getId()).buildAndExpand(p.getId()).toUri();
-		return ResponseEntity.created(uri).body(this.mapper.map(p, PriceDtoRes.class));
+	public ResponseEntity<PriceDtoRes> addPrice(PriceDtoReq dto, UriComponentsBuilder uriBuilder) {
+		Price price = repository.save(this.mapper.map(dto, Price.class));
+
+		URI uri = uriBuilder.path("/" + price.getId()).buildAndExpand(price.getId()).toUri();
+		return ResponseEntity.created(uri).body(this.mapper.map(price, PriceDtoRes.class));
 	}
 
 	@Transactional
@@ -57,7 +58,6 @@ public class PriceService {
 		Optional<Price> priceOptional = repository.findById(id);
 
 		if (priceOptional.isPresent()) {
-
 			Price p = dto.update(id, repository);
 
 			if (dto.getPrice() <= 0) {
@@ -68,7 +68,7 @@ public class PriceService {
 			}
 
 			return ResponseEntity.ok(this.mapper.map(p, PriceDtoRes.class));
-		} 
+		}
 
 		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 	}

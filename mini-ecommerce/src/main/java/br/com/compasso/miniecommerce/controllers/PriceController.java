@@ -2,7 +2,6 @@ package br.com.compasso.miniecommerce.controllers;
 
 import javax.validation.Valid;
 
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -19,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import br.com.compasso.miniecommerce.models.Price;
 import br.com.compasso.miniecommerce.models.dto.PriceDtoReq;
 import br.com.compasso.miniecommerce.models.dto.PriceDtoRes;
 import br.com.compasso.miniecommerce.services.PriceService;
@@ -31,21 +29,19 @@ public class PriceController {
 	@Autowired
 	private PriceService priceService;
 
-	private ModelMapper mapper = new ModelMapper();
-
 	@GetMapping
-	public Page<PriceDtoRes> getAllPrices(
+	public ResponseEntity<Page<PriceDtoRes>> getAllPrices(
 			@PageableDefault(sort = "id", direction = Direction.ASC, page = 0, size = 10) Pageable pagination) {
 		return priceService.getAllPrices(pagination);
 	}
 
 	@PostMapping
-	public ResponseEntity<PriceDtoRes> addPrice(@RequestBody @Valid PriceDtoReq priceDtoReq, BindingResult result,
+	public ResponseEntity<PriceDtoRes> addPrice(@RequestBody @Valid PriceDtoReq dto, BindingResult result,
 			UriComponentsBuilder uriBuilder) {
 		if (result.hasErrors())
 			return ResponseEntity.badRequest().build();
 
-		return priceService.addPrice(mapper.map(priceDtoReq, Price.class), uriBuilder);
+		return priceService.addPrice(dto, uriBuilder);
 	}
 
 	@GetMapping("/{id}")

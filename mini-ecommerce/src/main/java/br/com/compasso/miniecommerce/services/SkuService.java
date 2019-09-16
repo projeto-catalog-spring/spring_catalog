@@ -1,16 +1,22 @@
 package br.com.compasso.miniecommerce.services;
 
+import java.net.URI;
 import java.util.Optional;
 
 import javax.transaction.Transactional;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import br.com.compasso.miniecommerce.models.Product;
 import br.com.compasso.miniecommerce.models.Sku;
+import br.com.compasso.miniecommerce.models.dto.SkuDtoReq;
 import br.com.compasso.miniecommerce.models.dto.SkuDtoReqEdit;
 import br.com.compasso.miniecommerce.models.dto.SkuDtoRes;
 import br.com.compasso.miniecommerce.repository.ProductRepository;
@@ -25,21 +31,19 @@ public class SkuService {
 	@Autowired
 	private ProductRepository productRepository;
 
+	private ModelMapper mapper = new ModelMapper();
+
 	@Transactional
-	public Page<SkuDtoRes> getAllSkus(Pageable pagination) {
-		Page<Sku> skus = repository.findAll(pagination);
-		return SkuDtoRes.convert(skus);
+	public ResponseEntity<Page<SkuDtoRes>> getAllSkus(Pageable pagination) {
+		return new ResponseEntity<>(SkuDtoRes.convert(repository.findAll(pagination)), HttpStatus.OK);
 	}
 
 	@Transactional
-	public Sku addSku(Sku sku) {
-		Optional<Product> product = productRepository.findById(sku.getProduct().getId());
+	public ResponseEntity<SkuDtoRes> addSku(SkuDtoReq dto, UriComponentsBuilder uriBuilder) {
+		Sku sku = repository.save(this.mapper.map(dto, Sku.class));
 
-		if (product.isPresent()) {
-			sku.setProduct(product.get());
-		}
-
-		return repository.save(sku);
+		URI uri = uriBuilder.path("/" + sku.getId()).buildAndExpand(sku.getId()).toUri();
+		return ResponseEntity.created(uri).body(this.mapper.map(sku, SkuDtoRes.class));
 	}
 
 	@Transactional

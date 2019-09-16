@@ -1,5 +1,6 @@
 package br.com.compasso.miniecommerce.services;
 
+import java.net.URI;
 import java.util.Optional;
 
 import javax.transaction.Transactional;
@@ -8,9 +9,9 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import br.com.compasso.miniecommerce.models.Brand;
 import br.com.compasso.miniecommerce.models.Category;
@@ -34,7 +35,7 @@ public class ProductService {
 
 	@Autowired
 	private SkuRepository skuRepository;
-	
+
 	@Autowired
 	private BrandRepository brandRepository;
 
@@ -44,21 +45,22 @@ public class ProductService {
 	@Autowired
 	private PriceRepository priceRepository;
 
+	@Autowired
 	private ModelMapper mapper = new ModelMapper();
 
 	@Transactional
 	public ResponseEntity<Page<ProductDtoRes>> getAllProducts(Pageable page) {
-		return new ResponseEntity<>(ProductDtoRes.convert(repository.findAll(page)), HttpStatus.OK);
+		return ResponseEntity.ok(ProductDtoRes.convert(repository.findAll(page)));
 	}
 
 	@Transactional
 	public ResponseEntity<ProductDtoRes> getProduct(Long id, Pageable page) {
 		Optional<Product> product = repository.findById(id);
 		if (product.isPresent()) {
-			return new ResponseEntity<>(this.mapper.map(product.get(), ProductDtoRes.class), HttpStatus.OK);
+			return ResponseEntity.ok(this.mapper.map(product.get(), ProductDtoRes.class));
 		}
 
-		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		return ResponseEntity.notFound().build();
 	}
 
 	@Transactional
@@ -66,30 +68,41 @@ public class ProductService {
 		Page<Sku> skus = skuRepository.findByProductId(id, page);
 
 		if (repository.findById(id).isPresent()) {
-			return new ResponseEntity<>(SkuDtoRes.convert(skus), HttpStatus.OK);
+			return ResponseEntity.ok(SkuDtoRes.convert(skus));
 		}
 
-		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		return ResponseEntity.notFound().build();
 	}
 
 	@Transactional
-	public Product addProduct(Product product) {
+	public ResponseEntity<ProductDtoRes> addProduct(ProductDtoReq dto, UriComponentsBuilder uriBuilder) {
+		Product product = mapper.map(dto, Product.class);
+
 		Optional<Brand> branch = brandRepository.findByName(product.getBrand().getName());
 		if (branch.isPresent()) {
 			product.setBrand(branch.get());
+		} else {
+			product.setBrand(brandRepository.save(this.mapper.map(dto.getBrand(), Brand.class)));
 		}
 
 		Optional<Category> category = categoryRepository.findByName(product.getCategory().getName());
 		if (category.isPresent()) {
 			product.setCategory(category.get());
+		} else {
+			product.setCategory(categoryRepository.save(this.mapper.map(dto.getCategory(), Category.class)));
 		}
 
 		Optional<Price> price = priceRepository.findById(product.getPrice().getId());
 		if (price.isPresent()) {
 			product.setPrice(price.get());
+		} else {
+			return ResponseEntity.notFound().build();
 		}
 
-		return repository.save(product);
+		repository.save(product);
+
+		URI uri = uriBuilder.path("/" + product.getId()).buildAndExpand(product.getId()).toUri();
+		return ResponseEntity.created(uri).body(this.mapper.map(product, ProductDtoRes.class));
 	}
 
 	@Transactional
@@ -105,14 +118,14 @@ public class ProductService {
 			if (brand.isPresent()) {
 				updatedProduct.setBrand(brand.get());
 			} else {
-				updatedProduct.setBrand(brandRepository.save(dto.getBrand()));
+				updatedProduct.setBrand(brandRepository.save(this.mapper.map(dto.getBrand(), Brand.class)));
 			}
 
 			Optional<Category> category = categoryRepository.findByName(dto.getCategory().getName());
 			if (category.isPresent()) {
 				updatedProduct.setCategory(category.get());
 			} else {
-				updatedProduct.setCategory(categoryRepository.save(dto.getCategory()));
+				updatedProduct.setCategory(categoryRepository.save(this.mapper.map(dto.getCategory(), Category.class)));
 			}
 
 			Optional<Price> price = priceRepository.findById(dto.getPrice().getId());
@@ -134,12 +147,9 @@ public class ProductService {
 		if (productOptional.isPresent()) {
 			Product product = productOptional.get();
 			if (status) {
-				int numeroDeSkusAtivas = repository.findAllSkus(id);
-
-				if (numeroDeSkusAtivas > 0 && product.getPrice().getPrice() > 0) {
+				if (repository.findAllSkus(id) > 0 && product.getPrice().getPrice() > 0) {
 					product.setEnabled(status);
 				}
-
 			} else {
 				product.setEnabled(status);
 			}
@@ -148,10 +158,6 @@ public class ProductService {
 		}
 
 		return ResponseEntity.notFound().build();
-	}
-
-	public void activateProduct(Product product) {
-		product.setEnabled(true);
 	}
 
 }

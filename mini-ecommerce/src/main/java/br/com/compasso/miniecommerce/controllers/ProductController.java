@@ -1,14 +1,12 @@
 package br.com.compasso.miniecommerce.controllers;
 
-import java.net.URI;
-
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import br.com.compasso.miniecommerce.models.Product;
 import br.com.compasso.miniecommerce.models.dto.ProductDtoReq;
 import br.com.compasso.miniecommerce.models.dto.ProductDtoRes;
 import br.com.compasso.miniecommerce.models.dto.SkuDtoRes;
@@ -30,8 +27,6 @@ public class ProductController {
 
 	@Autowired
 	private ProductService service;
-
-	private ModelMapper mapper = new ModelMapper();
 
 	@GetMapping
 	public ResponseEntity<Page<ProductDtoRes>> getAllProducts(
@@ -47,11 +42,12 @@ public class ProductController {
 	}
 
 	@PostMapping
-	public ResponseEntity<ProductDtoRes> addProduct(@RequestBody ProductDtoReq dto, UriComponentsBuilder uriBuilder) {
-		Product product = service.addProduct(mapper.map(dto, Product.class));
+	public ResponseEntity<ProductDtoRes> addProduct(@RequestBody ProductDtoReq dto, BindingResult result,
+			UriComponentsBuilder uriBuilder) {
+		if (result.hasErrors())
+			return ResponseEntity.badRequest().build();
 
-		URI uri = uriBuilder.path("/{id}").buildAndExpand(product).toUri();
-		return ResponseEntity.created(uri).body(new ProductDtoRes(product));
+		return service.addProduct(dto, uriBuilder);
 	}
 
 	@GetMapping("/{id}")
