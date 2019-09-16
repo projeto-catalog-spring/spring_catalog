@@ -78,68 +78,29 @@ public class ProductService {
 	public ResponseEntity<ProductDtoRes> addProduct(ProductDtoReq dto, UriComponentsBuilder uriBuilder) {
 		Product product = mapper.map(dto, Product.class);
 
-		Optional<Brand> branch = brandRepository.findByName(product.getBrand().getName());
-		if (branch.isPresent()) {
-			product.setBrand(branch.get());
-		} else {
-			product.setBrand(brandRepository.save(this.mapper.map(dto.getBrand(), Brand.class)));
-		}
+		product = updateProduct(product, dto);
 
-		Optional<Category> category = categoryRepository.findByName(product.getCategory().getName());
-		if (category.isPresent()) {
-			product.setCategory(category.get());
-		} else {
-			product.setCategory(categoryRepository.save(this.mapper.map(dto.getCategory(), Category.class)));
-		}
-
-		Optional<Price> price = priceRepository.findById(product.getPrice().getId());
-		if (price.isPresent()) {
-			product.setPrice(price.get());
-		} else {
+		if (product == null) {
 			return ResponseEntity.notFound().build();
 		}
 
-		repository.save(product);
-
 		URI uri = uriBuilder.path("/" + product.getId()).buildAndExpand(product.getId()).toUri();
-		return ResponseEntity.created(uri).body(this.mapper.map(product, ProductDtoRes.class));
+		return ResponseEntity.created(uri).body(this.mapper.map(repository.save(product), ProductDtoRes.class));
 	}
 
 	@Transactional
 	public ResponseEntity<ProductDtoRes> editProduct(Long id, ProductDtoReq dto) {
-		Optional<Product> productX = repository.findById(id);
-		if (productX.isPresent()) {
-			Product product = productX.get();
+		Optional<Product> productSource = repository.findById(id);
 
-			Optional<Brand> branch = brandRepository.findByName(dto.getBrand().getName());
-			if (branch.isPresent()) {
-				product.setBrand(branch.get());
-			} else {
-				product.setBrand(brandRepository.save(this.mapper.map(dto.getBrand(), Brand.class)));
+		if (productSource.isPresent()) {
+			Product product = updateProduct(new Product(), dto);
+			if (product != null) {
+				product.setId(id);
+				return ResponseEntity.ok(this.mapper.map(repository.save(product), ProductDtoRes.class));
 			}
-
-			Optional<Category> category = categoryRepository.findByName(dto.getCategory().getName());
-			if (category.isPresent()) {
-				product.setCategory(category.get());
-			} else {
-				product.setCategory(categoryRepository.save(this.mapper.map(dto.getCategory(), Category.class)));
-			}
-
-			Optional<Price> price = priceRepository.findById(dto.getPrice().getId());
-			if (price.isPresent()) {
-				product.setPrice(price.get());
-			} else {
-				return ResponseEntity.notFound().build();
-			}
-
-			product.setName(dto.getName());
-			product.setDescription(dto.getDescription());
-
-			return ResponseEntity.ok(this.mapper.map(repository.save(product), ProductDtoRes.class));
 		}
 
 		return ResponseEntity.notFound().build();
-
 	}
 
 	@Transactional
@@ -151,14 +112,47 @@ public class ProductService {
 			if (status) {
 				if (repository.findAllSkus(id) > 0 && product.getPrice().getPrice() > 0) {
 					product.setEnabled(status);
-					return ResponseEntity.ok(new ProductDtoRes(repository.save(productOptional.get())));
 				}
 			} else {
 				product.setEnabled(status);
 			}
+
+			return ResponseEntity.ok(new ProductDtoRes(repository.save(productOptional.get())));
 		}
 
 		return ResponseEntity.notFound().build();
+	}
+
+	@Transactional
+	public Product updateProduct(Product product, ProductDtoReq dto) {
+		Optional<Brand> brand = brandRepository.findByName(dto.getBrand().getName());
+		if (brand.isPresent()) {
+			product.setBrand(brand.get());
+		} else {
+			Brand newBrand = brandRepository.save(this.mapper.map(dto.getBrand(), Brand.class));
+			product.setBrand(newBrand);
+		}
+
+		Optional<Category> category = categoryRepository.findByName(dto.getCategory().getName());
+		if (category.isPresent()) {
+			product.setCategory(category.get());
+		} else {
+			Category newCategory = categoryRepository.save(this.mapper.map(dto.getCategory(), Category.class));
+			product.setCategory(newCategory);
+		}
+
+		Optional<Price> price = priceRepository.findById(dto.getPrice().getId());
+		if (price.isPresent()) {
+			product.setPrice(price.get());
+		} else {
+			System.out.println("vai retornar NULL");
+			return null;
+		}
+
+		product.setName(dto.getName());
+		product.setDescription(dto.getDescription());
+
+		return product;
 	}
 
 }
