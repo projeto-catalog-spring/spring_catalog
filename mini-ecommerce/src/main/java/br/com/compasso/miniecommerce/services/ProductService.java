@@ -145,7 +145,6 @@ public class ProductService {
 		if (price.isPresent()) {
 			product.setPrice(price.get());
 		} else {
-			System.out.println("vai retornar NULL");
 			return null;
 		}
 
