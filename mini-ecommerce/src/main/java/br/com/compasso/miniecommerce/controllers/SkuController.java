@@ -2,7 +2,6 @@ package br.com.compasso.miniecommerce.controllers;
 
 import javax.validation.Valid;
 
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -19,8 +18,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import br.com.compasso.miniecommerce.models.Sku;
-import br.com.compasso.miniecommerce.models.dto.ProductDtoRes;
 import br.com.compasso.miniecommerce.models.dto.SkuDtoReq;
 import br.com.compasso.miniecommerce.models.dto.SkuDtoReqEdit;
 import br.com.compasso.miniecommerce.models.dto.SkuDtoRes;
@@ -32,9 +29,6 @@ public class SkuController {
 
 	@Autowired
 	private SkuService service;
-
-	@Autowired
-	private ModelMapper mapper = new ModelMapper();
 
 	@GetMapping
 	public ResponseEntity<Page<SkuDtoRes>> getAllSkus(
@@ -67,13 +61,7 @@ public class SkuController {
 
 	@PutMapping("/{id}/{status}")
 	public ResponseEntity<SkuDtoRes> removeSku(@PathVariable Long id, @PathVariable boolean status) {
-		Sku sku = service.removeSku(id, status);
-
-		if (sku != null) {
-			return ResponseEntity.ok(this.mapper.map(sku, SkuDtoRes.class));
-		}
-
-		return ResponseEntity.notFound().build();
+		return service.removeSku(id, status);
 	}
 
 }

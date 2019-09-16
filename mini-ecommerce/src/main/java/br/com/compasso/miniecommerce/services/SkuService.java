@@ -32,7 +32,7 @@ public class SkuService {
 	private ProductRepository productRepository;
 
 	@Autowired
-	private ModelMapper mapper = new ModelMapper();
+	private ModelMapper mapper;
 
 	@Transactional
 	public ResponseEntity<Page<SkuDtoRes>> getAllSkus(Pageable pagination) {
@@ -65,39 +65,37 @@ public class SkuService {
 		if (skuOp.isPresent()) {
 			Sku sku = dto.update(id, repository);
 
-			int quantidadeSkusValidas = productRepository.findAllSkus(id);
-
-			if (quantidadeSkusValidas <= 0) {
+			if (productRepository.findAllSkus(id) <= 0) {
 				Product prod = productRepository.getOne(skuOp.get().getProduct().getId());
 				prod.setEnabled(false);
 				productRepository.save(prod);
 			}
 
-			return ResponseEntity.ok(this.mapper.map(repository.save(sku), SkuDtoRes.class));
+			return ResponseEntity.ok(new SkuDtoRes(sku));
 		}
 
 		return ResponseEntity.notFound().build();
 	}
 
 	@Transactional
-	public Sku removeSku(Long id, boolean status) {
+	public ResponseEntity<SkuDtoRes> removeSku(Long id, boolean status) {
 		Optional<Sku> skuOp = repository.findById(id);
 
 		if (skuOp.isPresent()) {
 			skuOp.get().setEnabled(status);
 
-			Product product = productRepository.getOne(skuOp.get().getProduct().getId());
+			Optional<Product> productOp = productRepository.findById(skuOp.get().getProduct().getId());
+			if (productOp.isPresent()) {
+				Product product = productOp.get();
+				if (productRepository.findAllSkus(product.getId()) == 0) {
+					product.setEnabled(false);
+				}
 
-			int numeroDeSkusAtivas = productRepository.findAllSkus(product.getId());
-
-			if (numeroDeSkusAtivas == 0) {
-				product.setEnabled(false);
+				return ResponseEntity.ok(new SkuDtoRes(skuOp.get()));
 			}
-
-			return skuOp.get();
 		}
 
-		return null;
+		return ResponseEntity.notFound().build();
 	}
 
 	public static Page<SkuDtoRes> convert(Page<Sku> skus) {
