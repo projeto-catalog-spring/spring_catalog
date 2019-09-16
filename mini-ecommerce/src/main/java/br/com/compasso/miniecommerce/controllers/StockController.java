@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.compasso.miniecommerce.models.Sku;
 import br.com.compasso.miniecommerce.models.dto.SkuDtoRes;
 import br.com.compasso.miniecommerce.models.dto.StockDtoReq;
 import br.com.compasso.miniecommerce.models.dto.StockDtoRes;
@@ -35,9 +34,7 @@ public class StockController {
 	@GetMapping
 	public ResponseEntity<Page<StockDtoRes>> stockLevel(
 			@PageableDefault(sort = "id", direction = Direction.ASC, page = 0, size = 10) Pageable pageable) {
-		Page<Sku> skus = skuRep.findAllByEnabled(true, pageable);
-
-		return ResponseEntity.ok(StockDtoRes.convert(skus));
+		return ResponseEntity.ok(StockDtoRes.convert(skuRep.findAllByEnabled(true, pageable)));
 	}
 
 	@PutMapping("/add")
