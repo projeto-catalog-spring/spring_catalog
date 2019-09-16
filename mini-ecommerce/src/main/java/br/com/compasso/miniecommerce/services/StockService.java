@@ -36,9 +36,9 @@ public class StockService {
 			sku.add(stockReq.getQtd());
 
 			return ResponseEntity.ok(this.mapper.map(sku, SkuDtoRes.class));
-		} else {
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
+
+		return ResponseEntity.notFound().build();
 	}
 
 	@Transactional
@@ -64,7 +64,7 @@ public class StockService {
 				return ResponseEntity.ok(this.mapper.map(sku, SkuDtoRes.class));
 			}
 		} else {
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+			return ResponseEntity.notFound().build();
 		}
 	}
 

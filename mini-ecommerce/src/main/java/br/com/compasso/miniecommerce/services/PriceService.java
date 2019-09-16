@@ -51,7 +51,7 @@ public class PriceService {
 		if (repository.findById(id).isPresent()) {
 			return ResponseEntity.ok(this.mapper.map(repository.getOne(id), PriceDtoRes.class));
 		}
-		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		return ResponseEntity.notFound().build();
 	}
 
 	@Transactional
