@@ -8,14 +8,8 @@ import org.springframework.stereotype.Component;
 
 import br.com.compasso.miniecommerce.clients.ConsumerERP;
 import br.com.compasso.miniecommerce.models.Price;
-import br.com.compasso.miniecommerce.models.Product;
-import br.com.compasso.miniecommerce.models.Sku;
 import br.com.compasso.miniecommerce.models.helpers.HelperUpdate;
-import br.com.compasso.miniecommerce.repository.BrandRepository;
-import br.com.compasso.miniecommerce.repository.CategoryRepository;
 import br.com.compasso.miniecommerce.repository.PriceRepository;
-import br.com.compasso.miniecommerce.repository.ProductRepository;
-import br.com.compasso.miniecommerce.repository.SkuRepository;
 import feign.Feign;
 import feign.Logger;
 import feign.gson.GsonDecoder;
@@ -28,39 +22,18 @@ import feign.slf4j.Slf4jLogger;
 public class Scheduler {
 
 	@Autowired
-	private BrandRepository brandRepo;
-
-	@Autowired
-	private CategoryRepository categoryRepo;
-
-	@Autowired
-	private ProductRepository productRepo;
-
-	@Autowired
 	private PriceRepository priceRepo;
-
-	@Autowired
-	private SkuRepository skuRepo;
 
 	@Scheduled(cron = "0 0 0/1 * * *")
 	public void jobSchedule() {
-
+		System.out.println("teste");
+		
 		ConsumerERP erp = Feign.builder().client(new OkHttpClient()).encoder(new GsonEncoder())
 				.decoder(new GsonDecoder()).logger(new Slf4jLogger(ConsumerERP.class)).logLevel(Logger.Level.FULL)
 				.target(ConsumerERP.class, "http://localhost:8080/ERP");
 
 		for (Price price : erp.getData().getPrices()) {
 			HelperUpdate.updatePrice(priceRepo, price);
-		}
-
-		for (Product product : erp.getData().getProducts()) {
-			HelperUpdate.updateBrand(brandRepo, product.getBrand());
-			HelperUpdate.updateCategory(categoryRepo, product.getCategory());
-			HelperUpdate.updateProduct(productRepo, product);
-		}
-
-		for (Sku sku : erp.getData().getSkus()) {
-			HelperUpdate.updateSKU(skuRepo, sku);
 		}
 
 	}
