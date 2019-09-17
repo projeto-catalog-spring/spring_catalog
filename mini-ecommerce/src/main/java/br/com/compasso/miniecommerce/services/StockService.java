@@ -11,42 +11,43 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import br.com.compasso.miniecommerce.models.Product;
-import br.com.compasso.miniecommerce.models.SKU;
+import br.com.compasso.miniecommerce.models.Sku;
 import br.com.compasso.miniecommerce.models.dto.SkuDtoRes;
 import br.com.compasso.miniecommerce.models.dto.StockDtoReq;
 import br.com.compasso.miniecommerce.repository.ProductRepository;
-import br.com.compasso.miniecommerce.repository.SKURepository;
+import br.com.compasso.miniecommerce.repository.SkuRepository;
 
 @Service
 public class StockService {
 
+	@Autowired
 	private ModelMapper mapper = new ModelMapper();
 
 	@Autowired
 	private ProductRepository productRepository;
 
 	@Transactional
-	public ResponseEntity<SkuDtoRes> add(SKURepository skuRep, StockDtoReq stockReq) {
+	public ResponseEntity<SkuDtoRes> add(SkuRepository skuRep, StockDtoReq stockReq) {
 
-		Optional<SKU> skuOptional = skuRep.findById(stockReq.getId());
+		Optional<Sku> skuOptional = skuRep.findById(stockReq.getId());
 
 		if (skuOptional.isPresent()) {
-			SKU sku = skuOptional.get();
+			Sku sku = skuOptional.get();
 			sku.add(stockReq.getQtd());
 
 			return ResponseEntity.ok(this.mapper.map(sku, SkuDtoRes.class));
-		} else {
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
+
+		return ResponseEntity.notFound().build();
 	}
 
 	@Transactional
-	public ResponseEntity<SkuDtoRes> remove(SKURepository skuRep, StockDtoReq stockReq) {
+	public ResponseEntity<SkuDtoRes> remove(SkuRepository skuRep, StockDtoReq stockReq) {
 
-		Optional<SKU> skuOptional = skuRep.findById(stockReq.getId());
+		Optional<Sku> skuOptional = skuRep.findById(stockReq.getId());
 
 		if (skuOptional.isPresent()) {
-			SKU sku = skuOptional.get();
+			Sku sku = skuOptional.get();
 			if (sku.getStock() < stockReq.getQtd())
 				return new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
 			else {
@@ -63,7 +64,7 @@ public class StockService {
 				return ResponseEntity.ok(this.mapper.map(sku, SkuDtoRes.class));
 			}
 		} else {
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+			return ResponseEntity.notFound().build();
 		}
 	}
 

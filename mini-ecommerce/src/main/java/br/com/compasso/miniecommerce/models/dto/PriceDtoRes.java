@@ -5,11 +5,13 @@ import org.springframework.data.domain.Page;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import br.com.compasso.miniecommerce.models.Price;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @NoArgsConstructor
-@Data
+@Getter
+@Setter
 public class PriceDtoRes {
 
 	@JsonProperty("Id")

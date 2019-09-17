@@ -1,26 +1,32 @@
 package br.com.compasso.miniecommerce.services;
 
+import java.net.URI;
 import java.util.Optional;
 
 import javax.transaction.Transactional;
-import javax.validation.constraints.NotEmpty;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.validation.annotation.Validated;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import br.com.compasso.miniecommerce.models.Brand;
 import br.com.compasso.miniecommerce.models.Category;
 import br.com.compasso.miniecommerce.models.Price;
 import br.com.compasso.miniecommerce.models.Product;
+import br.com.compasso.miniecommerce.models.Sku;
 import br.com.compasso.miniecommerce.models.dto.ProductDtoReq;
 import br.com.compasso.miniecommerce.models.dto.ProductDtoRes;
+import br.com.compasso.miniecommerce.models.dto.ProductSkusDtoRes;
+import br.com.compasso.miniecommerce.models.dto.SkuDtoRes;
 import br.com.compasso.miniecommerce.repository.BrandRepository;
 import br.com.compasso.miniecommerce.repository.CategoryRepository;
 import br.com.compasso.miniecommerce.repository.PriceRepository;
 import br.com.compasso.miniecommerce.repository.ProductRepository;
-import br.com.compasso.miniecommerce.repository.SKURepository;
+import br.com.compasso.miniecommerce.repository.SkuRepository;
 
 @Service("ProductService")
 public class ProductService {
@@ -29,7 +35,7 @@ public class ProductService {
 	private ProductRepository repository;
 
 	@Autowired
-	private SKURepository skuRepository;
+	private SkuRepository skuRepository;
 
 	@Autowired
 	private BrandRepository brandRepository;
@@ -40,57 +46,62 @@ public class ProductService {
 	@Autowired
 	private PriceRepository priceRepository;
 
-	public Product addProduct(Product product) {
-		Optional<Brand> branch = brandRepository.findByName(product.getBrand().getName());
-		if (branch.isPresent()) {
-			product.setBrand(branch.get());
+	@Autowired
+	private ModelMapper mapper = new ModelMapper();
+
+	@Transactional
+	public ResponseEntity<Page<ProductDtoRes>> getAllProducts(Pageable page) {
+		return ResponseEntity.ok(ProductDtoRes.convert(repository.findAll(page)));
+	}
+
+	@Transactional
+	public ResponseEntity<ProductSkusDtoRes> getProduct(Long id, Pageable page) {
+		Optional<Product> product = repository.findById(id);
+		if (product.isPresent()) {
+			return ResponseEntity.ok(new ProductSkusDtoRes(product.get(), skuRepository));
 		}
 
-		Optional<Category> category = categoryRepository.findByName(product.getCategory().getName());
-		if (category.isPresent()) {
-			product.setCategory(category.get());
+		return ResponseEntity.notFound().build();
+	}
+
+	@Transactional
+	public ResponseEntity<Page<SkuDtoRes>> getProductSkus(Long id, Pageable page) {
+		Page<Sku> skus = skuRepository.findByProductId(id, page);
+
+		if (repository.findById(id).isPresent()) {
+			return ResponseEntity.ok(SkuDtoRes.convert(skus));
 		}
 
-		Optional<Price> price = priceRepository.findById(product.getPrice().getId());
-		if (price.isPresent()) {
-			product.setPrice(price.get());
+		return ResponseEntity.notFound().build();
+	}
+
+	@Transactional
+	public ResponseEntity<ProductDtoRes> addProduct(ProductDtoReq dto, UriComponentsBuilder uriBuilder) {
+		Product product = mapper.map(dto, Product.class);
+
+		product = updateProduct(product, dto);
+
+		if (product == null) {
+			return ResponseEntity.notFound().build();
 		}
 
-		return repository.save(product);
+		URI uri = uriBuilder.path("/" + product.getId()).buildAndExpand(product.getId()).toUri();
+		return ResponseEntity.created(uri).body(this.mapper.map(repository.save(product), ProductDtoRes.class));
 	}
 
 	@Transactional
 	public ResponseEntity<ProductDtoRes> editProduct(Long id, ProductDtoReq dto) {
-		Product updatedProduct = dto.update(dto);
+		Optional<Product> productSource = repository.findById(id);
 
-		Optional<Product> product = repository.findById(id);
-
-		if (product.isPresent()) {
-			updatedProduct.setId(product.get().getId());
-		}
-
-		if (true) {
-			Optional<Brand> brand = brandRepository.findByName(dto.getBrand().getName());
-			if (brand.isPresent()) {
-				updatedProduct.setBrand(brand.get());
-			} else {
-				updatedProduct.setBrand(brandRepository.save(dto.getBrand()));
-			}
-
-			Optional<Category> category = categoryRepository.findByName(dto.getCategory().getName());
-			if (category.isPresent()) {
-				updatedProduct.setCategory(category.get());
-			} else {
-				updatedProduct.setCategory(categoryRepository.save(dto.getCategory()));
-			}
-
-			Optional<Price> price = priceRepository.findById(dto.getPrice().getId());
-			if (price.isPresent()) {
-				updatedProduct.setPrice(price.get());
+		if (productSource.isPresent()) {
+			Product product = updateProduct(new Product(), dto);
+			if (product != null) {
+				product.setId(id);
+				return ResponseEntity.ok(this.mapper.map(repository.save(product), ProductDtoRes.class));
 			}
 		}
 
-		return ResponseEntity.ok(new ProductDtoRes(repository.save(updatedProduct)));
+		return ResponseEntity.notFound().build();
 	}
 
 	@Transactional
@@ -100,12 +111,9 @@ public class ProductService {
 		if (productOptional.isPresent()) {
 			Product product = productOptional.get();
 			if (status) {
-				int numeroDeSkusAtivas = repository.findAllSkus(id);
-
-				if (numeroDeSkusAtivas > 0 && product.getPrice().getPrice() > 0) {
+				if (repository.findAllSkus(id) > 0 && product.getPrice().getPrice() > 0) {
 					product.setEnabled(status);
 				}
-
 			} else {
 				product.setEnabled(status);
 			}
@@ -116,18 +124,35 @@ public class ProductService {
 		return ResponseEntity.notFound().build();
 	}
 
-	public void activateProduct(Product product) {
-		product.setEnabled(true);
-	}
+	@Transactional
+	public Product updateProduct(Product product, ProductDtoReq dto) {
+		Optional<Brand> brand = brandRepository.findByName(dto.getBrand().getName());
+		if (brand.isPresent()) {
+			product.setBrand(brand.get());
+		} else {
+			Brand newBrand = brandRepository.save(this.mapper.map(dto.getBrand(), Brand.class));
+			product.setBrand(newBrand);
+		}
 
-	// RN05 - Um produto ativo tem que ter um preço valido
-	public boolean validatePrice(@NotEmpty @Validated Product product) {
-		return (skuRepository.existsById(product.getId())) ? true : false;
-	}
+		Optional<Category> category = categoryRepository.findByName(dto.getCategory().getName());
+		if (category.isPresent()) {
+			product.setCategory(category.get());
+		} else {
+			Category newCategory = categoryRepository.save(this.mapper.map(dto.getCategory(), Category.class));
+			product.setCategory(newCategory);
+		}
 
-	/* Verifica se o produto está ativo */
-	public boolean isEnabled(Product product) {
-		return repository.isActive(product.getId());
+		Optional<Price> price = priceRepository.findById(dto.getPrice().getId());
+		if (price.isPresent()) {
+			product.setPrice(price.get());
+		} else {
+			return null;
+		}
+
+		product.setName(dto.getName());
+		product.setDescription(dto.getDescription());
+
+		return product;
 	}
 
 }

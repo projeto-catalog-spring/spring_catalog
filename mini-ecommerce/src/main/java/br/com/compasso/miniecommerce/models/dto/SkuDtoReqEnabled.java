@@ -2,9 +2,11 @@ package br.com.compasso.miniecommerce.models.dto;
 
 import javax.validation.constraints.NotNull;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 public class SkuDtoReqEnabled {
 	
 	@NotNull

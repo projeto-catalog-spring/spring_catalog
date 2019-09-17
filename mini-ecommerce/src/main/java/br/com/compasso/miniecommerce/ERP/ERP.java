@@ -13,12 +13,12 @@ import br.com.compasso.miniecommerce.models.Brand;
 import br.com.compasso.miniecommerce.models.Category;
 import br.com.compasso.miniecommerce.models.Price;
 import br.com.compasso.miniecommerce.models.Product;
-import br.com.compasso.miniecommerce.models.SKU;
+import br.com.compasso.miniecommerce.models.Sku;
 import br.com.compasso.miniecommerce.repository.BrandRepository;
 import br.com.compasso.miniecommerce.repository.CategoryRepository;
 import br.com.compasso.miniecommerce.repository.PriceRepository;
 import br.com.compasso.miniecommerce.repository.ProductRepository;
-import br.com.compasso.miniecommerce.repository.SKURepository;
+import br.com.compasso.miniecommerce.repository.SkuRepository;
 
 @RestController
 @RequestMapping("/ERP")
@@ -37,7 +37,7 @@ public class ERP {
 	ProductRepository productRepository;
 
 	@Autowired
-	SKURepository skuRepository;
+	SkuRepository skuRepository;
 
 	@GetMapping()
 	public ResponseEntity<ERPDtoSend> getData() {
@@ -68,14 +68,14 @@ public class ERP {
 		Product product2 = new Product(product.getId() + 2, "Lápis", "Lápis Fodão", true, c1, b1, price2);
 		Product product3 = new Product(product.getId() + 3, "Toalha", "Toalha de rosto", true, c2, b2, price1);
 
-		List<SKU> skus = skuRepository.findAll();
-		SKU sku = skus.get(skus.size() - 1);
+		List<Sku> skus = skuRepository.findAll();
+		Sku sku = skus.get(skus.size() - 1);
 
-		SKU sku1 = new SKU(sku.getId() + 1, "HB", "Lápis HB", 15001, true, product2);
-		SKU sku2 = new SKU(sku.getId() + 2, "B2", "Lápis B2", 15000, true, product2);
-		SKU sku3 = new SKU(sku.getId() + 3, "B4", "Lápis B4", 15000, true, product2);
-		SKU sku4 = new SKU(sku.getId() + 4, "Preta", "Confortável", 100, true, product1);
-		SKU sku5 = new SKU(sku.getId() + 5, "azul", "macia", 5000, true, product3);
+		Sku sku1 = new Sku(sku.getId() + 1, "HB", "Lápis HB", 15001, true, product2);
+		Sku sku2 = new Sku(sku.getId() + 2, "B2", "Lápis B2", 15000, true, product2);
+		Sku sku3 = new Sku(sku.getId() + 3, "B4", "Lápis B4", 15000, true, product2);
+		Sku sku4 = new Sku(sku.getId() + 4, "Preta", "Confortável", 100, true, product1);
+		Sku sku5 = new Sku(sku.getId() + 5, "azul", "macia", 5000, true, product3);
 
 		ERPDtoSend tbe = new ERPDtoSend();
 		tbe.setProducts(Arrays.asList(product1, product2, product3));

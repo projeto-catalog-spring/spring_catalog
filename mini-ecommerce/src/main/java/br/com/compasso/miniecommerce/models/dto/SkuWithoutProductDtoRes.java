@@ -14,13 +14,10 @@ import lombok.Setter;
 @AllArgsConstructor
 @Getter
 @Setter
-public class SkuDtoRes {
+public class SkuWithoutProductDtoRes {
 
 	@JsonProperty("Id")
 	private Long id;
-
-	@JsonProperty("ProductId")
-	private Long productId;
 
 	@JsonProperty("Name")
 	private String name;
@@ -30,25 +27,20 @@ public class SkuDtoRes {
 
 	@JsonProperty("Stock")
 	private int stock;
-
-	@JsonProperty("ProductName")
-	private String productName;
-
+	
 	@JsonProperty("Enabled")
 	private boolean enabled;
 
-	public SkuDtoRes(Sku sku) {
+	public SkuWithoutProductDtoRes(Sku sku) {
 		this.id = sku.getId();
 		this.name = sku.getName();
 		this.description = sku.getDescription();
 		this.stock = sku.getStock();
-		this.productName = sku.getProduct().getName();
 		this.enabled = sku.isEnabled();
-		this.productId = sku.getProduct().getId();
 	}
 
-	public static Page<SkuDtoRes> convert(Page<Sku> skus) {
-		return skus.map(SkuDtoRes::new);
+	public static Page<SkuWithoutProductDtoRes> convert(Page<Sku> skus) {
+		return skus.map(SkuWithoutProductDtoRes::new);
 	}
 
 }

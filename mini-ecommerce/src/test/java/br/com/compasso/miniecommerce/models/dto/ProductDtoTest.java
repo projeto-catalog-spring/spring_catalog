@@ -3,10 +3,6 @@ package br.com.compasso.miniecommerce.models.dto;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
 
-import javax.validation.Validation;
-import javax.validation.Validator;
-import javax.validation.ValidatorFactory;
-
 import org.aspectj.lang.annotation.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -20,8 +16,6 @@ import br.com.compasso.miniecommerce.models.Product;
 @RunWith(MockitoJUnitRunner.class)
 public class ProductDtoTest {
 
-	private Validator validator;
-
 	@Mock
 	private ProductDtoReq productmock;
 
@@ -31,8 +25,6 @@ public class ProductDtoTest {
 
 	@Before(value = "setup")
 	public void setup() {
-		ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
-		this.validator = factory.getValidator();
 	}
 
 	@Test(expected = IllegalArgumentException.class)
