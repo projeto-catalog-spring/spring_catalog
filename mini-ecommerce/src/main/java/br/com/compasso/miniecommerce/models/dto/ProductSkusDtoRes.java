@@ -45,9 +45,11 @@ public class ProductSkusDtoRes {
 	private Price price;
 
 	@JsonProperty("skus")
-	private ArrayList<Sku> skus;
+	private ArrayList<SkuWithoutProductDtoRes> skus;
 
 	public ProductSkusDtoRes(Product product, SkuRepository repository) {
+		this.skus = new ArrayList<>();
+
 		this.id = product.getId();
 		this.name = product.getName();
 		this.description = product.getDescription();
@@ -58,7 +60,12 @@ public class ProductSkusDtoRes {
 
 		ArrayList<Sku> lista = repository.findSkusByProductId(product.getId());
 
-		this.skus = lista;
+		int iterator = lista.size();
+
+		for (int i = 0; i < iterator; i++) {
+			this.skus.add(new SkuWithoutProductDtoRes(lista.get(i)));
+		}
+
 	}
 
 	public static Page<ProductDtoRes> convert(Page<Product> products) {
