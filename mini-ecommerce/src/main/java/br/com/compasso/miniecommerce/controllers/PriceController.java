@@ -3,7 +3,6 @@ package br.com.compasso.miniecommerce.controllers;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.web.PageableDefault;
@@ -19,7 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import br.com.compasso.miniecommerce.models.dto.PriceDtoReq;
-import br.com.compasso.miniecommerce.models.dto.PriceDtoRes;
 import br.com.compasso.miniecommerce.services.PriceService;
 
 @RestController
@@ -30,13 +28,13 @@ public class PriceController {
 	private PriceService service;
 
 	@GetMapping
-	public ResponseEntity<Page<PriceDtoRes>> getAllPrices(
+	public ResponseEntity<Object> getAllPrices(
 			@PageableDefault(sort = "id", direction = Direction.ASC, page = 0, size = 10) Pageable pagination) {
 		return service.getAllPrices(pagination);
 	}
 
 	@PostMapping
-	public ResponseEntity<PriceDtoRes> addPrice(@RequestBody @Valid PriceDtoReq dto, BindingResult result,
+	public ResponseEntity<Object> addPrice(@RequestBody @Valid PriceDtoReq dto, BindingResult result,
 			UriComponentsBuilder uriBuilder) {
 		if (result.hasErrors())
 			return ResponseEntity.badRequest().build();
@@ -45,12 +43,12 @@ public class PriceController {
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<PriceDtoRes> getPrice(@PathVariable Long id) {
+	public ResponseEntity<Object> getPrice(@PathVariable Long id) {
 		return service.getPrice(id);
 	}
 
 	@PutMapping("/{id}")
-	public ResponseEntity<PriceDtoRes> editPrice(@PathVariable Long id, @RequestBody @Valid PriceDtoReq dto,
+	public ResponseEntity<Object> editPrice(@PathVariable Long id, @RequestBody @Valid PriceDtoReq dto,
 			BindingResult result) {
 		if (result.hasErrors()) {
 			return ResponseEntity.notFound().build();

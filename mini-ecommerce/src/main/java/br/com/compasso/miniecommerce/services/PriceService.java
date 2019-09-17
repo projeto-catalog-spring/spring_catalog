@@ -34,12 +34,12 @@ public class PriceService {
 	private ModelMapper mapper = new ModelMapper();
 
 	@Transactional
-	public ResponseEntity<Page<PriceDtoRes>> getAllPrices(Pageable page) {
+	public ResponseEntity<Object> getAllPrices(Pageable page) {
 		return ResponseEntity.ok(PriceDtoRes.convert(repository.findAll(page)));
 	}
 
 	@Transactional
-	public ResponseEntity<PriceDtoRes> addPrice(PriceDtoReq dto, UriComponentsBuilder uriBuilder) {
+	public ResponseEntity<Object> addPrice(PriceDtoReq dto, UriComponentsBuilder uriBuilder) {
 		Price price = repository.save(this.mapper.map(dto, Price.class));
 
 		URI uri = uriBuilder.path("/" + price.getId()).buildAndExpand(price.getId()).toUri();
@@ -47,7 +47,7 @@ public class PriceService {
 	}
 
 	@Transactional
-	public ResponseEntity<PriceDtoRes> getPrice(Long id) {
+	public ResponseEntity<Object> getPrice(Long id) {
 		if (repository.findById(id).isPresent()) {
 			return ResponseEntity.ok(this.mapper.map(repository.getOne(id), PriceDtoRes.class));
 		}
@@ -55,7 +55,7 @@ public class PriceService {
 	}
 
 	@Transactional
-	public ResponseEntity<PriceDtoRes> editPrice(Long id, PriceDtoReq dto) {
+	public ResponseEntity<Object> editPrice(Long id, PriceDtoReq dto) {
 		Optional<Price> priceOptional = repository.findById(id);
 
 		if (priceOptional.isPresent()) {
