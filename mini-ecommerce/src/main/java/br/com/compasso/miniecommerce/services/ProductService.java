@@ -20,6 +20,7 @@ import br.com.compasso.miniecommerce.models.Product;
 import br.com.compasso.miniecommerce.models.Sku;
 import br.com.compasso.miniecommerce.models.dto.ProductDtoReq;
 import br.com.compasso.miniecommerce.models.dto.ProductDtoRes;
+import br.com.compasso.miniecommerce.models.dto.ProductSkusDtoRes;
 import br.com.compasso.miniecommerce.models.dto.SkuDtoRes;
 import br.com.compasso.miniecommerce.repository.BrandRepository;
 import br.com.compasso.miniecommerce.repository.CategoryRepository;
@@ -54,10 +55,10 @@ public class ProductService {
 	}
 
 	@Transactional
-	public ResponseEntity<ProductDtoRes> getProduct(Long id, Pageable page) {
+	public ResponseEntity<ProductSkusDtoRes> getProduct(Long id, Pageable page) {
 		Optional<Product> product = repository.findById(id);
 		if (product.isPresent()) {
-			return ResponseEntity.ok(this.mapper.map(product.get(), ProductDtoRes.class));
+			return ResponseEntity.ok(new ProductSkusDtoRes(product.get(), skuRepository));
 		}
 
 		return ResponseEntity.notFound().build();

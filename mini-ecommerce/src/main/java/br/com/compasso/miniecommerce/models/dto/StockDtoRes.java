@@ -6,10 +6,12 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import br.com.compasso.miniecommerce.models.Sku;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 @AllArgsConstructor
-@Data
+@Getter
+@Setter
 public class StockDtoRes {
 
 	@JsonProperty("Id")

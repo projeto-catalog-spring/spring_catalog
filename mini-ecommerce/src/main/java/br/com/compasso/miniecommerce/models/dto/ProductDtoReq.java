@@ -4,12 +4,14 @@ import org.modelmapper.ModelMapper;
 
 import br.com.compasso.miniecommerce.models.Product;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
+@Getter
+@Setter
 public class ProductDtoReq {
 
 	private String name;

@@ -5,11 +5,13 @@ import javax.validation.constraints.PositiveOrZero;
 
 import br.com.compasso.miniecommerce.models.Price;
 import br.com.compasso.miniecommerce.repository.PriceRepository;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @NoArgsConstructor
-@Data
+@Getter
+@Setter
 public class PriceDtoReq {
 
 	@NotNull

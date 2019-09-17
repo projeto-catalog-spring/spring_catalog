@@ -18,6 +18,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import br.com.compasso.miniecommerce.models.dto.ProductDtoReq;
 import br.com.compasso.miniecommerce.models.dto.ProductDtoRes;
+import br.com.compasso.miniecommerce.models.dto.ProductSkusDtoRes;
 import br.com.compasso.miniecommerce.models.dto.SkuDtoRes;
 import br.com.compasso.miniecommerce.services.ProductService;
 
@@ -51,7 +52,7 @@ public class ProductController {
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<ProductDtoRes> getProduct(@PathVariable Long id, Pageable page) {
+	public ResponseEntity<ProductSkusDtoRes> getProduct(@PathVariable Long id, Pageable page) {
 		return service.getProduct(id, page);
 	}
 

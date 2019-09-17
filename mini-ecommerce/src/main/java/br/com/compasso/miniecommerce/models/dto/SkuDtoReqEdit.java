@@ -9,12 +9,14 @@ import org.hibernate.validator.constraints.Length;
 import br.com.compasso.miniecommerce.models.Sku;
 import br.com.compasso.miniecommerce.repository.SkuRepository;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
+@Getter
+@Setter
 public class SkuDtoReqEdit {
 
 	@NotBlank
