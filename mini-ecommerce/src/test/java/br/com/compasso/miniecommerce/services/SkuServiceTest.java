@@ -15,7 +15,6 @@ import org.springframework.data.domain.Pageable;
 
 import br.com.compasso.miniecommerce.models.Product;
 import br.com.compasso.miniecommerce.models.Sku;
-import br.com.compasso.miniecommerce.models.dto.SkuDtoReqEdit;
 import br.com.compasso.miniecommerce.models.dto.SkuDtoRes;
 
 @RunWith(MockitoJUnitRunner.class)
