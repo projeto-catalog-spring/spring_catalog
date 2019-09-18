@@ -14,8 +14,9 @@ import br.com.compasso.miniecommerce.models.Product;
 import br.com.compasso.miniecommerce.models.Sku;
 import br.com.compasso.miniecommerce.models.dto.SkuDtoRes;
 import br.com.compasso.miniecommerce.models.dto.StockDtoReq;
+import br.com.compasso.miniecommerce.models.helpers.HelperProduct;
 import br.com.compasso.miniecommerce.repository.ProductRepository;
-import br.com.compasso.miniecommerce.repository.SkuRepository;
+import br.com.compasso.miniecommerce.repository.SKURepository;
 
 @Service
 public class StockService {
@@ -52,16 +53,11 @@ public class StockService {
 				return new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
 			else {
 				sku.remove(stockReq.getQtd());
-
-				int quantidadeSkusValidas = productRepository.findAllSkus(sku.getId());
-
-				if (quantidadeSkusValidas <= 0) {
-					Product prod = productRepository.getOne(sku.getProduct().getId());
-					prod.setEnabled(false);
-					productRepository.save(prod);
-				}
-
-				return ResponseEntity.ok(this.mapper.map(sku, SkuDtoRes.class));
+				URI uri = uriBuilder.path("/stock/{id}").buildAndExpand(sku.getId()).toUri();
+				//verificar se product ainda esta disponível
+				if(sku.getStock() == 0)
+					HelperProduct.productValidation(skuRep, sku.getProduct().getId());
+				return ResponseEntity.created(uri).body(mapper.map(sku, SkuDtoRes.class));
 			}
 		} else {
 			return ResponseEntity.notFound().build();
