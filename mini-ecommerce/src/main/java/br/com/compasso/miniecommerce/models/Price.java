@@ -11,12 +11,18 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@NoArgsConstructor @AllArgsConstructor
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
 public class Price {
- 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Getter private Long id; 
-    @Getter @Setter private double price;
-    @Getter @Setter private double salePrice;
-    //@Getter @Setter private Product product;
- }
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
+
+	private double price;
+
+	private double salePrice;
+
+}

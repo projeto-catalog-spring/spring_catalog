@@ -1,67 +1,73 @@
 package br.com.compasso.miniecommerce.controllers;
 
-import java.util.List;
-
-import javax.validation.Valid;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.util.UriComponentsBuilder;
 
-import br.com.compasso.miniecommerce.models.Product;
-import br.com.compasso.miniecommerce.models.dto.ProductDto;
-import br.com.compasso.miniecommerce.repository.ProductRepository;
+import br.com.compasso.miniecommerce.models.dto.ProductDtoReq;
+import br.com.compasso.miniecommerce.models.dto.ProductDtoRes;
+import br.com.compasso.miniecommerce.models.dto.ProductSkusDtoRes;
+import br.com.compasso.miniecommerce.models.dto.SkuDtoRes;
+import br.com.compasso.miniecommerce.services.ProductService;
 
 @RestController
 @RequestMapping("/products")
 public class ProductController {
-	
+
 	@Autowired
-	private ProductRepository productrep;
-	
-	@GetMapping 
-	public List <Product> getAllProducts(){
-		return productrep.findAll();
+	private ProductService service;
+
+	@GetMapping
+	public ResponseEntity<Page<ProductDtoRes>> getAllProducts(
+			@PageableDefault(sort = "id", direction = Direction.ASC, page = 0, size = 10) Pageable page) {
+		return service.getAllProducts(page);
 	}
-	
+
+	@GetMapping("/{id}/skus")
+	public ResponseEntity<Page<SkuDtoRes>> getProductSkus(
+			@PageableDefault(sort = "id", direction = Direction.ASC, page = 0, size = 10) Pageable page,
+			@PathVariable Long id) {
+		return service.getProductSkus(id, page);
+	}
+
 	@PostMapping
-	public Product set(@Validated ProductDto products) {
-		return productrep.save(products);
+	public ResponseEntity<ProductDtoRes> addProduct(@RequestBody ProductDtoReq dto, BindingResult result,
+			UriComponentsBuilder uriBuilder) {
+		if (result.hasErrors())
+			return ResponseEntity.badRequest().build();
+
+		return service.addProduct(dto, uriBuilder);
 	}
-	
+
+	@GetMapping("/{id}")
+	public ResponseEntity<ProductSkusDtoRes> getProduct(@PathVariable Long id, Pageable page) {
+		return service.getProduct(id, page);
+	}
+
 	@PutMapping("/{id}")
-	public Product insert(@RequestBody ProductDto id) {
-		return productrep.save(id);
+	public ResponseEntity<ProductDtoRes> editProduct(@RequestBody ProductDtoReq dto, @PathVariable Long id,
+			BindingResult result) {
+		if (result.hasErrors())
+			return ResponseEntity.badRequest().build();
+
+		return service.editProduct(id, dto);
 	}
-	
-	@DeleteMapping("/{id}")
-	public void delete(@RequestBody ProductDto id) {
-		/* RN07 - Um produto nunca será excluido, apenas desativado */
-		
-		productrep.findById(id);
-		try {
-			
-		} catch (Exception e ){
-			
-		}
-		/*if(productrep.getOne(id)!=null) {
-			id.isEnable();
-		} */
+
+	@PutMapping("/{id}/{status}")
+	public ResponseEntity<ProductDtoRes> removeProduct(@PathVariable long id, @PathVariable boolean status) {
+		return service.removeProduct(id, status);
 	}
-	
+
 }
-	
-	
-	
-	
-	
-	
-	
-
-
