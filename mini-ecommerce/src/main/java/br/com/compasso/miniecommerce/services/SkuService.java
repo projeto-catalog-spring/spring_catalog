@@ -47,6 +47,7 @@ public class SkuService {
 			Sku sku = this.mapper.map(dto, Sku.class);
 			sku.setProduct(prod);
 			sku = repository.save(sku);
+			System.out.println(sku);
 			
 			URI uri = uriBuilder.path("/" + sku.getId()).buildAndExpand(sku.getId()).toUri();
 			return ResponseEntity.created(uri).body(new SkuDtoRes(sku));
@@ -60,7 +61,7 @@ public class SkuService {
 		Optional<Sku> sku = repository.findById(id);
 
 		if (sku.isPresent()) {
-			return ResponseEntity.ok(this.mapper.map(sku.get(), SkuDtoRes.class));
+			return ResponseEntity.ok(new SkuDtoRes(sku.get()));
 		}
 
 		return ResponseEntity.notFound().build();
