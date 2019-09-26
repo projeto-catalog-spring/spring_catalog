@@ -41,12 +41,18 @@ public class SkuService {
 
 	@Transactional
 	public ResponseEntity<SkuDtoRes> addSku(SkuDtoReq dto, UriComponentsBuilder uriBuilder) {
-		Product prod = productRepository.findById((long) dto.getProductId()).get();
-		Sku sku = this.mapper.map(dto, Sku.class);
-		sku.setProduct(prod);
-		sku = repository.save(sku);
-		URI uri = uriBuilder.path("/" + sku.getId()).buildAndExpand(sku.getId()).toUri();
-		return ResponseEntity.created(uri).body(new SkuDtoRes(sku));
+		Optional<Product> prodOp = productRepository.findById((long) dto.getProductId());
+		if(prodOp.isPresent()) {
+			Product prod = prodOp.get();
+			Sku sku = this.mapper.map(dto, Sku.class);
+			sku.setProduct(prod);
+			sku = repository.save(sku);
+			
+			URI uri = uriBuilder.path("/" + sku.getId()).buildAndExpand(sku.getId()).toUri();
+			return ResponseEntity.created(uri).body(new SkuDtoRes(sku));
+		} 
+		
+		return ResponseEntity.notFound().build();
 	}
 
 	@Transactional
