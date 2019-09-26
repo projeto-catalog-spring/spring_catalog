@@ -41,10 +41,12 @@ public class SkuService {
 
 	@Transactional
 	public ResponseEntity<SkuDtoRes> addSku(SkuDtoReq dto, UriComponentsBuilder uriBuilder) {
-		Sku sku = repository.save(this.mapper.map(dto, Sku.class));
-
+		Product prod = productRepository.findById((long) dto.getProductId()).get();
+		Sku sku = this.mapper.map(dto, Sku.class);
+		sku.setProduct(prod);
+		sku = repository.save(sku);
 		URI uri = uriBuilder.path("/" + sku.getId()).buildAndExpand(sku.getId()).toUri();
-		return ResponseEntity.created(uri).body(this.mapper.map(sku, SkuDtoRes.class));
+		return ResponseEntity.created(uri).body(new SkuDtoRes(sku));
 	}
 
 	@Transactional
