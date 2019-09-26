@@ -55,7 +55,7 @@ public class SkuController {
 			BindingResult result) {
 		if (result.hasErrors())
 			return ResponseEntity.badRequest().build();
-
+			
 		return service.editSku(id, dto);
 	}
 
