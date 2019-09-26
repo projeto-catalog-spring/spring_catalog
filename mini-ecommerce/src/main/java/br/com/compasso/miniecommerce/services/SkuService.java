@@ -47,7 +47,6 @@ public class SkuService {
 			Sku sku = this.mapper.map(dto, Sku.class);
 			sku.setProduct(prod);
 			sku = repository.save(sku);
-			System.out.println(sku);
 			
 			URI uri = uriBuilder.path("/" + sku.getId()).buildAndExpand(sku.getId()).toUri();
 			return ResponseEntity.created(uri).body(new SkuDtoRes(sku));
