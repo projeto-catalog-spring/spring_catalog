@@ -48,6 +48,8 @@ public class SkuService {
 			sku.setProduct(prod);
 			sku = repository.save(sku);
 			
+			//anaju
+			
 			URI uri = uriBuilder.path("/" + sku.getId()).buildAndExpand(sku.getId()).toUri();
 			return ResponseEntity.created(uri).body(new SkuDtoRes(sku));
 		} 
