@@ -18,8 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import br.com.compasso.miniecommerce.models.dto.SkuDtoRes;
 import br.com.compasso.miniecommerce.models.dto.StockDtoReq;
 import br.com.compasso.miniecommerce.models.dto.StockDtoRes;
-import br.com.compasso.miniecommerce.repository.ProductRepository;
-import br.com.compasso.miniecommerce.repository.SKURepository;
+import br.com.compasso.miniecommerce.repository.SkuRepository;
 import br.com.compasso.miniecommerce.services.StockService;
 
 @RestController
@@ -31,9 +30,6 @@ public class StockController {
 
 	@Autowired
 	private StockService stockService;
-
-	@Autowired
-	private ProductRepository productRep;
 
 	@GetMapping
 	public ResponseEntity<Page<StockDtoRes>> stockLevel(
@@ -55,7 +51,6 @@ public class StockController {
 		if (result.hasErrors())
 			return ResponseEntity.badRequest().build();
 
-		StockService stockService = new StockService();
-		return stockService.remove(skuRep, stockReq, uriBuilder);
+		return stockService.remove(skuRep, stockReq);
 	}
 }
