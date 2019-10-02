@@ -21,9 +21,6 @@ import br.com.compasso.miniecommerce.repository.SkuRepository;
 public class StockService {
 
 	@Autowired
-	private ModelMapper mapper = new ModelMapper();
-
-	@Autowired
 	private ProductRepository productRepository;
 
 	@Transactional
