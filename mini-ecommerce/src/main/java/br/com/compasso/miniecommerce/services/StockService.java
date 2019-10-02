@@ -35,7 +35,7 @@ public class StockService {
 			Sku sku = skuOptional.get();
 			sku.add(stockReq.getQtd());
 
-			return ResponseEntity.ok(this.mapper.map(new SkuDtoRes(sku)));
+			return ResponseEntity.ok(new SkuDtoRes(sku));
 		}
 
 		return ResponseEntity.notFound().build();
@@ -61,7 +61,7 @@ public class StockService {
 					productRepository.save(prod);
 				}
 
-				return ResponseEntity.ok(this.mapper.map(new SkuDtoRes(sku));
+				return ResponseEntity.ok(new SkuDtoRes(sku));
 			}
 		} else {
 			return ResponseEntity.notFound().build();
