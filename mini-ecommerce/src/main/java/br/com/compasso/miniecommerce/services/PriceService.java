@@ -40,6 +40,9 @@ public class PriceService {
 
 	@Transactional
 	public ResponseEntity<Object> addPrice(PriceDtoReq dto, UriComponentsBuilder uriBuilder) {
+		if(dto.getPrice() < 0){
+			return ResponseEntity.badRequest().build();
+		}
 		Price price = repository.save(this.mapper.map(dto, Price.class));
 
 		URI uri = uriBuilder.path("/" + price.getId()).buildAndExpand(price.getId()).toUri();
@@ -56,6 +59,10 @@ public class PriceService {
 
 	@Transactional
 	public ResponseEntity<Object> editPrice(Long id, PriceDtoReq dto) {
+		if(dto.getPrice() < 0){
+			return ResponseEntity.badRequest().build();
+		}
+		
 		Optional<Price> priceOptional = repository.findById(id);
 
 		if (priceOptional.isPresent()) {
